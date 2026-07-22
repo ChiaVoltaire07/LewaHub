@@ -1,6 +1,6 @@
 # Lewahub
 
-A school discovery catalog platform for post-secondary and secondary institutions in Cameroon. Parents and students search, filter, and compare schools by location, curriculum system, and programs — with no account required to browse.
+A school discovery catalog platform for post-secondary and secondary institutions in Cameroon. Parents and students search, filter, and compare schools by location, curriculum system, and programs  with no account required to browse.
 
 ![status](https://img.shields.io/badge/status-in%20development-teal)
 
@@ -25,12 +25,12 @@ A school discovery catalog platform for post-secondary and secondary institution
 
 ## Overview
 
-Lewahub centralizes school information that is currently scattered across word-of-mouth and informal channels — location, fees, curriculum type (Anglophone / Francophone / Bilingual), accreditation, and programs offered — into a single, publicly browsable catalog.
+Lewahub centralizes school information that is currently scattered across word-of-mouth and informal channels location, fees, curriculum type (Anglophone / Francophone / Bilingual), accreditation, and programs offered  into a single, publicly browsable catalog.
 
 Unlike a typical review-aggregation site, Lewahub does not rely on public user reviews as its trust signal. Instead, school quality is communicated through:
 
-- An **in-house evaluation program**, where the platform team directly assesses selected students and records a school-level score
-- **Admin-reviewed AI content** — natural-language search and weekly AI-drafted summaries, never auto-published without human approval
+- An **in-house evaluation program**: where the platform team directly assesses selected students and records a school-level score
+- **Admin-reviewed AI content** :natural language search and weekly AI-drafted summaries, never auto-published without human approval
 
 There is no login for the general public. Browsing, searching, and viewing school details work anonymously. Authentication exists only for the admin team managing listings, evaluations, and content review.
 
@@ -49,7 +49,7 @@ There is no login for the general public. Browsing, searching, and viewing schoo
 **Admin panel** (authenticated)
 - Dashboard with pending submissions, evaluations, and AI-review counts
 - Add / edit / delete school listings, including subschools, programs, and campuses
-- Evaluation recording, with student identity verification (receipt / school ID / matricule) stored only as a **hashed reference** — never the raw document or number
+- Evaluation recording, with student identity verification (receipt / school ID / matricule) stored only as a **hashed reference** never the raw document or number
 - AI-generated content review queue (approve/reject before anything goes live)
 - Listing update request queue
 
@@ -68,7 +68,7 @@ There is no login for the general public. Browsing, searching, and viewing schoo
 
 ## Architecture
  
-Lewahub is a **layered monolith** — one client-server application, not microservices. This was a deliberate choice: the team is small, the budget is limited, and the core data (schools, subschools, programs, evaluations) is tightly relational, so a single backend serving one database avoids the network overhead and operational cost that splitting into independent services would add without a corresponding benefit at this scale.
+Lewahub is a **layered monolith**  : one client-server application, not microservices. This was a deliberate choice; the team is small, the budget is limited, and the core data (schools, subschools, programs, evaluations) is tightly relational, so a single backend serving one database avoids the network overhead and operational cost that splitting into independent services would add without a corresponding benefit at this scale.
  
 ```mermaid
 flowchart TB
@@ -89,12 +89,12 @@ flowchart TB
 - **Routes** — Express route handlers, one per resource (`/api/schools`, `/api/evaluations`, `/api/auth`, etc.)
 - **Services** — business logic (approval workflows, evaluation recording, AI-content review gating)
 - **Data access** — Prisma ORM against PostgreSQL
-**Why not microservices:** the project's own constraints — small team, limited budget, and closely coupled data best served by SQL joins rather than cross-service network calls — all point the same direction. The layered structure preserves the option to extract a piece (e.g. AI search) into its own service later if it ever needs to scale or fail independently of the rest, without requiring a rewrite now.
+**Why not microservices:** the project's own constraints , small team, limited budget, and closely coupled data best served by SQL joins rather than cross service network calls, all point the same direction. The layered structure preserves the option to extract a piece (e.g. AI search) into its own service later if it ever needs to scale or fail independently of the rest, without requiring a rewrite now.
  
 **What's out of scope architecturally, on purpose:**
-- No microservices — one deployable backend
-- No event-driven message broker — the weekly AI summary job is a scheduled cron task calling the app's own API, not a pub/sub system
-- No public-account authentication — auth exists only for the admin/school-owner-facing side, not general browsing
+- No microservices , that is  one deployable backend
+- No event driven message broker : the weekly AI summary job is a scheduled cron task calling the app's own API, not a pub/sub system
+- No public-account authentication : auth exists only for the admin/school owner facing side, not general browsing
 Full rationale, including alternatives considered, is documented in the project's Technical Requirements Specification (TRS).
  
 
@@ -127,9 +127,6 @@ npm run dev
 
 Open the local URL printed in your terminal (typically `http://localhost:5173`).
 
-The app runs fully client-side against **mock data** in development — no backend setup required to explore it. MSW intercepts API calls and returns realistic sample data: ~20 schools across five regions, a mix of evaluated/not-yet-evaluated listings, and sample subschools, programs, and campuses.
-
-To sign in to the admin panel at `/admin/login`, use any email address with a password of 4 or more characters.
 
 ## Environment Variables
 
@@ -157,7 +154,7 @@ A few intentional choices worth knowing before contributing:
 
 - **No public accounts or reviews.** This was a deliberate pivot away from a review-based trust model, to avoid the moderation and fraud burden of open public reviews at small-team scale.
 - **Student verification data is never stored raw.** Evaluation records keep only a one-way hashed reference to the verification method used (receipt / school ID / matricule) never the document, image, or number itself.
-- **AI content is never auto-published.** Natural-language search falls back to keyword search on low confidence or timeout; weekly AI-drafted summaries sit in an admin queue until approved.
+- **AI content is never auto-published.** Natural language search falls back to keyword search on low confidence or timeout; weekly AI-drafted summaries sit in an admin queue until approved.
 
 
 ## Roadmap
