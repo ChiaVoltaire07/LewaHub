@@ -10,7 +10,6 @@ A school discovery catalog platform for post-secondary and secondary institution
 ## Table of Contents
 
 - [Overview](#overview)
--
 - [Key Features](#key-features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -67,6 +66,37 @@ There is no login for the general public. Browsing, searching, and viewing schoo
 | Maps | Leaflet + React-Leaflet (OpenStreetMap tiles) |
 | Mock API (development) | Mock Service Worker (MSW) |
 
+## Architecture
+ 
+Lewahub is a **layered monolith** — one client-server application, not microservices. This was a deliberate choice: the team is small, the budget is limited, and the core data (schools, subschools, programs, evaluations) is tightly relational, so a single backend serving one database avoids the network overhead and operational cost that splitting into independent services would add without a corresponding benefit at this scale.
+ 
+```mermaid
+flowchart TB
+    subgraph App["Lewahub application"]
+        Client["Client\nReact + Vite SPA"]
+        Server["Server\nExpress REST API"]
+        Client -->|HTTPS / REST| Server
+    end
+ 
+    Server --> DB[("PostgreSQL\nPostGIS + pgvector")]
+    Server --> Map["Map tiles\nLeaflet + OpenStreetMap"]
+    Server --> AI["AI / LLM API\nsearch + summaries"]
+    Server --> Storage["File storage\nCloudflare R2"]
+```
+ 
+**Layers inside the backend** (routes → services → data access) keep responsibilities separated even though everything deploys as one process:
+ 
+- **Routes** — Express route handlers, one per resource (`/api/schools`, `/api/evaluations`, `/api/auth`, etc.)
+- **Services** — business logic (approval workflows, evaluation recording, AI-content review gating)
+- **Data access** — Prisma ORM against PostgreSQL
+**Why not microservices:** the project's own constraints — small team, limited budget, and closely coupled data best served by SQL joins rather than cross-service network calls — all point the same direction. The layered structure preserves the option to extract a piece (e.g. AI search) into its own service later if it ever needs to scale or fail independently of the rest, without requiring a rewrite now.
+ 
+**What's out of scope architecturally, on purpose:**
+- No microservices — one deployable backend
+- No event-driven message broker — the weekly AI summary job is a scheduled cron task calling the app's own API, not a pub/sub system
+- No public-account authentication — auth exists only for the admin/school-owner-facing side, not general browsing
+Full rationale, including alternatives considered, is documented in the project's Technical Requirements Specification (TRS).
+ 
 
 ## Project Structure
 
