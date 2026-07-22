@@ -29,8 +29,8 @@ Lewahub centralizes school information that is currently scattered across word-o
 
 Unlike a typical review-aggregation site, Lewahub does not rely on public user reviews as its trust signal. Instead, school quality is communicated through:
 
-- An **in-house evaluation program**: where the platform team directly assesses selected students and records a school-level score
-- **Admin-reviewed AI content** :natural language search and weekly AI-drafted summaries, never auto-published without human approval
+- An **in house evaluation program**: where the platform team directly assesses selected students and records a school-level score
+- **Admin reviewed AI content** :natural language search and weekly AI-drafted summaries, never auto-published without human approval
 
 There is no login for the general public. Browsing, searching, and viewing school details work anonymously. Authentication exists only for the admin team managing listings, evaluations, and content review.
 
@@ -43,8 +43,8 @@ There is no login for the general public. Browsing, searching, and viewing schoo
 - Interactive map (Leaflet + OpenStreetMap) synced with search results , hover a card to highlight its pin, click a pin to highlight its card
 - School detail pages with subschools, programs, certificate types, and multi-campus support
 - "Not yet evaluated" vs "Evaluated" status shown transparently. No misleading star ratings
-- Related-school recommendations
-- Public contact form and listing-update-request flow (no account needed)
+- Related school recommendations
+- Public contact form and listing update request flow (no account needed)
 
 **Admin panel** (authenticated)
 - Dashboard with pending submissions, evaluations, and AI-review counts
@@ -86,9 +86,9 @@ flowchart TB
  
 **Layers inside the backend** (routes → services → data access) keep responsibilities separated even though everything deploys as one process:
  
-- **Routes** — Express route handlers, one per resource (`/api/schools`, `/api/evaluations`, `/api/auth`, etc.)
-- **Services** — business logic (approval workflows, evaluation recording, AI-content review gating)
-- **Data access** — Prisma ORM against PostgreSQL
+- **Routes** : Express route handlers, one per resource (`/api/schools`, `/api/evaluations`, `/api/auth`, etc.)
+- **Services** : business logic (approval workflows, evaluation recording, AI-content review gating)
+- **Data access** : Prisma ORM against PostgreSQL
 **Why not microservices:** the project's own constraints , small team, limited budget, and closely coupled data best served by SQL joins rather than cross service network calls, all point the same direction. The layered structure preserves the option to extract a piece (e.g. AI search) into its own service later if it ever needs to scale or fail independently of the rest, without requiring a rewrite now.
  
 **What's out of scope architecturally, on purpose:**
