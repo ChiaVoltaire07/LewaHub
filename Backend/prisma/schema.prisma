@@ -1,0 +1,228 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ai_summary {
+  summary_id   Int       @id @default(autoincrement())
+  school_id    Int
+  content      String?
+  status       String?   @default("pending") @db.VarChar(20)
+  reviewed_by  Int?
+  generated_at DateTime? @default(now()) @db.Timestamp(6)
+  users        users?    @relation(fields: [reviewed_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  school       school    @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model category {
+  category_id     Int               @id @default(autoincrement())
+  name            String            @unique @db.VarChar(100)
+  school_category school_category[]
+}
+
+model certificate {
+  certificate_id     Int                  @id @default(autoincrement())
+  name               String               @unique @db.VarChar(100)
+  school_certificate school_certificate[]
+}
+
+model curriculum {
+  curriculum_id Int        @id @default(autoincrement())
+  school_id     Int
+  subschool_id  Int?
+  name          String     @db.VarChar(100)
+  country       String?    @db.VarChar(100)
+  description   String?
+  school        school     @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+  subschool     subschool? @relation(fields: [subschool_id], references: [subschool_id], onDelete: NoAction, onUpdate: NoAction)
+  program       program[]
+
+  @@unique([school_id, name])
+}
+
+model evaluation {
+  evaluation_id Int       @id @default(autoincrement())
+  school_id     Int
+  admin_id      Int
+  score         Decimal?  @db.Decimal(3, 2)
+  notes         String?
+  status        String?   @default("draft") @db.VarChar(20)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  users         users     @relation(fields: [admin_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  school        school    @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model facility {
+  facility_id     Int               @id @default(autoincrement())
+  name            String            @unique @db.VarChar(100)
+  school_facility school_facility[]
+}
+
+model fee {
+  fee_id    Int      @id @default(autoincrement())
+  school_id Int
+  fee_type  String?  @db.VarChar(100)
+  amount    Decimal? @db.Decimal(12, 2)
+  currency  String?  @default("XAF") @db.VarChar(10)
+  period    String?  @db.VarChar(20)
+  school    school   @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model listing_update_request {
+  request_id       Int       @id @default(autoincrement())
+  school_id        Int
+  requester_name   String?   @db.VarChar(150)
+  requester_email  String?   @db.VarChar(150)
+  proposed_changes String?
+  status           String?   @default("pending") @db.VarChar(20)
+  reviewed_by      Int?
+  created_at       DateTime? @default(now()) @db.Timestamp(6)
+  users            users?    @relation(fields: [reviewed_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  school           school    @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model program {
+  program_id    Int         @id @default(autoincrement())
+  school_id     Int
+  subschool_id  Int?
+  curriculum_id Int?
+  name          String      @db.VarChar(150)
+  description   String?
+  curriculum    curriculum? @relation(fields: [curriculum_id], references: [curriculum_id], onDelete: NoAction, onUpdate: NoAction)
+  school        school      @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+  subschool     subschool?  @relation(fields: [subschool_id], references: [subschool_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([school_id, name])
+}
+
+model region {
+  region_id Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(100)
+  school    school[]
+}
+
+model school {
+  school_id              Int                      @id @default(autoincrement())
+  name                   String                   @db.VarChar(150)
+  description            String?
+  region_id              Int
+  address                String?                  @db.VarChar(255)
+  phone                  String?                  @db.VarChar(30)
+  email                  String?                  @db.VarChar(150)
+  website                String?                  @db.VarChar(255)
+  location               Unsupported("geography")
+  ownership              String?                  @db.VarChar(30)
+  boarding_available     Boolean?                 @default(false)
+  verification_status    String?                  @default("pending") @db.VarChar(20)
+  created_at             DateTime?                @default(now()) @db.Timestamp(6)
+  updated_at             DateTime?                @default(now()) @db.Timestamp(6)
+  ai_summary             ai_summary[]
+  curriculum             curriculum[]
+  evaluation             evaluation[]
+  fee                    fee[]
+  listing_update_request listing_update_request[]
+  program                program[]
+  region                 region                   @relation(fields: [region_id], references: [region_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_school_region")
+  school_approval_log    school_approval_log[]
+  school_category        school_category[]
+  school_certificate     school_certificate[]
+  school_contact         school_contact[]
+  school_facility        school_facility[]
+  school_photo           school_photo[]
+  school_view            school_view[]
+  subschool              subschool[]
+}
+
+model school_approval_log {
+  log_id     Int       @id @default(autoincrement())
+  school_id  Int
+  admin_id   Int
+  old_status String?   @db.VarChar(20)
+  new_status String?   @db.VarChar(20)
+  notes      String?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  users      users     @relation(fields: [admin_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  school     school    @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model school_category {
+  school_id   Int
+  category_id Int
+  category    category @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction)
+  school      school   @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([school_id, category_id])
+}
+
+model school_certificate {
+  school_id      Int
+  certificate_id Int
+  certificate    certificate @relation(fields: [certificate_id], references: [certificate_id], onDelete: NoAction, onUpdate: NoAction)
+  school         school      @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([school_id, certificate_id])
+}
+
+model school_contact {
+  contact_id    Int     @id @default(autoincrement())
+  school_id     Int
+  contact_type  String? @db.VarChar(30)
+  contact_value String? @db.VarChar(150)
+  school        school  @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model school_facility {
+  school_id   Int
+  facility_id Int
+  facility    facility @relation(fields: [facility_id], references: [facility_id], onDelete: NoAction, onUpdate: NoAction)
+  school      school   @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([school_id, facility_id])
+}
+
+model school_photo {
+  photo_id      Int      @id @default(autoincrement())
+  school_id     Int
+  url           String?  @db.VarChar(255)
+  is_cover      Boolean? @default(false)
+  display_order Int?
+  school        school   @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model school_view {
+  view_id    Int       @id @default(autoincrement())
+  school_id  Int
+  session_id String?   @db.VarChar(100)
+  viewed_at  DateTime? @default(now()) @db.Timestamp(6)
+  school     school    @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model subschool {
+  subschool_id  Int          @id @default(autoincrement())
+  school_id     Int
+  school_level  String?      @db.VarChar(30)
+  name          String       @db.VarChar(100)
+  description   String?
+  display_order Int?
+  curriculum    curriculum[]
+  program       program[]
+  school        school       @relation(fields: [school_id], references: [school_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_subschool_school")
+
+  @@unique([school_id, name])
+}
+
+model users {
+  user_id                Int                      @id @default(autoincrement())
+  email                  String                   @unique @db.VarChar(150)
+  password_hash          String                   @db.VarChar(255)
+  role                   String?                  @default("admin") @db.VarChar(30)
+  created_at             DateTime?                @default(now()) @db.Timestamp(6)
+  ai_summary             ai_summary[]
+  evaluation             evaluation[]
+  listing_update_request listing_update_request[]
+  school_approval_log    school_approval_log[]
+}
