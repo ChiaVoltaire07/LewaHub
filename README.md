@@ -13,6 +13,7 @@ A school discovery catalog platform for post-secondary and secondary institution
 - [Key Features](#key-features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
+-[Architecture](#architecture)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
 - [Connecting to a Real Backend](#connecting-to-a-real-backend)
@@ -113,6 +114,26 @@ src/
     ├── admin/        # Login, Dashboard, ManageSchools, SchoolForm, Evaluations, AiReview, ListingRequests
     └── ...           # Home, Search, SchoolDetails, About, Contact
 ```
+
+```mermaid
+flowchart TB
+    subgraph App["Lewahub application"]
+        Client["Client\nReact + Vite SPA"]
+        Server["Server\nExpress REST API"]
+        Client -->|HTTPS / REST| Server
+    end
+ 
+    Server --> DB[("PostgreSQL\nPostGIS + pgvector")]
+    Server --> Map["Map tiles\nLeaflet + OpenStreetMap"]
+    Server --> AI["AI / LLM API\nsearch + summaries"]
+    Server --> Storage["File storage\nCloudflare R2"]
+```
+
+
+## Architecture
+ 
+Lewahub is a **layered monolith** — one client-server application. This was a deliberate choice: the team is small, the budget is limited, and the core data (schools, subschools, programs, evaluations) is tightly relational, so a single backend serving one database avoids the network overhead and operational cost that splitting into independent services would add without a corresponding benefit at this scale.
+ 
 
 ## Getting Started
 
