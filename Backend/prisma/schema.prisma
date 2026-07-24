@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Institution {
+  id          String    @id @default(cuid())
+  name        String
+  region      String
+  type        String
+  description String?
+  lat         Float
+  lng         Float
+  verified    Boolean   @default(false)
+  viewCount   Int       @default(0)
+  programs    Program[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([region])
+  @@index([type])
+}
+
+model Program {
+  id             String      @id @default(cuid())
+  institutionId  String
+  institution    Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  name           String
+  degreeLevel    String
+  durationMonths Int
+  tuition        Float
+  currency       String      @default("XAF")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@index([institutionId])
+}
+
+// Part 2 will add: User (with role), Evaluation, AuditLog
+// Part 3 will add: AiDraftSummary
+// Add new models below this line — don't touch the two above without syncing with Part 1.
