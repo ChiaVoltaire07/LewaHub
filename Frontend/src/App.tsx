@@ -9,7 +9,7 @@ function App() {
       <Navbar />
 
       <main className="flex-1">
-        {/* Header Section */}
+       
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-teal-primary tracking-tight">
             Get in Touch
@@ -20,15 +20,14 @@ function App() {
           </p>
         </section>
 
-        {/* Main Grid Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Left Column - Contact Form */}
+            
             <div className="lg:col-span-7">
               <ContactForm />
             </div>
 
-            {/* Right Column - Info & Map */}
+            
             <div className="lg:col-span-5">
               <ContactInfo />
             </div>

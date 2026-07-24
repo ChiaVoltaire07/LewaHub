@@ -39,7 +39,7 @@ export default function ContactForm() {
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Name & Email row */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="fullName" className="block text-sm font-medium text-text-dark mb-1.5">
@@ -73,7 +73,7 @@ export default function ContactForm() {
           </div>
         </div>
 
-        {/* Subject */}
+       
         <div>
           <label htmlFor="subject" className="block text-sm font-medium text-text-dark mb-1.5">
             Subject
@@ -90,7 +90,7 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Message */}
+        
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-text-dark mb-1.5">
             Message
@@ -107,7 +107,7 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Submit button */}
+        
         <button
           type="submit"
           className="inline-flex items-center gap-2 px-6 py-2.5 bg-teal-primary text-white text-sm font-semibold rounded-lg hover:bg-teal-dark transition-colors"
@@ -117,7 +117,7 @@ export default function ContactForm() {
         </button>
       </form>
 
-      {/* Success toast */}
+      
       {showSuccess && (
         <div className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium z-50 animate-slide-up">
           ✓ Message sent successfully! We'll get back to you soon.

@@ -3,14 +3,14 @@ import { Mail, Phone, MapPin, Globe, Users, Megaphone, ExternalLink } from "luci
 export default function ContactInfo() {
   return (
     <div className="space-y-6">
-      {/* Contact Information Card */}
+      
       <div className="bg-lavender/60 rounded-2xl p-6 sm:p-8">
         <h2 className="text-xl font-bold text-text-dark mb-6">
           Contact Information
         </h2>
 
         <div className="space-y-5">
-          {/* Email */}
+        
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-primary/10 flex items-center justify-center">
               <Mail className="h-5 w-5 text-teal-primary" />
@@ -28,7 +28,7 @@ export default function ContactInfo() {
             </div>
           </div>
 
-          {/* Phone */}
+     
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-primary/10 flex items-center justify-center">
               <Phone className="h-5 w-5 text-teal-primary" />
@@ -43,13 +43,10 @@ export default function ContactInfo() {
               >
                 +237 600 000 000
               </a>
-              <p className="text-xs text-text-muted mt-0.5">
-                Mon - Fri, 8am - 5pm
-              </p>
             </div>
           </div>
 
-          {/* Address */}
+          
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-primary/10 flex items-center justify-center">
               <MapPin className="h-5 w-5 text-teal-primary" />
@@ -66,10 +63,10 @@ export default function ContactInfo() {
         </div>
       </div>
 
-      {/* Interactive Map Card */}
+      
       <div className="bg-white rounded-2xl shadow-sm border border-border-light overflow-hidden">
         <div className="relative">
-          {/* Static map image fallback with embedded map */}
+          
           <div className="w-full h-56 bg-gray-200 relative overflow-hidden">
             <iframe
               title="Yaoundé Cameroon Map"
@@ -82,7 +79,7 @@ export default function ContactInfo() {
             />
           </div>
 
-          {/* Overlay button */}
+       
           <a
             href="https://maps.google.com/maps?q=Yaound%C3%A9+Cameroon"
             target="_blank"
@@ -95,9 +92,9 @@ export default function ContactInfo() {
         </div>
       </div>
 
-      {/* Social / Action Icons Row */}
+      
       <div className="flex items-center justify-center gap-8 py-4">
-        {/* Globe Icon */}
+       
         <a
           href="#"
           className="w-14 h-14 rounded-full bg-white shadow-sm border border-border-light flex items-center justify-center text-text-muted hover:text-teal-primary hover:border-teal-primary/30 hover:shadow-md transition-all duration-200 group"
@@ -106,7 +103,7 @@ export default function ContactInfo() {
           <Globe className="h-6 w-6 group-hover:scale-110 transition-transform" />
         </a>
 
-        {/* Users Icon */}
+        
         <a
           href="#"
           className="w-14 h-14 rounded-full bg-white shadow-sm border border-border-light flex items-center justify-center text-text-muted hover:text-teal-primary hover:border-teal-primary/30 hover:shadow-md transition-all duration-200 group"
@@ -115,7 +112,7 @@ export default function ContactInfo() {
           <Users className="h-6 w-6 group-hover:scale-110 transition-transform" />
         </a>
 
-        {/* Megaphone Icon */}
+       
         <a
           href="#"
           className="w-14 h-14 rounded-full bg-white shadow-sm border border-border-light flex items-center justify-center text-text-muted hover:text-teal-primary hover:border-teal-primary/30 hover:shadow-md transition-all duration-200 group"
