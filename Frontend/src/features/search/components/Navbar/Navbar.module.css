@@ -1,0 +1,201 @@
+.navbar {
+  background: #FFFFFF;
+  border-bottom: 1px solid #D9E3E8;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.logoText {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0F766E;
+  letter-spacing: -0.5px;
+}
+
+.desktopNav {
+  display: none;
+  gap: 32px;
+  align-items: center;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #1E293B;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: #0F766E;
+}
+
+.navLink.active {
+  color: #0F766E;
+  font-weight: 600;
+}
+
+.navLink.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #0F766E;
+  border-radius: 2px;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #0F766E;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  border-radius: 2px;
+}
+
+.navLink:hover::after {
+  transform: scaleX(1);
+}
+
+.hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #1E293B;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+
+.hamburger:hover {
+  color: #0F766E;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1998;
+  animation: fadeIn 0.3s ease;
+}
+
+.mobileDrawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background: #FFFFFF;
+  z-index: 1999;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.mobileDrawer.open {
+  transform: translateX(0);
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #D9E3E8;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #1E293B;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.closeButton:hover {
+  color: #0F766E;
+}
+
+.drawerNav {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drawerLink {
+  text-decoration: none;
+  color: #1E293B;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.drawerLink:hover {
+  background: #F8FAFC;
+  color: #0F766E;
+}
+
+.drawerLink.active {
+  color: #0F766E;
+  font-weight: 600;
+  background: #F8FAFC;
+  border-left: 3px solid #0F766E;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 992px) {
+  .desktopNav {
+    display: flex;
+  }
+
+  .hamburger {
+    display: none;
+  }
+}

@@ -1,0 +1,206 @@
+.page {
+  min-height: 100vh;
+  background: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Search Header */
+.searchHeader {
+  margin-bottom: 24px;
+}
+
+.searchContainer {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #0F766E;
+  border: none;
+  border-radius: 12px;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+}
+
+.filterButton:hover {
+  background: #115E59;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+}
+
+.filterButton:active {
+  transform: translateY(0);
+}
+
+.filterBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #0F766E;
+}
+
+/* Desktop Layout */
+.desktopLayout {
+  display: none;
+  gap: 24px;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.contentArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Results Header */
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.resultsInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 1;
+}
+
+.resultsTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0;
+}
+
+.sortContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sortLabel {
+  font-size: 14px;
+  color: #64748B;
+  white-space: nowrap;
+}
+
+.sortSelect {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sortDropdown {
+  appearance: none;
+  background: #FFFFFF;
+  border: 1px solid #D9E3E8;
+  border-radius: 8px;
+  padding: 8px 32px 8px 12px;
+  font-size: 14px;
+  color: #1E293B;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sortDropdown:focus {
+  outline: none;
+  border-color: #0F766E;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
+
+.sortIcon {
+  position: absolute;
+  right: 8px;
+  pointer-events: none;
+  color: #64748B;
+}
+
+/* Desktop Map */
+.desktopMap {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid #D9E3E8;
+}
+
+.mapTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0 0 16px 0;
+}
+
+/* Mobile Layout */
+.mobileLayout {
+  display: block;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .mainContent {
+    padding: 32px;
+  }
+
+  .filterButton {
+    display: flex;
+  }
+
+  .mobileLayout {
+    display: block;
+  }
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+  .mainContent {
+    padding: 40px;
+  }
+
+  .desktopLayout {
+    display: flex;
+  }
+
+  .mobileLayout {
+    display: none;
+  }
+
+  .filterButton {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .mainContent {
+    padding: 48px;
+  }
+}

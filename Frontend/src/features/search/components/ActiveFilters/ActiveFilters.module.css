@@ -1,0 +1,83 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  flex-wrap: wrap;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #D1FAE5;
+  color: #0F766E;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.chip:hover {
+  background: #A7F3D0;
+}
+
+.chipLabel {
+  white-space: nowrap;
+}
+
+.removeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #0F766E;
+  cursor: pointer;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.removeButton:hover {
+  color: #115E59;
+  transform: scale(1.1);
+}
+
+.clearAll {
+  background: none;
+  border: none;
+  color: #DC2626;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.clearAll:hover {
+  background: #FEE2E2;
+}
+
+@media (max-width: 767px) {
+  .container {
+    padding: 8px 0;
+  }
+
+  .chip {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}

@@ -1,0 +1,196 @@
+import { School } from '../types';
+
+export const mockSchools: School[] = [
+  {
+    id: '1',
+    name: 'University of Yaoundé I',
+    region: 'Centre',
+    institutionType: 'University',
+    curriculum: ['Anglophone', 'Francophone'],
+    degreeLevel: ['Bachelor', 'Master', 'PhD'],
+    programs: ['Computer Science', 'Medicine', 'Law', 'Economics'],
+    feeRange: '150,000 - 500,000 XAF',
+    rating: 4.5,
+    topRated: true,
+    image: 'https://images.unsplash.com/photo-1562774053-701939374585?w=800',
+    location: {
+      lat: 3.8480,
+      lng: 11.5021,
+      address: 'Yaoundé, Cameroon'
+    },
+    description: 'Premier university in Cameroon offering diverse programs.'
+  },
+  {
+    id: '2',
+    name: 'University of Buea',
+    region: 'Southwest',
+    institutionType: 'University',
+    curriculum: ['Anglophone'],
+    degreeLevel: ['Bachelor', 'Master'],
+    programs: ['Engineering', 'Agriculture', 'Business'],
+    feeRange: '100,000 - 350,000 XAF',
+    rating: 4.3,
+    topRated: true,
+    image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3a?w=800',
+    location: {
+      lat: 4.1534,
+      lng: 9.2422,
+      address: 'Buea, Cameroon'
+    },
+    description: 'Leading university in the Southwest region.'
+  },
+  {
+    id: '3',
+    name: 'American Institute of Cameroon',
+    region: 'Littoral',
+    institutionType: 'College',
+    curriculum: ['Anglophone', 'American'],
+    degreeLevel: ['Bachelor', 'Associate'],
+    programs: ['Business Administration', 'Computer Science', 'Nursing'],
+    feeRange: '200,000 - 600,000 XAF',
+    rating: 4.7,
+    topRated: true,
+    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c87f?w=800',
+    location: {
+      lat: 4.0511,
+      lng: 9.7679,
+      address: 'Douala, Cameroon'
+    },
+    description: 'American-style education in Cameroon.'
+  },
+  {
+    id: '4',
+    name: 'University of Douala',
+    region: 'Littoral',
+    institutionType: 'University',
+    curriculum: ['Francophone'],
+    degreeLevel: ['Bachelor', 'Master', 'PhD'],
+    programs: ['Sciences', 'Letters', 'Economics', 'Law'],
+    feeRange: '120,000 - 400,000 XAF',
+    rating: 4.2,
+    topRated: false,
+    image: 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=800',
+    location: {
+      lat: 4.0511,
+      lng: 9.7679,
+      address: 'Douala, Cameroon'
+    },
+    description: 'Major public university in the economic capital.'
+  },
+  {
+    id: '5',
+    name: 'Catholic University of Central Africa',
+    region: 'Centre',
+    institutionType: 'University',
+    curriculum: ['Francophone', 'Catholic'],
+    degreeLevel: ['Bachelor', 'Master', 'PhD'],
+    programs: ['Theology', 'Philosophy', 'Law', 'Economics'],
+    feeRange: '180,000 - 550,000 XAF',
+    rating: 4.6,
+    topRated: true,
+    image: 'https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=800',
+    location: {
+      lat: 3.8480,
+      lng: 11.5021,
+      address: 'Yaoundé, Cameroon'
+    },
+    description: 'Prestigious Catholic university with strong academic tradition.'
+  },
+  {
+    id: '6',
+    name: 'University of Dschang',
+    region: 'West',
+    institutionType: 'University',
+    curriculum: ['Francophone'],
+    degreeLevel: ['Bachelor', 'Master'],
+    programs: ['Agriculture', 'Forestry', 'Veterinary Medicine'],
+    feeRange: '100,000 - 300,000 XAF',
+    rating: 4.1,
+    topRated: false,
+    image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800',
+    location: {
+      lat: 5.4467,
+      lng: 10.0539,
+      address: 'Dschang, Cameroon'
+    },
+    description: 'Specialized in agricultural and environmental sciences.'
+  },
+  {
+    id: '7',
+    name: 'International University of Bamenda',
+    region: 'Northwest',
+    institutionType: 'University',
+    curriculum: ['Anglophone'],
+    degreeLevel: ['Bachelor', 'Master'],
+    programs: ['Business', 'IT', 'Law', 'Education'],
+    feeRange: '130,000 - 380,000 XAF',
+    rating: 4.0,
+    topRated: false,
+    image: 'https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=800',
+    location: {
+      lat: 5.9631,
+      lng: 10.1591,
+      address: 'Bamenda, Cameroon'
+    },
+    description: 'Growing university in the Northwest region.'
+  },
+  {
+    id: '8',
+    name: 'University of Maroua',
+    region: 'Far North',
+    institutionType: 'University',
+    curriculum: ['Francophone'],
+    degreeLevel: ['Bachelor', 'Master'],
+    programs: ['Sciences', 'Letters', 'Economics'],
+    feeRange: '80,000 - 250,000 XAF',
+    rating: 3.9,
+    topRated: false,
+    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800',
+    location: {
+      lat: 10.5916,
+      lng: 14.3159,
+      address: 'Maroua, Cameroon'
+    },
+    description: 'University serving the Far North region.'
+  }
+];
+
+export const filterOptions = {
+  region: [
+    { value: 'Centre', label: 'Centre' },
+    { value: 'Littoral', label: 'Littoral' },
+    { value: 'Southwest', label: 'Southwest' },
+    { value: 'Northwest', label: 'Northwest' },
+    { value: 'West', label: 'West' },
+    { value: 'Far North', label: 'Far North' }
+  ],
+  institutionType: [
+    { value: 'University', label: 'University' },
+    { value: 'College', label: 'College' },
+    { value: 'Institute', label: 'Institute' }
+  ],
+  curriculum: [
+    { value: 'Francophone', label: 'Francophone' },
+    { value: 'Anglophone', label: 'Anglophone' },
+    { value: 'American', label: 'American' },
+    { value: 'Catholic', label: 'Catholic' }
+  ],
+  degreeLevel: [
+    { value: 'Bachelor', label: 'Bachelor' },
+    { value: 'Master', label: 'Master' },
+    { value: 'PhD', label: 'PhD' },
+    { value: 'Associate', label: 'Associate' }
+  ],
+  feeRange: [
+    { value: '0-100000', label: 'Under 100,000 XAF' },
+    { value: '100000-300000', label: '100,000 - 300,000 XAF' },
+    { value: '300000-500000', label: '300,000 - 500,000 XAF' },
+    { value: '500000+', label: 'Above 500,000 XAF' }
+  ]
+};
+
+export const sortOptions = [
+  { value: 'rating', label: 'Highest Rated' },
+  { value: 'name', label: 'Name (A-Z)' },
+  { value: 'name-desc', label: 'Name (Z-A)' }
+];

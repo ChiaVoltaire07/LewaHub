@@ -1,0 +1,52 @@
+.toggleContainer {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 4px;
+  gap: 4px;
+  z-index: 1000;
+  border: 1px solid #D9E3E8;
+}
+
+.toggleButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #64748B;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.toggleButton:hover {
+  color: #0F766E;
+  background: #F8FAFC;
+}
+
+.toggleButton.active {
+  background: #0F766E;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+}
+
+.toggleButton.active:hover {
+  background: #115E59;
+  color: #FFFFFF;
+}
+
+@media (min-width: 768px) {
+  .toggleContainer {
+    display: none;
+  }
+}
