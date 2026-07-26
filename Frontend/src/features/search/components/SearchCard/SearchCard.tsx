@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, MapPin, ExternalLink } from 'lucide-react';
+import { MapPin, ExternalLink } from 'lucide-react';
 import { School } from '../../types';
 import styles from './SearchCard.module.css';
 
@@ -20,7 +20,6 @@ const SearchCard: React.FC<SearchCardProps> = ({ school, onViewDetails }) => {
         <div className={styles.header}>
           <h3 className={styles.schoolName}>{school.name}</h3>
           <div className={styles.rating}>
-            <Star size={16} fill="#F59E0B" color="#F59E0B" />
             <span className={styles.ratingValue}>{school.rating.toFixed(1)}</span>
           </div>
         </div>

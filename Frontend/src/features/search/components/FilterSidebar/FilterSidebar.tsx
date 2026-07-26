@@ -6,7 +6,7 @@ import styles from './FilterSidebar.module.css';
 
 interface FilterSidebarProps {
   filters: Filters;
-  onToggleArrayFilter: (key: 'region' | 'institutionType' | 'curriculum' | 'degreeLevel' | 'feeRange', value: string) => void;
+  onToggleArrayFilter: (key: 'region' | 'institutionType' | 'schoolLevel' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating', value: string) => void;
   onToggleTopRated: () => void;
   onReset: () => void;
   onClose?: () => void;
@@ -23,17 +23,15 @@ const FilterSection: React.FC<{
 }> = ({ title, options, selectedValues, onToggle }) => (
   <div className={styles.filterSection}>
     <h3 className={styles.filterTitle}>{title}</h3>
-    <div className={styles.filterOptions}>
+    <div className={styles.pillContainer}>
       {options.map(option => (
-        <label key={option.value} className={styles.filterOption}>
-          <input
-            type="checkbox"
-            checked={selectedValues.includes(option.value)}
-            onChange={() => onToggle(option.value)}
-          />
-          <span className={styles.checkbox}></span>
-          <span className={styles.optionLabel}>{option.label}</span>
-        </label>
+        <button
+          key={option.value}
+          className={`${styles.pill} ${(selectedValues || []).includes(option.value) ? styles.active : ''}`}
+          onClick={() => onToggle(option.value)}
+        >
+          {option.label}
+        </button>
       ))}
     </div>
   </div>
@@ -109,6 +107,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           options={filterOptions.institutionType}
           selectedValues={filters.institutionType}
           onToggle={(value) => onToggleArrayFilter('institutionType', value)}
+        />
+
+        <FilterSection
+          title="School Level"
+          options={filterOptions.schoolLevel}
+          selectedValues={filters.schoolLevel}
+          onToggle={(value) => onToggleArrayFilter('schoolLevel', value)}
         />
 
         <FilterSection

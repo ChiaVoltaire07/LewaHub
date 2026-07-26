@@ -3,6 +3,7 @@ export interface School {
   name: string;
   region: string;
   institutionType: string;
+  schoolLevel: string;
   curriculum: string[];
   degreeLevel: string[];
   programs: string[];
@@ -21,11 +22,17 @@ export interface School {
 export interface Filters {
   region: string[];
   institutionType: string[];
+  schoolLevel: string[];
   curriculum: string[];
   degreeLevel: string[];
   feeRange: string[];
   topRated: boolean;
   searchQuery: string;
+  distance?: number;
+  minRating?: number;
+  ownership?: string[];
+  boarding?: string[];
+  programs?: string[];
 }
 
 export interface SearchState {

@@ -17,17 +17,18 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #D1FAE5;
-  color: #0F766E;
+  background: var(--paper-deep);
+  color: var(--forest);
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .chip:hover {
-  background: #A7F3D0;
+  background: var(--moss);
+  color: var(--forest-dark);
 }
 
 .chipLabel {
@@ -40,7 +41,7 @@
   justify-content: center;
   background: none;
   border: none;
-  color: #0F766E;
+  color: var(--forest);
   cursor: pointer;
   padding: 0;
   width: 16px;
@@ -50,25 +51,25 @@
 }
 
 .removeButton:hover {
-  color: #115E59;
+  color: var(--forest-dark);
   transform: scale(1.1);
 }
 
 .clearAll {
   background: none;
   border: none;
-  color: #DC2626;
+  color: var(--sienna);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   transition: all 0.3s ease;
   white-space: nowrap;
 }
 
 .clearAll:hover {
-  background: #FEE2E2;
+  background: rgba(193, 87, 43, 0.1);
 }
 
 @media (max-width: 767px) {

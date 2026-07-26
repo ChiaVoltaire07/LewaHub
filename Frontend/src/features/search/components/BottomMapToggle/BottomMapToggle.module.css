@@ -5,12 +5,12 @@
   transform: translateX(-50%);
   display: flex;
   background: #FFFFFF;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(20, 35, 28, 0.15);
   padding: 4px;
   gap: 4px;
   z-index: 1000;
-  border: 1px solid #D9E3E8;
+  border: 1px solid var(--line);
 }
 
 .toggleButton {
@@ -20,8 +20,9 @@
   padding: 10px 20px;
   background: transparent;
   border: none;
-  border-radius: 8px;
-  color: #64748B;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  opacity: 0.7;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -30,18 +31,19 @@
 }
 
 .toggleButton:hover {
-  color: #0F766E;
-  background: #F8FAFC;
+  color: var(--forest);
+  background: var(--paper);
 }
 
 .toggleButton.active {
-  background: #0F766E;
+  background: var(--forest);
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+  opacity: 1;
+  box-shadow: 0 2px 8px rgba(31, 93, 69, 0.2);
 }
 
 .toggleButton.active:hover {
-  background: #115E59;
+  background: var(--forest-dark);
   color: #FFFFFF;
 }
 

@@ -4,11 +4,17 @@ import { Filters } from '../types';
 const initialFilters: Filters = {
   region: [],
   institutionType: [],
+  schoolLevel: [],
   curriculum: [],
   degreeLevel: [],
   feeRange: [],
   topRated: false,
-  searchQuery: ''
+  searchQuery: '',
+  distance: undefined,
+  minRating: undefined,
+  ownership: [],
+  boarding: [],
+  programs: []
 };
 
 export const useFilters = () => {
@@ -22,9 +28,15 @@ export const useFilters = () => {
     setFilters(prev => ({ ...prev, [key]: value }));
   }, []);
 
-  const toggleArrayFilter = useCallback((key: 'region' | 'institutionType' | 'curriculum' | 'degreeLevel' | 'feeRange', value: string) => {
+  const toggleArrayFilter = useCallback((key: 'region' | 'institutionType' | 'schoolLevel' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating', value: string) => {
     setFilters(prev => {
-      const currentArray = prev[key];
+      // Handle single-value filters (distance, minRating)
+      if (key === 'distance' || key === 'minRating') {
+        const numValue = parseFloat(value);
+        return { ...prev, [key]: prev[key] === numValue ? undefined : numValue };
+      }
+      // Handle array filters
+      const currentArray = prev[key] || [];
       const newArray = currentArray.includes(value)
         ? currentArray.filter(item => item !== value)
         : [...currentArray, value];

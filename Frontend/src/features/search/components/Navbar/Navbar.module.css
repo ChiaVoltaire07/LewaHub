@@ -1,10 +1,9 @@
 .navbar {
   background: #FFFFFF;
-  border-bottom: 1px solid #D9E3E8;
+  border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .container {
@@ -24,9 +23,10 @@
 }
 
 .logoText {
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 700;
-  color: #0F766E;
+  color: var(--forest-dark);
   letter-spacing: -0.5px;
 }
 
@@ -38,7 +38,7 @@
 
 .navLink {
   text-decoration: none;
-  color: #1E293B;
+  color: var(--ink);
   font-size: 15px;
   font-weight: 500;
   padding: 8px 0;
@@ -47,11 +47,11 @@
 }
 
 .navLink:hover {
-  color: #0F766E;
+  color: var(--forest);
 }
 
 .navLink.active {
-  color: #0F766E;
+  color: var(--forest);
   font-weight: 600;
 }
 
@@ -62,7 +62,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #0F766E;
+  background: var(--forest);
   border-radius: 2px;
 }
 
@@ -73,7 +73,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #0F766E;
+  background: var(--forest);
   transform: scaleX(0);
   transition: transform 0.3s ease;
   border-radius: 2px;
@@ -89,14 +89,14 @@
   justify-content: center;
   background: none;
   border: none;
-  color: #1E293B;
+  color: var(--ink);
   cursor: pointer;
   padding: 8px;
   transition: color 0.3s ease;
 }
 
 .hamburger:hover {
-  color: #0F766E;
+  color: var(--forest);
 }
 
 .backdrop {
@@ -105,7 +105,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(20, 35, 28, 0.5);
   backdrop-filter: blur(4px);
   z-index: 1998;
   animation: fadeIn 0.3s ease;
@@ -121,7 +121,7 @@
   z-index: 1999;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
-  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 0 12px rgba(20, 35, 28, 0.1);
 }
 
 .mobileDrawer.open {
@@ -133,13 +133,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  border-bottom: 1px solid #D9E3E8;
+  border-bottom: 1px solid var(--line);
 }
 
 .closeButton {
   background: none;
   border: none;
-  color: #1E293B;
+  color: var(--ink);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -149,7 +149,7 @@
 }
 
 .closeButton:hover {
-  color: #0F766E;
+  color: var(--forest);
 }
 
 .drawerNav {
@@ -161,7 +161,7 @@
 
 .drawerLink {
   text-decoration: none;
-  color: #1E293B;
+  color: var(--ink);
   font-size: 16px;
   font-weight: 500;
   padding: 12px 24px;
@@ -170,15 +170,15 @@
 }
 
 .drawerLink:hover {
-  background: #F8FAFC;
-  color: #0F766E;
+  background: var(--paper);
+  color: var(--forest);
 }
 
 .drawerLink.active {
-  color: #0F766E;
+  color: var(--forest);
   font-weight: 600;
-  background: #F8FAFC;
-  border-left: 3px solid #0F766E;
+  background: var(--paper);
+  border-left: 3px solid var(--forest);
 }
 
 @keyframes fadeIn {

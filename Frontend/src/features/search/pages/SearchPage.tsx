@@ -27,7 +27,7 @@ const SearchPage: React.FC = () => {
     hasActiveFilters
   } = useFilters();
 
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [sortBy, setSortBy] = useState('rating');
 
   const handleSearchChange = (query: string) => {
@@ -156,11 +156,18 @@ const SearchPage: React.FC = () => {
 
         {/* Mobile Layout */}
         <div className={styles.mobileLayout}>
-          <SearchResults
-            schools={filteredSchools}
-            isLoading={isLoading}
-            onViewDetails={handleViewDetails}
-          />
+          {viewMode === 'list' ? (
+            <SearchResults
+              schools={filteredSchools}
+              isLoading={isLoading}
+              onViewDetails={handleViewDetails}
+            />
+          ) : (
+            <MapView
+              schools={filteredSchools}
+              onSchoolClick={handleViewDetails}
+            />
+          )}
         </div>
 
         {/* Mobile Filter Drawer */}
@@ -171,6 +178,7 @@ const SearchPage: React.FC = () => {
           onToggleArrayFilter={toggleArrayFilter}
           onToggleTopRated={toggleTopRated}
           onReset={resetFilters}
+          resultCount={filteredSchools.length}
         />
 
         {/* Mobile Bottom Toggle */}

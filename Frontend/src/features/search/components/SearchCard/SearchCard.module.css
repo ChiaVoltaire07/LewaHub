@@ -1,8 +1,8 @@
 .card {
   background: #FFFFFF;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  border: 1px solid #D9E3E8;
+  border: 1px solid var(--line);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -11,8 +11,8 @@
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  border-color: #0F766E;
+  box-shadow: 0 12px 24px rgba(20, 35, 28, 0.08);
+  border-color: var(--moss);
 }
 
 .imageContainer {
@@ -37,13 +37,13 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  background: #0F766E;
+  background: var(--forest);
   color: #FFFFFF;
   padding: 4px 12px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 12px;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.3);
+  box-shadow: 0 2px 8px rgba(31, 93, 69, 0.3);
 }
 
 .content {
@@ -62,9 +62,10 @@
 }
 
 .schoolName {
+  font-family: var(--font-display);
   font-size: 18px;
   font-weight: 600;
-  color: #1E293B;
+  color: var(--ink);
   margin: 0;
   line-height: 1.3;
   flex: 1;
@@ -78,16 +79,18 @@
 }
 
 .ratingValue {
+  font-family: var(--font-mono);
   font-size: 14px;
-  font-weight: 600;
-  color: #1E293B;
+  font-weight: 500;
+  color: var(--forest);
 }
 
 .location {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #64748B;
+  color: var(--ink);
+  opacity: 0.7;
   font-size: 14px;
 }
 
@@ -98,10 +101,10 @@
 }
 
 .tag {
-  background: #D1FAE5;
-  color: #0F766E;
+  background: var(--paper-deep);
+  color: var(--forest);
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 12px;
   font-weight: 500;
 }
@@ -113,8 +116,10 @@
 }
 
 .programsCount {
+  font-family: var(--font-mono);
   font-size: 13px;
-  color: #64748B;
+  color: var(--ink);
+  opacity: 0.7;
   font-weight: 500;
 }
 
@@ -125,10 +130,10 @@
   gap: 8px;
   width: 100%;
   padding: 12px;
-  background: #0F766E;
+  background: var(--sienna);
   color: #FFFFFF;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -137,9 +142,9 @@
 }
 
 .viewButton:hover {
-  background: #115E59;
+  background: #A84622;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+  box-shadow: 0 4px 12px rgba(193, 87, 43, 0.2);
 }
 
 .viewButton:active {

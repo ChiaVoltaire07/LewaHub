@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F8FAFC;
+  background: var(--paper);
   display: flex;
   flex-direction: column;
 }
@@ -29,22 +29,22 @@
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: #0F766E;
+  background: var(--sienna);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   color: #FFFFFF;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+  box-shadow: 0 2px 8px rgba(193, 87, 43, 0.2);
 }
 
 .filterButton:hover {
-  background: #115E59;
+  background: #A84622;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+  box-shadow: 0 4px 12px rgba(193, 87, 43, 0.3);
 }
 
 .filterButton:active {
@@ -59,7 +59,7 @@
   height: 8px;
   background: #FFFFFF;
   border-radius: 50%;
-  box-shadow: 0 0 0 2px #0F766E;
+  box-shadow: 0 0 0 2px var(--sienna);
 }
 
 /* Desktop Layout */
@@ -97,9 +97,10 @@
 }
 
 .resultsTitle {
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 600;
-  color: #1E293B;
+  color: var(--ink);
   margin: 0;
 }
 
@@ -111,7 +112,8 @@
 
 .sortLabel {
   font-size: 14px;
-  color: #64748B;
+  color: var(--ink);
+  opacity: 0.7;
   white-space: nowrap;
 }
 
@@ -124,39 +126,41 @@
 .sortDropdown {
   appearance: none;
   background: #FFFFFF;
-  border: 1px solid #D9E3E8;
-  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
   padding: 8px 32px 8px 12px;
   font-size: 14px;
-  color: #1E293B;
+  color: var(--ink);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .sortDropdown:focus {
   outline: none;
-  border-color: #0F766E;
-  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+  border-color: var(--forest);
+  box-shadow: 0 0 0 3px rgba(31, 93, 69, 0.1);
 }
 
 .sortIcon {
   position: absolute;
   right: 8px;
   pointer-events: none;
-  color: #64748B;
+  color: var(--ink);
+  opacity: 0.5;
 }
 
 /* Desktop Map */
 .desktopMap {
   margin-top: 40px;
   padding-top: 40px;
-  border-top: 1px solid #D9E3E8;
+  border-top: 1px solid var(--line);
 }
 
 .mapTitle {
+  font-family: var(--font-display);
   font-size: 20px;
   font-weight: 600;
-  color: #1E293B;
+  color: var(--ink);
   margin: 0 0 16px 0;
 }
 

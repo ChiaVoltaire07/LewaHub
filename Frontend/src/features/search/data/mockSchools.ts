@@ -6,6 +6,7 @@ export const mockSchools: School[] = [
     name: 'University of Yaoundé I',
     region: 'Centre',
     institutionType: 'University',
+    schoolLevel: 'Secondary',
     curriculum: ['Anglophone', 'Francophone'],
     degreeLevel: ['Bachelor', 'Master', 'PhD'],
     programs: ['Computer Science', 'Medicine', 'Law', 'Economics'],
@@ -25,6 +26,7 @@ export const mockSchools: School[] = [
     name: 'University of Buea',
     region: 'Southwest',
     institutionType: 'University',
+    schoolLevel: 'Secondary',
     curriculum: ['Anglophone'],
     degreeLevel: ['Bachelor', 'Master'],
     programs: ['Engineering', 'Agriculture', 'Business'],
@@ -44,6 +46,7 @@ export const mockSchools: School[] = [
     name: 'American Institute of Cameroon',
     region: 'Littoral',
     institutionType: 'College',
+    schoolLevel: 'Secondary',
     curriculum: ['Anglophone', 'American'],
     degreeLevel: ['Bachelor', 'Associate'],
     programs: ['Business Administration', 'Computer Science', 'Nursing'],
@@ -63,6 +66,7 @@ export const mockSchools: School[] = [
     name: 'University of Douala',
     region: 'Littoral',
     institutionType: 'University',
+    schoolLevel: 'Secondary',
     curriculum: ['Francophone'],
     degreeLevel: ['Bachelor', 'Master', 'PhD'],
     programs: ['Sciences', 'Letters', 'Economics', 'Law'],
@@ -82,6 +86,7 @@ export const mockSchools: School[] = [
     name: 'Catholic University of Central Africa',
     region: 'Centre',
     institutionType: 'University',
+    schoolLevel: 'Secondary',
     curriculum: ['Francophone', 'Catholic'],
     degreeLevel: ['Bachelor', 'Master', 'PhD'],
     programs: ['Theology', 'Philosophy', 'Law', 'Economics'],
@@ -101,6 +106,7 @@ export const mockSchools: School[] = [
     name: 'University of Dschang',
     region: 'West',
     institutionType: 'University',
+    schoolLevel: 'Secondary',
     curriculum: ['Francophone'],
     degreeLevel: ['Bachelor', 'Master'],
     programs: ['Agriculture', 'Forestry', 'Veterinary Medicine'],
@@ -120,6 +126,7 @@ export const mockSchools: School[] = [
     name: 'International University of Bamenda',
     region: 'Northwest',
     institutionType: 'University',
+    schoolLevel: 'Secondary',
     curriculum: ['Anglophone'],
     degreeLevel: ['Bachelor', 'Master'],
     programs: ['Business', 'IT', 'Law', 'Education'],
@@ -139,6 +146,7 @@ export const mockSchools: School[] = [
     name: 'University of Maroua',
     region: 'Far North',
     institutionType: 'University',
+    schoolLevel: 'Secondary',
     curriculum: ['Francophone'],
     degreeLevel: ['Bachelor', 'Master'],
     programs: ['Sciences', 'Letters', 'Economics'],
@@ -152,6 +160,86 @@ export const mockSchools: School[] = [
       address: 'Maroua, Cameroon'
     },
     description: 'University serving the Far North region.'
+  },
+  {
+    id: '9',
+    name: 'Greenfield Academy',
+    region: 'Centre',
+    institutionType: 'School',
+    schoolLevel: 'Primary',
+    curriculum: ['Anglophone', 'Francophone'],
+    degreeLevel: ['Primary'],
+    programs: ['Mathematics', 'Science', 'English', 'French', 'Art'],
+    feeRange: '50,000 - 150,000 XAF',
+    rating: 4.8,
+    topRated: true,
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800',
+    location: {
+      lat: 3.8480,
+      lng: 11.5021,
+      address: 'Yaoundé, Cameroon'
+    },
+    description: 'Premier primary school with excellent academic record.'
+  },
+  {
+    id: '10',
+    name: 'Sunshine Nursery School',
+    region: 'Littoral',
+    institutionType: 'Nursery',
+    schoolLevel: 'Nursery',
+    curriculum: ['Anglophone', 'Francophone'],
+    degreeLevel: ['Nursery'],
+    programs: ['Early Learning', 'Creative Play', 'Basic Numeracy'],
+    feeRange: '25,000 - 75,000 XAF',
+    rating: 4.9,
+    topRated: true,
+    image: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800',
+    location: {
+      lat: 4.0511,
+      lng: 9.7679,
+      address: 'Douala, Cameroon'
+    },
+    description: 'A nurturing environment for early childhood development.'
+  },
+  {
+    id: '11',
+    name: 'St. Mary\'s Secondary School',
+    region: 'Southwest',
+    institutionType: 'School',
+    schoolLevel: 'Secondary',
+    curriculum: ['Anglophone'],
+    degreeLevel: ['Secondary'],
+    programs: ['Sciences', 'Arts', 'Commercial Studies'],
+    feeRange: '80,000 - 200,000 XAF',
+    rating: 4.4,
+    topRated: false,
+    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c87f?w=800',
+    location: {
+      lat: 4.1534,
+      lng: 9.2422,
+      address: 'Buea, Cameroon'
+    },
+    description: 'Well-established secondary school with strong academic tradition.'
+  },
+  {
+    id: '12',
+    name: 'Little Angels Primary School',
+    region: 'Northwest',
+    institutionType: 'School',
+    schoolLevel: 'Primary',
+    curriculum: ['Anglophone'],
+    degreeLevel: ['Primary'],
+    programs: ['Mathematics', 'English', 'Science', 'Social Studies'],
+    feeRange: '40,000 - 120,000 XAF',
+    rating: 4.6,
+    topRated: true,
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800',
+    location: {
+      lat: 5.9631,
+      lng: 10.1591,
+      address: 'Bamenda, Cameroon'
+    },
+    description: 'Quality primary education focused on foundational skills.'
   }
 ];
 
@@ -168,6 +256,11 @@ export const filterOptions = {
     { value: 'University', label: 'University' },
     { value: 'College', label: 'College' },
     { value: 'Institute', label: 'Institute' }
+  ],
+  schoolLevel: [
+    { value: 'Nursery', label: 'Nursery' },
+    { value: 'Primary', label: 'Primary' },
+    { value: 'Secondary', label: 'Secondary' }
   ],
   curriculum: [
     { value: 'Francophone', label: 'Francophone' },
