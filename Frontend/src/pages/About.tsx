@@ -7,7 +7,7 @@ const About = () => {
       <Navbar />
       
       <main className="pt-xl overflow-hidden">
-        {/* Hero Section */}
+    
         <section className="relative py-lg md:py-xl px-margin-mobile md:px-xl max-w-container-max mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-lg items-center">
             <div className="md:col-span-7 space-y-sm">
