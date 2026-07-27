@@ -3,7 +3,7 @@ import { GraduationCap, BookOpen, School, Info } from 'lucide-react';
 
 function FeeCard() {
   const fees = [
-    { level: 'Primary Section (Level 1-6)', amount: '350,000 XAF / Year', icon: GraduationCap, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { level: 'Primary Section (Class 1-6)', amount: '350,000 XAF / Year', icon: GraduationCap, color: 'text-blue-600', bg: 'bg-blue-50' },
     { level: 'Secondary Section (Form 1-5)', amount: '550,000 XAF / Year', icon: BookOpen, color: 'text-purple-600', bg: 'bg-purple-50' },
     { level: 'High School (Lower/Upper Sixth)', amount: '750,000 XAF / Year', icon: School, color: 'text-primary-700', bg: 'bg-primary-50' },
   ];

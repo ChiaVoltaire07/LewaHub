@@ -1,5 +1,4 @@
 import React from 'react';
-import { MapPin } from 'lucide-react';
 
 function HeroBanner() {
   return (
@@ -33,8 +32,7 @@ function HeroBanner() {
         </h1>
 
         
-        <div className="flex items-center gap-2 text-white/90">
-          <MapPin className="w-5 h-5 flex-shrink-0" />
+        <div className="text-white/90">
           <span className="text-base sm:text-lg md:text-xl font-medium">
             Bastos, Yaoundé, Cameroon
           </span>
