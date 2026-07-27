@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-**/node_modules/
-=======
 # Dependencies
 node_modules/
 
@@ -30,4 +27,3 @@ Thumbs.db
 
 # Vite cache
 .vite/
->>>>>>> origin/contact-page
