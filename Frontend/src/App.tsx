@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import About from './pages/About'
 import ContactPage from './pages/ContactPage'
+import SchoolDetailsPage from './pages/SchoolDetailsPage'
 import { SearchPage } from './features/search'
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
       <Route path="/search" element={<SearchPage />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/school/:id" element={<SchoolDetailsPage />} />
     </Routes>
   )
 }
