@@ -1,0 +1,251 @@
+.sidebar {
+  background: #FFFFFF;
+  border-right: 1px solid var(--line);
+  padding: 24px;
+  overflow-y: auto;
+  height: fit-content;
+  position: sticky;
+  top: 80px;
+}
+
+.sidebar.mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+  z-index: 2000;
+  border-right: none;
+  box-shadow: 4px 0 12px rgba(20, 35, 28, 0.15);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.sidebar.mobile.open {
+  transform: translateX(0);
+}
+
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+}
+
+.mobileTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.closeButton:hover {
+  color: var(--forest);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.resetButton {
+  background: none;
+  border: none;
+  color: var(--forest);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+}
+
+.resetButton:hover {
+  background: var(--paper-deep);
+}
+
+.filterSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filterTitle {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pillContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  padding: 8px 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--ink);
+  opacity: 0.7;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pill:hover {
+  border-color: var(--forest);
+  opacity: 1;
+}
+
+.pill.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+.topRatedOption {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  padding-left: 32px;
+  user-select: none;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+}
+
+.topRatedOption input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.topRatedOption .checkbox {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 18px;
+  width: 18px;
+  background: #FFFFFF;
+  border: 2px solid var(--line);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.topRatedOption input:checked ~ .checkbox {
+  background: var(--forest);
+  border-color: var(--forest);
+}
+
+.topRatedOption input:checked ~ .checkbox::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.topRatedOption .optionLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.viewToggle {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+}
+
+.viewToggleButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  opacity: 0.7;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.viewToggleButton:hover {
+  border-color: var(--forest);
+  color: var(--forest);
+}
+
+.viewToggleButton.active {
+  background: var(--forest);
+  color: #FFFFFF;
+  border-color: var(--forest);
+  opacity: 1;
+}
+
+.viewToggleButton.active:hover {
+  background: var(--forest-dark);
+  border-color: var(--forest-dark);
+  color: #FFFFFF;
+}
+
+@media (max-width: 991px) {
+  .sidebar {
+    display: none;
+  }
+}
