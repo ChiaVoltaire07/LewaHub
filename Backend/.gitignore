@@ -1,18 +1,6 @@
-<<<<<<< HEAD
+
 **/node_modules/
-=======
-# Dependencies
-node_modules/
-
-# Build files
 dist/
-
-# Environment files
 .env
-
-# Logs
 *.log
-
-# VS Code
 .vscode/
->>>>>>> origin/contact-page
