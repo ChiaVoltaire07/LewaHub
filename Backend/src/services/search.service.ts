@@ -15,7 +15,7 @@ export async function searchSchools(
     query: string
 ) {
     // 1. Check cache first
-    const cacheKey = `school-search:${query}`;
+    const cacheKey = `school-search:${query.toLowerCase().trim()}`;
     const cached = await getCache(cacheKey);
 
     if (cached) {
@@ -26,21 +26,11 @@ export async function searchSchools(
     // 2. Extract filters from natural language query
     const filters = extractFilters(query);
 
-    // 2.5 Check if we have any filters to apply
-    const hasFilters = filters.region || 
-                       filters.boarding !== undefined || 
-                       filters.ownership || 
-                       (filters.facilities && filters.facilities.length > 0) ||
-                       (filters.programs && filters.programs.length > 0) ||
-                       (filters.keywords && filters.keywords.length > 0);
-
-    if (!hasFilters) {
-        // No valid filters extracted, return empty array
-        return [];
-    }
-
     // 3. Build dynamic Prisma query
     const where: any = {};
+
+    // Always include approved schools by default
+    where.verification_status = "approved";
 
     // Region filter
     if (filters.region) {
@@ -63,17 +53,32 @@ export async function searchSchools(
     }
 
     // Facilities filter - schools that have ALL specified facilities
+    // BUT skip if the only facility is "dormitory" (already covered by boarding filter)
     if (filters.facilities && filters.facilities.length > 0) {
-        where.school_facility = {
-            some: {
-                facility: {
-                    name: {
-                        in: filters.facilities,
-                        mode: "insensitive"
+        const nonDormitoryFacilities = filters.facilities.filter(f => f !== "dormitory");
+        
+        if (nonDormitoryFacilities.length > 0) {
+            // Use AND to require ALL specified facilities
+            const facilityConditions = nonDormitoryFacilities.map(facility => ({
+                school_facility: {
+                    some: {
+                        facility: {
+                            name: {
+                                contains: facility,
+                                mode: "insensitive"
+                            }
+                        }
                     }
                 }
+            }));
+            
+            // Merge with existing AND conditions if any
+            if (where.AND) {
+                where.AND = [...where.AND, ...facilityConditions];
+            } else {
+                where.AND = facilityConditions;
             }
-        };
+        }
     }
 
     // Programs filter - schools that have ANY of the specified programs
@@ -114,7 +119,12 @@ export async function searchSchools(
         }
 
         // All keywords must match (AND between keyword groups)
-        where.AND = keywordGroups;
+        // Merge with existing AND conditions if any
+        if (where.AND) {
+            where.AND = [...where.AND, ...keywordGroups];
+        } else {
+            where.AND = keywordGroups;
+        }
     }
 
     // 4. Execute search with includes
@@ -129,7 +139,17 @@ export async function searchSchools(
                     facility: true
                 }
             },
-            curriculum: true
+            curriculum: true,
+            evaluation: {
+                where: {
+                    status: "approved"
+                },
+                take: 1
+            },
+            school_view: {
+                take: 100
+            },
+            fee: true
         }
     });
 

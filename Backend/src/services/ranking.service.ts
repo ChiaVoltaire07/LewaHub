@@ -1,5 +1,6 @@
 import prisma from "../lib/prisma";
 import { SearchFilters } from "./filter.service";
+import { Decimal } from "@prisma/client/runtime/library";
 
 type School = Awaited<
     ReturnType<
@@ -12,6 +13,10 @@ type SchoolWithRelations = School & {
     program?: Array<{ name: string }>;
     school_facility?: Array<{ facility: { name: string } }>;
     curriculum?: Array<{ name: string }>;
+    evaluation?: Array<{ score?: Decimal | null }>;
+    school_view?: Array<{ view_id: number }>;
+    fee?: Array<{ fee_id: number }>;
+    school_photo?: Array<{ photo_id: number }>;
 };
 
 export function calculateSchoolScore(
@@ -23,6 +28,19 @@ export function calculateSchoolScore(
     // Base score for approved schools
     if (school.verification_status === "approved") {
         score += 30;
+    }
+
+    // Rating score (0-5 scale, convert to 0-20 points)
+    if (school.evaluation && school.evaluation.length > 0 && school.evaluation[0].score) {
+        const avgRating = parseFloat(school.evaluation[0].score.toString());
+        score += (avgRating / 5) * 20; // Max 20 points for rating
+    }
+
+    // Popularity score based on views (max 15 points)
+    const viewCount = school.school_view?.length || 0;
+    if (viewCount > 0) {
+        // Logarithmic scale: 10 views = 5pts, 100 views = 10pts, 1000+ views = 15pts
+        score += Math.min(15, Math.log10(viewCount) * 5);
     }
 
     // Boarding match bonus
@@ -39,7 +57,9 @@ export function calculateSchoolScore(
             schoolFacilityNames.includes(f.toLowerCase())
         );
         
-        score += matchedFacilities.length * 15;
+        // Calculate percentage of matched facilities
+        const matchPercentage = matchedFacilities.length / filters.facilities.length;
+        score += matchPercentage * 25; // Max 25 points for perfect facility match
     }
 
     // Program match bonus
@@ -51,7 +71,9 @@ export function calculateSchoolScore(
             schoolProgramNames.some((sp: string) => sp.includes(p.toLowerCase()) || p.toLowerCase().includes(sp))
         );
         
-        score += matchedPrograms.length * 15;
+        // Calculate percentage of matched programs
+        const matchPercentage = matchedPrograms.length / filters.programs.length;
+        score += matchPercentage * 25; // Max 25 points for perfect program match
     }
 
     // Keyword match bonus
@@ -67,8 +89,22 @@ export function calculateSchoolScore(
             schoolText.includes(keyword.toLowerCase())
         );
         
-        score += keywordMatches.length * 10;
+        // Calculate percentage of matched keywords
+        const matchPercentage = keywordMatches.length / filters.keywords.length;
+        score += matchPercentage * 20; // Max 20 points for perfect keyword match
     }
+
+    // Completeness bonus (schools with more information)
+    let completenessScore = 0;
+    if (school.description) completenessScore += 2;
+    if (school.phone) completenessScore += 1;
+    if (school.email) completenessScore += 1;
+    if (school.website) completenessScore += 1;
+    if (school.address) completenessScore += 1;
+    if (school.fee && school.fee.length > 0) completenessScore += 2;
+    if (school.school_photo && school.school_photo.length > 0) completenessScore += 2;
+    
+    score += Math.min(10, completenessScore); // Max 10 points for completeness
 
     return score;
 }
