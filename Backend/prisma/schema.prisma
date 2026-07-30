@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"e
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt hash
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Institution {
+  id              String   @id @default(cuid())
+  name            String
+  type            String   // University, College, Institute, School
+  description     String   @db.Text
+  region          String   // Cameroon region
+  city            String
+  address         String
+  latitude        Float
+  longitude       Float
+  website         String?
+  imageUrl        String?
+  contactEmail    String?
+  contactPhone    String?
+  verified        Boolean  @default(false)
+  aiSummary       String?  @db.Text
+  anonymousViews  Int      @default(0)
+  programs        Program[]
+  evaluations     Evaluation[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([region])
+  @@index([city])
+  @@index([type])
+  @@index([verified])
+}
+
+model Program {
+  id              String   @id @default(cuid())
+  name            String
+  level           String   // Bachelor, Master, Doctorate
+  duration        String   // e.g., "3 years"
+  tuition         Int?     // in local currency
+  description     String?  @db.Text
+  institution     Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  institutionId   String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([institutionId])
+}
+
+model Evaluation {
+  id              String   @id @default(cuid())
+  studentId       String   // Reference to student (can be external system)
+  institutionId   String
+  institution     Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  score           Int      // 1-10
+  notes           String?  @db.Text
+  createdAt       DateTime @default(now())
+
+  @@index([institutionId])
+  @@index([studentId])
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  hash      String   @unique // SHA256 hash of token (never store raw token)
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}

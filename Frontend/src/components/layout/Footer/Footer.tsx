@@ -1,42 +1,179 @@
-import { Share2, Globe } from "lucide-react";
-import styles from "./Footer.module.css";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
-      <div className={styles.inner}>
-        <div className={styles.brand}>
-          <span className={styles.logo}>LewaHub</span>
-          <p className={styles.description}>
-            Empowering families to make the best educational choices for their
-            children since 2024.
-          </p>
+    <footer
+      style={{
+        backgroundColor: "var(--ink, #14231C)",
+        color: "#FFFFFF",
+        padding: "60px 24px 24px",
+        marginTop: "60px",
+      }}
+    >
+      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: "40px",
+            marginBottom: "40px",
+          }}
+          className="md:grid-cols-2 lg:grid-cols-[2fr_1fr]"
+        >
+          {/* Brand */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <h3
+              style={{
+                fontFamily: "Fraunces, serif",
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "var(--forest, #1F5D45)",
+                margin: 0,
+              }}
+            >
+              LewaHub
+            </h3>
+            <p
+              style={{
+                fontSize: "14px",
+                color: "#FFFFFF",
+                opacity: 0.7,
+                lineHeight: 1.6,
+                margin: 0,
+                maxWidth: "300px",
+              }}
+            >
+              Connecting students with the best educational institutions in Cameroon
+            </p>
+          </div>
+
+          {/* Links */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "40px",
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <h4
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#FFFFFF",
+                  margin: "0 0 4px 0",
+                }}
+              >
+                Quick Links
+              </h4>
+              <Link
+                to="/"
+                style={{
+                  color: "#FFFFFF",
+                  opacity: 0.7,
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  transition: "all 0.3s ease",
+                }}
+                className="hover:opacity-100"
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
+              >
+                Home
+              </Link>
+              <Link
+                to="/search"
+                style={{
+                  color: "#FFFFFF",
+                  opacity: 0.7,
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  transition: "all 0.3s ease",
+                }}
+                className="hover:opacity-100"
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
+              >
+                Search
+              </Link>
+              <Link
+                to="/about"
+                style={{
+                  color: "#FFFFFF",
+                  opacity: 0.7,
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  transition: "all 0.3s ease",
+                }}
+                className="hover:opacity-100"
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                style={{
+                  color: "#FFFFFF",
+                  opacity: 0.7,
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  transition: "all 0.3s ease",
+                }}
+                className="hover:opacity-100"
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
+              >
+                Contact
+              </Link>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <h4
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#FFFFFF",
+                  margin: "0 0 4px 0",
+                }}
+              >
+                Contact
+              </h4>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#FFFFFF",
+                  opacity: 0.7,
+                  margin: 0,
+                }}
+              >
+                info@lewahub.com
+              </p>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#FFFFFF",
+                  opacity: 0.7,
+                  margin: 0,
+                }}
+              >
+                Yaoundé, Cameroon
+              </p>
+            </div>
+          </div>
         </div>
 
-        <nav className={styles.links} aria-label="Footer">
-          <a href="/privacy" className={styles.link}>
-            Privacy Policy
-          </a>
-          <a href="/terms" className={styles.link}>
-            Terms of Service
-          </a>
-          <a href="/support" className={styles.link}>
-            Support
-          </a>
-        </nav>
-
-        <div className={styles.meta}>
-          <span className={styles.copyright}>
-            © {new Date().getFullYear()} LewaHub School Catalog. All rights reserved.
-          </span>
-          <div className={styles.social}>
-            <a href="/" aria-label="Share" className={styles.socialIcon}>
-              <Share2 size={16} />
-            </a>
-            <a href="/" aria-label="Website" className={styles.socialIcon}>
-              <Globe size={16} />
-            </a>
-          </div>
+        {/* Bottom bar */}
+        <div
+          style={{
+            paddingTop: "24px",
+            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <p style={{ fontSize: "13px", color: "#FFFFFF", opacity: 0.5, margin: 0 }}>
+            &copy; {new Date().getFullYear()} LewaHub. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

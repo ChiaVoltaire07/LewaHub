@@ -1,6 +1,6 @@
 import "../../styles/contact.css";
 import ContactNavbar from "./components/ContactNavbar";
-import ContactFooter from "./components/ContactFooter";
+import Footer from "../../components/layout/Footer/Footer";
 import ContactForm from "./components/ContactForm";
 import ContactInfo from "./components/ContactInfo";
 
@@ -33,7 +33,7 @@ export default function ContactPage() {
         </section>
       </main>
 
-      <ContactFooter />
+      <Footer />
     </div>
   );
 }

@@ -13,7 +13,7 @@
   padding: 24px;
 }
 
-/* Search Header */
+
 .searchHeader {
   margin-bottom: 24px;
 }
@@ -62,7 +62,7 @@
   box-shadow: 0 0 0 2px var(--sienna);
 }
 
-/* Desktop Layout */
+
 .desktopLayout {
   display: none;
   gap: 24px;
@@ -80,7 +80,7 @@
   gap: 24px;
 }
 
-/* Results Header */
+
 .resultsHeader {
   display: flex;
   align-items: center;
@@ -149,7 +149,6 @@
   opacity: 0.5;
 }
 
-/* Desktop Map */
 .desktopMap {
   margin-top: 40px;
   padding-top: 40px;
@@ -184,7 +183,7 @@
   }
 }
 
-/* Desktop */
+
 @media (min-width: 992px) {
   .mainContent {
     padding: 40px;

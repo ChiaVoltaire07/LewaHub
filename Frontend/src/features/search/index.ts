@@ -8,7 +8,7 @@ export { default as SearchCard } from './components/SearchCard/SearchCard';
 export { default as MapView } from './components/MapView/MapView';
 export { default as BottomMapToggle } from './components/BottomMapToggle/BottomMapToggle';
 export { default as ActiveFilters } from './components/ActiveFilters/ActiveFilters';
-export { default as Footer } from './components/Footer/Footer';
+export { default as Footer } from '../../components/layout/Footer/Footer';
 export { useSearch } from './hooks/useSearch';
 export { useFilters } from './hooks/useFilters';
 export { useMap } from './hooks/useMap';

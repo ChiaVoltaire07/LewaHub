@@ -1,4 +1,5 @@
 import { CheckCircle2, Clock3, MapPin, Star, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import type { School } from "../../types/school";
 import styles from "./FeaturedSchools.module.css";
 
@@ -54,10 +55,10 @@ export default function SchoolCard({ school }: SchoolCardProps) {
             {school.status}
           </span>
 
-          <a href={`/schools/${school.id}`} className={styles.details}>
+          <Link to={`/school/${school.id}`} className={styles.details}>
             Details
             <ArrowRight size={14} aria-hidden="true" />
-          </a>
+          </Link>
         </div>
       </div>
     </article>

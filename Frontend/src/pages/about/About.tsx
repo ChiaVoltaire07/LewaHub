@@ -1,5 +1,5 @@
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import Footer from "../../components/layout/Footer/Footer";
 
 const About = () => {
   return (
@@ -25,7 +25,7 @@ const About = () => {
               <div className="aspect-square rounded-2xl overflow-hidden shadow-sm border border-outline-variant bg-surface-container">
                 <img 
                   className="w-full h-full object-cover" 
-                  alt="A clean, professional photograph of a bright, modern classroom in Cameroon with warm sunlight filtering through windows. The scene captures the essence of hope and quality education, featuring organized wooden desks and a chalkboard in a minimalist setting. The color palette is dominated by soft whites and natural tones with subtle teal accents, reflecting the CameroonEdu brand identity."
+                  alt="A clean, professional photograph of a bright, modern classroom in Cameroon with warm sunlight filtering through windows. The scene captures the essence of hope and quality education, featuring organized wooden desks and a chalkboard in a minimalist setting. The color palette is dominated by soft whites and natural tones with subtle teal accents, reflecting the LewaHub brand identity."
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrIccq-M-EdaxKhskSZX86Y80NkiCbJKiCIHA61aC1Q3mya7zWgxDi8nyvZG1QKX6OB6Oh2WtaQQibKWUYY0Qw94-0HQ6cRsAe0eAbz4U5Pnb8TesdAVHdrzciVb24qwkblKAzBvHPhXWjNxVRt1vPl0FomW2nvDE6gnE0Hxyuy9cIj3xAc--WYOC5_UxDFh6DY7aEjmVyvKEnR9z6rgDaEobmK8q-qkh-nNIQAtFQ7_8bSrMVReTx4A"
                 />
               </div>
@@ -33,7 +33,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* Our Mission */}
+
         <section className="py-lg md:py-xl bg-surface-container-low border-y border-outline-variant">
           <div className="px-margin-mobile md:px-xl max-w-container-max mx-auto">
             <div className="flex flex-col md:flex-row gap-lg">
@@ -66,7 +66,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* How We Verify Schools */}
+       
         <section className="py-lg md:py-xl px-margin-mobile md:px-xl max-w-container-max mx-auto">
           <div className="text-center mb-lg">
             <h2 className="font-headline-lg text-headline-lg text-on-surface mb-xs">How We Verify Schools</h2>
@@ -75,7 +75,7 @@ const About = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
-            {/* Step 1 */}
+         
             <div className="p-md rounded-2xl bg-surface border border-outline-variant shadow-sm hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center mb-sm">
                 <span className="material-symbols-outlined">description</span>
@@ -85,7 +85,7 @@ const About = () => {
                 We collect and review official registration documents from the Ministry of Secondary Education (MINESEC) or Basic Education (MINEDUB).
               </p>
             </div>
-            {/* Step 2 */}
+           
             <div className="p-md rounded-2xl bg-surface border border-outline-variant shadow-sm hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center mb-sm">
                 <span className="material-symbols-outlined">location_on</span>
@@ -95,7 +95,7 @@ const About = () => {
                 Our field agents conduct periodic visits to verify the existence of physical facilities and the accuracy of provided photos.
               </p>
             </div>
-            {/* Step 3 */}
+           
             <div className="p-md rounded-2xl bg-surface border border-outline-variant shadow-sm hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center mb-sm">
                 <span className="material-symbols-outlined">reviews</span>
@@ -108,7 +108,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* The Goal Section */}
+      
         <section className="py-lg md:py-xl px-margin-mobile md:px-xl max-w-container-max mx-auto mb-lg">
           <div className="relative rounded-3xl overflow-hidden bg-on-surface text-on-primary p-lg md:p-xl">
             <div className="absolute inset-0 opacity-20"></div>
@@ -135,7 +135,7 @@ const About = () => {
           </div>
         </section>
 
-        {/* Trust Section */}
+        
         <section className="py-lg bg-surface border-t border-outline-variant">
           <div className="px-margin-mobile md:px-xl max-w-container-max mx-auto text-center">
             <h3 className="font-headline-md text-headline-md text-on-surface mb-sm">Trusted by Educational Partners</h3>

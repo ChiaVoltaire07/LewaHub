@@ -79,9 +79,6 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               })}
             </nav>
 
-            <button type="button" className={styles.signIn} onClick={onClose}>
-              Sign In
-            </button>
           </motion.div>
         </>
       )}

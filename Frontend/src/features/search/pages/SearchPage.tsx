@@ -1,5 +1,6 @@
 import "../../../styles/search-global.css";
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import Navbar from '../components/Navbar/Navbar';
 import SearchBar from '../components/SearchBar/SearchBar';
@@ -9,7 +10,7 @@ import SearchResults from '../components/SearchResults/SearchResults';
 import MapView from '../components/MapView/MapView';
 import BottomMapToggle from '../components/BottomMapToggle/BottomMapToggle';
 import ActiveFilters from '../components/ActiveFilters/ActiveFilters';
-import Footer from '../components/Footer/Footer';
+import Footer from "../../../components/layout/Footer/Footer";
 import { useSearch } from '../hooks/useSearch';
 import { useFilters } from '../hooks/useFilters';
 import { School } from '../types';
@@ -17,7 +18,7 @@ import { sortOptions } from '../data/mockSchools';
 import styles from './SearchPage.module.css';
 
 const SearchPage: React.FC = () => {
-  const { filteredSchools, isLoading, filters, updateFilter, resetFilters } = useSearch();
+  const { filteredSchools, isLoading, filters, error, updateFilter, resetFilters } = useSearch();
   const {
     isFilterDrawerOpen,
     toggleArrayFilter,
@@ -28,6 +29,7 @@ const SearchPage: React.FC = () => {
     hasActiveFilters
   } = useFilters();
 
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [sortBy, setSortBy] = useState('rating');
 
@@ -50,8 +52,7 @@ const SearchPage: React.FC = () => {
   };
 
   const handleViewDetails = (school: School) => {
-    console.log('View details for:', school.name);
-    // TODO: Navigate to school details page
+    navigate(`/school/${school.id}`);
   };
 
   const handleSortChange = (value: string) => {
@@ -129,6 +130,18 @@ const SearchPage: React.FC = () => {
             </div>
 
             {/* Results and Map */}
+            {error && (
+              <div className={styles.errorContainer} style={{
+                backgroundColor: "rgba(193, 87, 43, 0.1)",
+                border: "1px solid rgba(193, 87, 43, 0.3)",
+                borderRadius: "8px",
+                padding: "1rem",
+                marginBottom: "1rem",
+                color: "#C1572B"
+              }}>
+                <p><strong>Error:</strong> {error}</p>
+              </div>
+            )}
             {viewMode === 'list' ? (
               <SearchResults
                 schools={filteredSchools}
