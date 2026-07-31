@@ -2,7 +2,6 @@ import "../../../styles/search-global.css";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
-import Navbar from '../components/Navbar/Navbar';
 import SearchBar from '../components/SearchBar/SearchBar';
 import FilterSidebar from '../components/FilterSidebar/FilterSidebar';
 import MobileFilterDrawer from '../components/MobileFilterDrawer/MobileFilterDrawer';
@@ -10,7 +9,6 @@ import SearchResults from '../components/SearchResults/SearchResults';
 import MapView from '../components/MapView/MapView';
 import BottomMapToggle from '../components/BottomMapToggle/BottomMapToggle';
 import ActiveFilters from '../components/ActiveFilters/ActiveFilters';
-import Footer from "../../../components/layout/Footer/Footer";
 import { useSearch } from '../hooks/useSearch';
 import { useFilters } from '../hooks/useFilters';
 import { School } from '../types';
@@ -62,8 +60,6 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      <Navbar />
-
       <div className={styles.mainContent}>
         {/* Search Header */}
         <div className={styles.searchHeader}>
@@ -201,8 +197,6 @@ const SearchPage: React.FC = () => {
           onToggle={setViewMode}
         />
       </div>
-
-      <Footer />
     </div>
   );
 };

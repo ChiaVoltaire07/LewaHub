@@ -1,5 +1,6 @@
 import { Send } from "lucide-react";
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   fullName: string;
@@ -9,6 +10,7 @@ interface FormData {
 }
 
 export default function ContactForm() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -35,7 +37,7 @@ export default function ContactForm() {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-border-light p-6 sm:p-8">
       <h2 className="text-xl font-bold text-text-dark mb-6">
-        Send us a message
+        {t("contact.form.subject")}
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -43,7 +45,7 @@ export default function ContactForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="fullName" className="block text-sm font-medium text-text-dark mb-1.5">
-              Full Name
+              {t("contact.form.name")}
             </label>
             <input
               id="fullName"
@@ -52,13 +54,13 @@ export default function ContactForm() {
               required
               value={formData.fullName}
               onChange={handleChange}
-              placeholder="Enter your name"
+              placeholder={t("contact.form.name")}
               className="w-full px-4 py-2.5 text-sm border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-primary/30 focus:border-teal-primary bg-bg-soft"
             />
           </div>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-text-dark mb-1.5">
-              Email Address
+              {t("contact.form.email")}
             </label>
             <input
               id="email"
@@ -76,7 +78,7 @@ export default function ContactForm() {
        
         <div>
           <label htmlFor="subject" className="block text-sm font-medium text-text-dark mb-1.5">
-            Subject
+            {t("contact.form.subject")}
           </label>
           <input
             id="subject"
@@ -85,7 +87,7 @@ export default function ContactForm() {
             required
             value={formData.subject}
             onChange={handleChange}
-            placeholder="What can we help you with?"
+            placeholder={t("contact.form.subject")}
             className="w-full px-4 py-2.5 text-sm border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-primary/30 focus:border-teal-primary bg-bg-soft"
           />
         </div>
@@ -93,7 +95,7 @@ export default function ContactForm() {
         
         <div>
           <label htmlFor="message" className="block text-sm font-medium text-text-dark mb-1.5">
-            Message
+            {t("contact.form.message")}
           </label>
           <textarea
             id="message"
@@ -102,7 +104,7 @@ export default function ContactForm() {
             rows={5}
             value={formData.message}
             onChange={handleChange}
-            placeholder="Write your message here..."
+            placeholder={t("contact.form.message")}
             className="w-full px-4 py-2.5 text-sm border border-border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-primary/30 focus:border-teal-primary bg-bg-soft resize-none"
           />
         </div>
@@ -112,7 +114,7 @@ export default function ContactForm() {
           type="submit"
           className="inline-flex items-center gap-2 px-6 py-2.5 bg-teal-primary text-white text-sm font-semibold rounded-lg hover:bg-teal-dark transition-colors"
         >
-          Send Message
+          {t("contact.form.submit")}
           <Send className="w-4 h-4" />
         </button>
       </form>
@@ -123,7 +125,7 @@ export default function ContactForm() {
           role="status"
           className="contact-toast fixed bottom-6 right-6 left-6 sm:left-auto max-w-sm mx-auto sm:mx-0 bg-teal-primary text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium z-50"
         >
-          ✓ Message sent successfully! We'll get back to you soon.
+          ✓ {t("contact.form.success")}
         </div>
       )}
     </div>

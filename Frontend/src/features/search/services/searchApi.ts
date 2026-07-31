@@ -18,7 +18,7 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
     }
 
     // Backend returns { data, total, page, limit }
-    const results = response.data || [];
+    const results: any[] = (response as any).data || [];
 
     // Map backend institutions to frontend School type
     let mappedSchools = results.map((inst: any) => ({
@@ -26,15 +26,20 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
       name: inst.name,
       region: inst.region,
       institutionType: inst.type,
+      schoolLevel: inst.level || inst.type,
       curriculum: inst.programs?.map((p: any) => p.level) || [],
       degreeLevel: inst.programs?.map((p: any) => p.level) || [],
       programs: inst.programs?.map((p: any) => p.name) || [],
       feeRange: inst.programs?.[0]?.tuition ? `${inst.programs[0].tuition}` : '0',
       topRated: inst.verified || false,
-      city: inst.city,
       rating: 4.5, // Placeholder
-      logo: inst.imageUrl,
-      description: inst.description,
+      image: inst.imageUrl || inst.logo || '',
+      location: {
+        lat: inst.latitude || 5.5,
+        lng: inst.longitude || 12.5,
+        address: inst.address || inst.city || '',
+      },
+      description: inst.description || '',
     }));
 
     // Apply client-side filters for curriculum and degree level if needed
@@ -71,21 +76,26 @@ export const getSchoolById = async (id: string): Promise<School | null> => {
     }
 
     // Backend returns the institution directly (not wrapped in data)
-    const inst = response.data || response;
+    const inst: any = (response as any).data || response;
     return {
       id: inst.id,
       name: inst.name,
       region: inst.region,
       institutionType: inst.type,
+      schoolLevel: inst.level || inst.type,
       curriculum: inst.programs?.map((p: any) => p.level) || [],
       degreeLevel: inst.programs?.map((p: any) => p.level) || [],
       programs: inst.programs?.map((p: any) => p.name) || [],
       feeRange: inst.programs?.[0]?.tuition ? `${inst.programs[0].tuition}` : '0',
       topRated: inst.verified || false,
-      city: inst.city,
       rating: 4.5,
-      logo: inst.imageUrl,
-      description: inst.description,
+      image: inst.imageUrl || inst.logo || '',
+      location: {
+        lat: inst.latitude || 5.5,
+        lng: inst.longitude || 12.5,
+        address: inst.address || inst.city || '',
+      },
+      description: inst.description || '',
     };
   } catch (err) {
     console.error('Get school API error:', err);

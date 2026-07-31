@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
@@ -11,15 +12,17 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({
   value,
   onChange,
-  placeholder = 'Search schools, programs...'
+  placeholder
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.searchBar}>
       <Search className={styles.searchIcon} size={20} />
       <input
         type="text"
         className={styles.searchInput}
-        placeholder={placeholder}
+        placeholder={placeholder || t("search.placeholder")}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

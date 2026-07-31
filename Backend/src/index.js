@@ -9,12 +9,11 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import authRoutes from "./modules/auth/authRoutes.js";
 import institutionsRoutes from "./modules/institutions/institutionsRoutes.js";
 import programsRoutes from "./modules/programs/programsRoutes.js";
-import evaluationsRoutes from "./modules/evaluations/evaluationsRoutes.js";
 import searchRoutes from "./modules/search/searchRoutes.js";
 import aiSummaryRoutes from "./modules/aiSummary/aiSummaryRoutes.js";
 import dashboardRoutes from "./modules/dashboard/dashboardRoutes.js";
 import geolocationRoutes from "./modules/geolocation/geolocationRoutes.js";
-
+import settingsRoutes from "./modules/settings/settingsRoutes.js";
 const app = express();
 
 // Security middleware
@@ -22,7 +21,7 @@ app.use(helmet());
 
 // CORS configuration
 const corsOptions = {
-  origin: [config.frontendUrl, "http://localhost:5173", "http://localhost:3000"],
+  origin: [config.frontendUrl, "http://localhost:5173", "http://localhost:5174", "http://localhost:3000"],
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -49,9 +48,9 @@ app.use("/api/v1/admin/login", loginLimiter);
 // Routes
 app.use("/api/v1/admin", authRoutes);
 app.use("/api/v1/admin/dashboard", dashboardRoutes);
+app.use("/api/v1/admin/settings", settingsRoutes);
 app.use("/api/v1/institutions", institutionsRoutes);
 app.use("/api/v1/institutions/:institutionId/programs", programsRoutes);
-app.use("/api/v1/evaluations", evaluationsRoutes);
 app.use("/api/v1/search", searchRoutes);
 app.use("/api/v1/ai-summary", aiSummaryRoutes);
 app.use("/api/v1/geolocation", geolocationRoutes);

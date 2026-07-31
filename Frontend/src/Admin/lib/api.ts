@@ -2,11 +2,12 @@ import api from "../../lib/api";
 
 export async function apiRequest<T = any>(
   endpoint: string,
-  options?: { method?: string; body?: string },
+  options?: { method?: string; body?: any },
   token?: string
 ): Promise<T> {
   const method = options?.method || "GET";
-  return api.request(endpoint, { method, body: options?.body, token });
+  const response = await api.request<T>(endpoint, { method, body: options?.body, token });
+  return response.data as T;
 }
 
 export async function adminLogin(email: string, password: string) {
@@ -19,7 +20,7 @@ export async function getDashboardStats(token: string) {
 
 export async function listInstitutions(
   token: string,
-  filters?: { search?: string; type?: string; region?: string; page?: number; limit?: number }
+  filters?: Record<string, any>
 ) {
   // For admin, we use authenticated endpoint
   return api.request("/institutions", { token, ...filters });

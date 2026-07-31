@@ -1,0 +1,143 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "search": "Recherche",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "title": "Trouvez l'école parfaite pour votre enfant",
+      "subtitle": "Découvrez, comparez et connectez-vous avec des milliers d'écoles vérifiées à travers le Cameroun. Prenez des décisions éclairées pour l'avenir de votre enfant.",
+      "cta": "Commencer la recherche",
+      "learnMore": "En savoir plus"
+    },
+    "features": {
+      "title": "Pourquoi choisir LewaHub ?",
+      "subtitle": "Nous rendons la sélection scolaire simple, transparente et sans stress.",
+      "comprehensive": {
+        "title": "Base de données complète",
+        "desc": "Accédez à des profils détaillés de milliers d'écoles dans les 10 régions du Cameroun."
+      },
+      "verified": {
+        "title": "Informations vérifiées",
+        "desc": "Les données de chaque école sont vérifiées via des documents officiels et des visites sur place."
+      },
+      "compare": {
+        "title": "Comparaison facile",
+        "desc": "Comparez les écoles côte à côte en fonction des frais, des programmes, des installations et plus encore."
+      }
+    },
+    "featured": {
+      "title": "Écoles en vedette",
+      "subtitle": "Institutions les mieux notées sélectionnées pour l'excellence et la qualité vérifiée.",
+      "viewAll": "Voir toutes les écoles",
+      "loading": "Chargement...",
+      "error": "Erreur lors du chargement des écoles",
+      "empty": "Aucune école disponible"
+    },
+    "newsletter": {
+      "title": "Restez informé",
+      "subtitle": "Recevez les dernières listes d'écoles, actualités éducatives et conseils dans votre boîte de réception.",
+      "placeholder": "Entrez votre email",
+      "button": "S'abonner",
+      "success": "Merci de vous être abonné !",
+      "error": "Une erreur s'est produite. Veuillez réessayer."
+    }
+  },
+  "search": {
+    "title": "Rechercher des écoles",
+    "placeholder": "Rechercher par nom d'école, ville ou région...",
+    "filters": "Filtres",
+    "sortBy": "Trier par :",
+    "schoolsFound": "{{count}} école trouvée",
+    "schoolsFound_plural": "{{count}} écoles trouvées",
+    "viewDetails": "Voir les détails",
+    "noResults": "Aucune école ne correspond à vos critères de recherche.",
+    "loading": "Recherche d'écoles en cours...",
+    "error": "Erreur lors du chargement des écoles"
+  },
+  "about": {
+    "badge": "L'éducation d'abord",
+    "title": "Autonomiser les parents et les élèves grâce à",
+    "titleHighlight": "un savoir vérifié.",
+    "description": "Chez LewaHub, nous croyons que chaque enfant mérite un accès à une éducation de qualité. Nous comblons le déficit d'information en fournissant un répertoire complet, transparent et vérifié des écoles à travers le Cameroun.",
+    "mission": {
+      "title": "Notre mission",
+      "desc": "Notre mission principale est de simplifier le processus de sélection scolaire pour les familles au Cameroun. Nous comprenons que choisir la bonne institution est l'une des décisions les plus critiques qu'un parent puisse prendre. En centralisant les données sur les frais, les programmes, les installations et l'emplacement, nous supprimons le stress et l'incertitude du processus.",
+      "accessibility": "Accessibilité",
+      "accessibilityDesc": "Rendre les données scolaires gratuites et faciles d'accès pour tous.",
+      "transparency": "Transparence",
+      "transparencyDesc": "Garantir que les détails des frais de scolarité et des installations sont clairs et honnêtes."
+    },
+    "verification": {
+      "title": "Comment nous vérifions les écoles",
+      "desc": "La confiance est le fondement de notre plateforme. Chaque école répertoriée sur LewaHub subit un processus de vérification en plusieurs étapes.",
+      "document": {
+        "title": "Examen des documents",
+        "desc": "Nous collectons et examinons les documents d'enregistrement officiels du Ministère de l'Enseignement Secondaire (MINESEC) ou de l'Éducation de Base (MINEDUB)."
+      },
+      "onsite": {
+        "title": "Confirmation sur place",
+        "desc": "Nos agents de terrain effectuent des visites périodiques pour vérifier l'existence des installations physiques et l'exactitude des photos fournies."
+      },
+      "feedback": {
+        "title": "Avis de la communauté",
+        "desc": "Nous modérons les avis des parents et des élèves pour garantir que les retours qualitatifs reflètent l'expérience réelle au sein de l'institution."
+      }
+    },
+    "vision": {
+      "title": "LewaHub",
+      "desc": "D'ici 2030, notre objectif est que chaque école primaire et secondaire légalement enregistrée au Cameroun soit accessible via notre plateforme. Nous visons à devenir la référence standard pour la transparence éducative en Afrique centrale, en favorisant une saine concurrence entre les écoles pour améliorer leurs installations et leurs résultats éducatifs.",
+      "schoolsVerified": "Écoles vérifiées",
+      "monthlyUsers": "Utilisateurs mensuels",
+      "regionsCovered": "Régions couvertes"
+    },
+    "partners": "Approuvé par nos partenaires éducatifs"
+  },
+  "contact": {
+    "title": "Prenez contact",
+    "subtitle": "Vous avez des questions sur le choix de la bonne école pour votre enfant ? Notre équipe d'experts en éducation est là pour vous guider tout au long du processus.",
+    "form": {
+      "name": "Nom complet",
+      "email": "Adresse email",
+      "phone": "Numéro de téléphone",
+      "subject": "Sujet",
+      "message": "Votre message",
+      "submit": "Envoyer le message",
+      "sending": "Envoi en cours...",
+      "success": "Votre message a été envoyé avec succès ! Nous vous répondrons bientôt.",
+      "error": "Échec de l'envoi du message. Veuillez réessayer."
+    },
+    "info": {
+      "title": "Coordonnées",
+      "email": "Email",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "hours": "Heures d'ouverture",
+      "hoursValue": "Lundi - Vendredi : 8h00 - 17h00"
+    }
+  },
+  "schoolDetails": {
+    "overview": "Aperçu",
+    "programs": "Programmes",
+    "fees": "Frais de scolarité",
+    "location": "Emplacement",
+    "facilities": "Installations",
+    "reviews": "Avis",
+    "contact": "Contacter l'école",
+    "visitWebsite": "Visiter le site web",
+    "notFound": "École non trouvée",
+    "loading": "Chargement des détails de l'école...",
+    "error": "Échec du chargement des détails de l'école"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "close": "Fermer",
+    "menu": "Menu",
+    "switchLanguage": "Changer de langue"
+  }
+}

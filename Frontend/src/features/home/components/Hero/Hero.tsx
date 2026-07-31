@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import SearchBar from "../SearchBar/SearchBar";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
+  const { t } = useTranslation();
+
   return (
     <section className={styles.hero}>
       <motion.span
@@ -20,7 +23,7 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, delay: 0.05 }}
       >
-        Find the best school for your future
+        {t("home.hero.title")}
       </motion.h1>
 
       <motion.p
@@ -29,8 +32,7 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, delay: 0.1 }}
       >
-        Navigate through thousands of verified primary, secondary, and higher
-        education institutions across Cameroon with confidence and clarity.
+        {t("home.hero.subtitle")}
       </motion.p>
 
       <motion.div

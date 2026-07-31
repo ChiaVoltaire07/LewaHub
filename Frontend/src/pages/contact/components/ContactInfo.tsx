@@ -1,12 +1,15 @@
 import { Mail, Phone, MapPin, Globe, Users, Megaphone, ExternalLink } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function ContactInfo() {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
       
       <div className="bg-lavender/60 rounded-2xl p-6 sm:p-8">
         <h2 className="text-xl font-bold text-text-dark mb-6">
-          Contact Information
+          {t("contact.info.title")}
         </h2>
 
         <div className="space-y-5">
@@ -17,7 +20,7 @@ export default function ContactInfo() {
             </div>
             <div>
               <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                Email Us
+                {t("contact.info.email")}
               </p>
               <a
                 href="mailto:support@LewaHub.cm"
@@ -28,14 +31,14 @@ export default function ContactInfo() {
             </div>
           </div>
 
-     
+      
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-teal-primary/10 flex items-center justify-center">
               <Phone className="h-5 w-5 text-teal-primary" />
             </div>
             <div>
               <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                Call Us
+                {t("contact.info.phone")}
               </p>
               <a
                 href="tel:+237600000000"
@@ -53,7 +56,7 @@ export default function ContactInfo() {
             </div>
             <div>
               <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                Visit Us
+                {t("contact.info.address")}
               </p>
               <p className="text-sm font-medium text-text-dark">
                 123 Education Way, Bastos, Yaoundé, Cameroon
@@ -79,7 +82,7 @@ export default function ContactInfo() {
             />
           </div>
 
-       
+        
           <a
             href="https://maps.google.com/maps?q=Yaound%C3%A9+Cameroon"
             target="_blank"

@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer
       style={{
@@ -64,7 +67,7 @@ export default function Footer() {
                   margin: "0 0 4px 0",
                 }}
               >
-                Quick Links
+                {t("nav.home")}
               </h4>
               <Link
                 to="/"
@@ -79,7 +82,7 @@ export default function Footer() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
               >
-                Home
+                {t("nav.home")}
               </Link>
               <Link
                 to="/search"
@@ -94,7 +97,7 @@ export default function Footer() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
               >
-                Search
+                {t("nav.search")}
               </Link>
               <Link
                 to="/about"
@@ -109,7 +112,7 @@ export default function Footer() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
               >
-                About
+                {t("nav.about")}
               </Link>
               <Link
                 to="/contact"
@@ -124,7 +127,7 @@ export default function Footer() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = "var(--sunbeam, #E8A93B)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#FFFFFF")}
               >
-                Contact
+                {t("nav.contact")}
               </Link>
             </div>
 
@@ -137,7 +140,7 @@ export default function Footer() {
                   margin: "0 0 4px 0",
                 }}
               >
-                Contact
+                {t("contact.info.title")}
               </h4>
               <p
                 style={{

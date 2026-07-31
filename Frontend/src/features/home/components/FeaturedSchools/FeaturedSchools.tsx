@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import api from "../../../../lib/api";
 import SchoolCard from "./SchoolCard";
 import styles from "./FeaturedSchools.module.css";
@@ -16,6 +17,7 @@ interface Institution {
 }
 
 export default function FeaturedSchools() {
+  const { t } = useTranslation();
   const [schools, setSchools] = useState<Institution[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,9 +37,10 @@ export default function FeaturedSchools() {
         }
 
         // Map backend institutions to frontend School type
-        const mappedSchools = (response.data || []).slice(0, 6).map((inst: any) => ({
+        const mappedSchools = ((response.data as any[]) || []).slice(0, 6).map((inst: any) => ({
           id: inst.id,
           name: inst.name,
+          type: inst.type,
           category: inst.type,
           region: inst.region,
           city: inst.city,
@@ -65,10 +68,10 @@ export default function FeaturedSchools() {
         <div className={styles.header}>
           <div>
             <h2 id="featured-schools-heading" className={styles.heading}>
-              Featured Schools
+              {t("home.featured.title")}
             </h2>
             <p className={styles.subheading}>
-              Error loading schools: {error}
+              {t("home.featured.error")}: {error}
             </p>
           </div>
         </div>
@@ -81,15 +84,15 @@ export default function FeaturedSchools() {
       <div className={styles.header}>
         <div>
           <h2 id="featured-schools-heading" className={styles.heading}>
-            Featured Schools
+            {t("home.featured.title")}
           </h2>
           <p className={styles.subheading}>
-            {loading ? "Loading..." : "Top-rated institutions hand-picked for excellence and verified quality."}
+            {loading ? t("home.featured.loading") : t("home.featured.subtitle")}
           </p>
         </div>
 
         <a href="/search" className={styles.viewAll}>
-          View all schools
+          {t("home.featured.viewAll")}
           <ChevronRight size={16} aria-hidden="true" />
         </a>
       </div>
@@ -97,11 +100,11 @@ export default function FeaturedSchools() {
       <div className={styles.grid}>
         {loading ? (
           <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "2rem" }}>
-            Loading schools...
+            {t("home.featured.loading")}
           </div>
         ) : schools.length === 0 ? (
           <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "2rem" }}>
-            No schools available
+            {t("home.featured.empty")}
           </div>
         ) : (
           schools.map((school) => (

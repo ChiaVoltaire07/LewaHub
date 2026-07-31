@@ -1,59 +1,101 @@
-import { Search, Menu } from "lucide-react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { NAV_ITEMS } from "../../../features/home/hooks/useNavbar";
-import styles from "./Navbar.module.css";
+import { Menu, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-interface NavbarProps {
-  onOpenMobileMenu: () => void;
-}
+const NAV_LINKS = [
+  { to: "/", labelKey: "nav.home" },
+  { to: "/search", labelKey: "nav.search" },
+  { to: "/about", labelKey: "nav.about" },
+  { to: "/contact", labelKey: "nav.contact" },
+];
 
-export default function Navbar({ onOpenMobileMenu }: NavbarProps) {
+export default function Navbar() {
   const { pathname } = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "fr" : "en";
+    i18n.changeLanguage(newLang);
+  };
 
   return (
-    <header className={styles.navbar}>
-      <div className={styles.inner}>
-        <Link to="/" className={styles.logo}>
+    <header className="sticky top-0 z-50 bg-white border-b border-border-light shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <Link
+          to="/"
+          className="text-xl font-bold text-teal-primary tracking-tight"
+        >
           LewaHub
         </Link>
 
-        <nav className={styles.links} aria-label="Primary">
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
+        <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
+          {NAV_LINKS.map(({ to, labelKey }) => {
+            const isActive = pathname === to;
             return (
               <Link
-                key={item.href}
-                to={item.href}
-                className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
+                key={to}
+                to={to}
+                className={`text-sm font-medium transition-colors pb-0.5 border-b-2 ${
+                  isActive
+                    ? "text-teal-primary border-teal-primary"
+                    : "text-text-muted border-transparent hover:text-teal-primary"
+                }`}
                 aria-current={isActive ? "page" : undefined}
               >
-                {item.label}
+                {t(labelKey)}
               </Link>
             );
           })}
         </nav>
 
-        <div className={styles.actions}>
-          <div className={styles.quickSearch}>
-            <Search size={16} className={styles.quickSearchIcon} aria-hidden="true" />
-            <input
-              type="search"
-              placeholder="Quick search..."
-              aria-label="Quick search"
-              className={styles.quickSearchInput}
-            />
-          </div>
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={toggleLanguage}
+            className="text-xs font-semibold uppercase tracking-wider px-2 py-1 rounded border border-teal-primary text-teal-primary hover:bg-teal-light transition-colors"
+            aria-label={t("common.switchLanguage")}
+          >
+            {i18n.language === "en" ? "FR" : "EN"}
+          </button>
 
           <button
             type="button"
-            className={styles.hamburger}
-            onClick={onOpenMobileMenu}
-            aria-label="Open menu"
+            className="md:hidden p-2 text-teal-primary"
+            aria-label={mobileOpen ? t("common.close") : t("common.menu")}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((open) => !open)}
           >
-            <Menu size={22} />
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
+
+      {mobileOpen && (
+        <nav
+          className="md:hidden border-t border-border-light bg-white px-4 py-3 flex flex-col gap-1"
+          aria-label="Mobile"
+        >
+          {NAV_LINKS.map(({ to, labelKey }) => {
+            const isActive = pathname === to;
+            return (
+              <Link
+                key={to}
+                to={to}
+                onClick={() => setMobileOpen(false)}
+                className={`py-2.5 px-3 rounded-lg text-sm font-medium ${
+                  isActive
+                    ? "bg-teal-light text-teal-primary"
+                    : "text-text-dark hover:bg-bg-soft"
+                }`}
+              >
+                {t(labelKey)}
+              </Link>
+            );
+          })}
+        </nav>
+      )}
     </header>
   );
 }

@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"e
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -23,6 +23,7 @@ model Institution {
   id              String   @id @default(cuid())
   name            String
   type            String   // University, College, Institute, School
+  level           String   @default("University") // Nursery, Primary, Secondary, University
   description     String   @db.Text
   region          String   // Cameroon region
   city            String
@@ -37,13 +38,13 @@ model Institution {
   aiSummary       String?  @db.Text
   anonymousViews  Int      @default(0)
   programs        Program[]
-  evaluations     Evaluation[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   @@index([region])
   @@index([city])
   @@index([type])
+  @@index([level])
   @@index([verified])
 }
 
@@ -60,19 +61,6 @@ model Program {
   updatedAt       DateTime @updatedAt
 
   @@index([institutionId])
-}
-
-model Evaluation {
-  id              String   @id @default(cuid())
-  studentId       String   // Reference to student (can be external system)
-  institutionId   String
-  institution     Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  score           Int      // 1-10
-  notes           String?  @db.Text
-  createdAt       DateTime @default(now())
-
-  @@index([institutionId])
-  @@index([studentId])
 }
 
 model VerificationToken {

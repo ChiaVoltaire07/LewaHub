@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { School } from '../../types';
 import SearchCard from '../SearchCard/SearchCard';
 import styles from './SearchResults.module.css';
@@ -14,11 +15,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   isLoading,
   onViewDetails
 }) => {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
-        <p>Searching schools...</p>
+        <p>{t("search.loading")}</p>
       </div>
     );
   }
@@ -26,7 +29,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   if (schools.length === 0) {
     return (
       <div className={styles.empty}>
-        <p className={styles.emptyTitle}>No schools found</p>
+        <p className={styles.emptyTitle}>{t("search.noResults")}</p>
         <p className={styles.emptyText}>Try adjusting your filters or search query</p>
       </div>
     );

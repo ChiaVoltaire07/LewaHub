@@ -19,7 +19,7 @@ let institutions = [
     contactEmail: "info@uy1.uninet.cm",
     contactPhone: "+237 222 22 22 22",
     verified: true,
-    imageUrl: "https://via.placeholder.com/400x300?text=University+of+Yaounde+I",
+    imageUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=400&fit=crop",
     aiSummary: "University of Yaoundé I is Cameroon's premier higher education institution, offering a wide range of programs across multiple faculties. Known for its strong research output and central location in the capital.",
     programs: [
       { id: "prog-1", name: "Computer Science", level: "Bachelor", duration: "3 years", tuition: 250000 },
@@ -149,9 +149,24 @@ export const institutionsRepository = {
   async update(id, data) {
     if (usePrisma && prismaClient) {
       try {
+        const { programs, ...instData } = data;
         return await prismaClient.institution.update({
           where: { id },
-          data,
+          data: {
+            ...instData,
+            programs: programs
+              ? {
+                  deleteMany: {},
+                  create: programs.map((p) => ({
+                    name: p.name,
+                    level: p.level,
+                    duration: p.duration,
+                    tuition: p.tuition,
+                    description: p.description,
+                  })),
+                }
+              : undefined,
+          },
           include: { programs: true },
         });
       } catch (err) {

@@ -1,22 +1,20 @@
+import { useTranslation } from "react-i18next";
 import "../../styles/contact.css";
-import ContactNavbar from "./components/ContactNavbar";
-import Footer from "../../components/layout/Footer/Footer";
 import ContactForm from "./components/ContactForm";
 import ContactInfo from "./components/ContactInfo";
 
 export default function ContactPage() {
+  const { t } = useTranslation();
+
   return (
     <div className="contact-page min-h-screen flex flex-col bg-bg-soft">
-      <ContactNavbar />
-
       <main className="flex-1">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 pb-8 text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-teal-primary tracking-tight">
-            Get in Touch
+            {t("contact.title")}
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg text-text-muted leading-relaxed">
-            Have questions about choosing the right school for your child? Our
-            team of education experts is here to guide you through the process.
+            {t("contact.subtitle")}
           </p>
         </section>
 
@@ -32,8 +30,6 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import api from '../../../lib/api';
 
 interface HeroBannerProps {
@@ -16,6 +17,7 @@ interface Institution {
 }
 
 function HeroBanner({ schoolId }: HeroBannerProps) {
+  const { t } = useTranslation();
   const [school, setSchool] = useState<Institution | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +31,7 @@ function HeroBanner({ schoolId }: HeroBannerProps) {
       try {
         const response = await api.getInstitution(schoolId);
         if (!response.error && response.data) {
-          setSchool(response.data);
+          setSchool(response.data as Institution);
         }
       } catch (err) {
         console.error('Failed to load school details:', err);
@@ -44,7 +46,7 @@ function HeroBanner({ schoolId }: HeroBannerProps) {
   if (loading) {
     return (
       <section className="relative h-[50vh] sm:h-[55vh] md:h-[60vh] lg:h-[65vh] min-h-[400px] overflow-hidden bg-gray-200 flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+        <div className="text-white">{t("common.loading")}</div>
       </section>
     );
   }
@@ -71,14 +73,14 @@ function HeroBanner({ schoolId }: HeroBannerProps) {
           </span>
           {school?.programs && school.programs.length > 0 && (
             <span className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30">
-              {school.programs.length} Programs
+              {school.programs.length} {t("schoolDetails.programs")}
             </span>
           )}
         </div>
 
         
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 leading-tight">
-          {school?.name || "School Details"}
+          {school?.name || t("schoolDetails.notFound")}
         </h1>
 
         

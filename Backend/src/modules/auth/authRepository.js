@@ -29,4 +29,11 @@ export const authRepository = {
     admins.push(newAdmin);
     return newAdmin;
   },
+
+  async update(id, data) {
+    const idx = admins.findIndex((a) => a.id === id);
+    if (idx === -1) return null;
+    admins[idx] = { ...admins[idx], ...data };
+    return admins[idx];
+  },
 };

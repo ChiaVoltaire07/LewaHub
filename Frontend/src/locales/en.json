@@ -1,0 +1,143 @@
+{
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "title": "Find the Perfect School for Your Child",
+      "subtitle": "Discover, compare, and connect with thousands of verified schools across Cameroon. Make informed decisions for your child's future.",
+      "cta": "Start Searching",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "title": "Why Choose LewaHub?",
+      "subtitle": "We make school selection simple, transparent, and stress-free.",
+      "comprehensive": {
+        "title": "Comprehensive Database",
+        "desc": "Access detailed profiles of thousands of schools across all 10 regions of Cameroon."
+      },
+      "verified": {
+        "title": "Verified Information",
+        "desc": "Every school's data is verified through official documents and on-site visits."
+      },
+      "compare": {
+        "title": "Easy Comparison",
+        "desc": "Compare schools side by side based on fees, curriculum, facilities, and more."
+      }
+    },
+    "featured": {
+      "title": "Featured Schools",
+      "subtitle": "Top-rated institutions hand-picked for excellence and verified quality.",
+      "viewAll": "View all schools",
+      "loading": "Loading...",
+      "error": "Error loading schools",
+      "empty": "No schools available"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "subtitle": "Get the latest school listings, education news, and tips delivered to your inbox.",
+      "placeholder": "Enter your email",
+      "button": "Subscribe",
+      "success": "Thank you for subscribing!",
+      "error": "Something went wrong. Please try again."
+    }
+  },
+  "search": {
+    "title": "Search Schools",
+    "placeholder": "Search by school name, city, or region...",
+    "filters": "Filters",
+    "sortBy": "Sort by:",
+    "schoolsFound": "{{count}} School",
+    "schoolsFound_plural": "{{count}} Schools Found",
+    "viewDetails": "View Details",
+    "noResults": "No schools match your search criteria.",
+    "loading": "Searching schools...",
+    "error": "Error loading schools"
+  },
+  "about": {
+    "badge": "Education First",
+    "title": "Empowering Parents and Students Through",
+    "titleHighlight": "Verified Knowledge.",
+    "description": "At LewaHub, we believe every child deserves access to a quality education. We bridge the information gap by providing a comprehensive, transparent, and verified directory of schools across Cameroon.",
+    "mission": {
+      "title": "Our Mission",
+      "desc": "Our primary mission is to simplify the school selection process for families in Cameroon. We understand that choosing the right institution is one of the most critical decisions a parent can make. By centralizing data on fees, curriculum, facilities, and location, we remove the stress and uncertainty from the process.",
+      "accessibility": "Accessibility",
+      "accessibilityDesc": "Making school data free and easy to access for everyone.",
+      "transparency": "Transparency",
+      "transparencyDesc": "Ensuring tuition and facility details are clear and honest."
+    },
+    "verification": {
+      "title": "How We Verify Schools",
+      "desc": "Trust is the foundation of our platform. Every school listed on LewaHub undergoes a multi-step verification process.",
+      "document": {
+        "title": "Document Review",
+        "desc": "We collect and review official registration documents from the Ministry of Secondary Education (MINESEC) or Basic Education (MINEDUB)."
+      },
+      "onsite": {
+        "title": "On-Site Confirmation",
+        "desc": "Our field agents conduct periodic visits to verify the existence of physical facilities and the accuracy of provided photos."
+      },
+      "feedback": {
+        "title": "Community Feedback",
+        "desc": "We moderate parent and student reviews to ensure that qualitative feedback reflects the real-world experience at the institution."
+      }
+    },
+    "vision": {
+      "title": "LewaHub",
+      "desc": "By the year 2030, our goal is to have every legally registered primary and secondary school in Cameroon accessible via our platform. We aim to become the standard benchmark for educational transparency in Central Africa, fostering a healthy competition among schools to improve their facilities and educational outcomes.",
+      "schoolsVerified": "Schools Verified",
+      "monthlyUsers": "Monthly Users",
+      "regionsCovered": "Regions Covered"
+    },
+    "partners": "Trusted by Educational Partners"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Have questions about choosing the right school for your child? Our team of education experts is here to guide you through the process.",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Your Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Your message has been sent successfully! We'll get back to you soon.",
+      "error": "Failed to send message. Please try again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "hours": "Business Hours",
+      "hoursValue": "Monday - Friday: 8:00 AM - 5:00 PM"
+    }
+  },
+  "schoolDetails": {
+    "overview": "Overview",
+    "programs": "Programs",
+    "fees": "Tuition & Fees",
+    "location": "Location",
+    "facilities": "Facilities",
+    "reviews": "Reviews",
+    "contact": "Contact School",
+    "visitWebsite": "Visit Website",
+    "notFound": "School not found",
+    "loading": "Loading school details...",
+    "error": "Failed to load school details"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "back": "Back",
+    "close": "Close",
+    "menu": "Menu",
+    "switchLanguage": "Switch language"
+  }
+}

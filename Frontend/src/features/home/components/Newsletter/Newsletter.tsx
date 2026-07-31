@@ -1,8 +1,10 @@
 import { FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Rocket } from "lucide-react";
 import styles from "./Newsletter.module.css";
 
 export default function Newsletter() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -17,34 +19,33 @@ export default function Newsletter() {
       <div className={styles.container}>
         <div className={styles.content}>
           <h2 id="newsletter-heading" className={styles.heading}>
-            Join the future of education
+            {t("home.newsletter.title")}
           </h2>
           <p className={styles.description}>
-            Get notified about upcoming entrance exams, new school evaluations,
-            and scholarship opportunities across the country.
+            {t("home.newsletter.subtitle")}
           </p>
 
           <form className={styles.form} onSubmit={handleSubmit}>
             <label htmlFor="newsletter-email" className={styles.srOnly}>
-              Email address
+              {t("home.newsletter.placeholder")}
             </label>
             <input
               id="newsletter-email"
               type="email"
               required
-              placeholder="Your email address"
+              placeholder={t("home.newsletter.placeholder")}
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className={styles.input}
             />
             <button type="submit" className={styles.submit}>
-              Subscribe Now
+              {t("home.newsletter.button")}
             </button>
           </form>
 
           {submitted && (
             <p className={styles.confirmation} role="status">
-              You're subscribed. Watch your inbox for the next update.
+              {t("home.newsletter.success")}
             </p>
           )}
         </div>
