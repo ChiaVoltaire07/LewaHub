@@ -58,9 +58,24 @@ The platform has two sides:
 | Caching | Redis |
 | Auth | JWT + bcrypt |
 
-**Architecture:** the backend follows a layered pattern (`routes → controllers → services →
-repositories`), organized into feature modules (institutions, programs, geolocation, evaluations,
-search, admin). The frontend mirrors this with a `features/<name>/` structure per page.
+## Architecture
+ 
+Lewahub is a **layered monolith**  : one client-server application, not microservices. This was a deliberate choice; the team is small, the budget is limited, and the core data (schools, subschools, programs, evaluations) is tightly relational, so a single backend serving one database avoids the network overhead and operational cost that splitting into independent services would add without a corresponding benefit at this scale.
+ 
+```mermaid
+flowchart TB
+    subgraph App["Lewahub application"]
+        Client["Client\nReact + Vite SPA"]
+        Server["Server\nExpress REST API"]
+        Client -->|HTTPS / REST| Server
+    end
+ 
+    Server --> DB[("PostgreSQL\nPostGIS + pgvector")]
+    Server --> Map["Map tiles\nLeaflet + OpenStreetMap"]
+    Server --> AI["AI / LLM API\nsearch + summaries"]
+    Server --> Storage["File storage\nCloudflare R2"]
+```
+ 
 
 ---
 
