@@ -8,34 +8,34 @@ A school discovery platform for Cameroon — covering nursery, primary, secondar
 institutions, with location-based search, verified student ratings, and an admin panel for managing
 the catalog.
 
-
+![status](https://img.shields.io/badge/status-in%20development-teal)
 
 ---
 
 ## 📖 Overview
 
 LewaHub helps parents and students in Cameroon discover and evaluate schools with confidence.
-Institutions are searchable by region, level, and program, locatable on a map, and rated by students
-who have verified their enrollment — so ratings reflect real experience, not anonymous reviews.
+Schools are searchable by region, level, and program, locatable on a map, and rated by students
+who have verified their enrollment . So ratings reflect real experience, not anonymous reviews.
 
 The platform has two sides:
-- **Public site** — fully anonymous browsing, no account required
-- **Admin panel** — staff-only, for managing the institution catalog
+- **Public site** :fully anonymous browsing, no account required
+- **Admin panel** :staff-only, for managing the institution catalog
 
 ---
 
 ## ✨ Features
 
 ### Public Site
-- 🔍 **Search & filter** — Region, Level (Nursery/Primary/Secondary/University), Language of
+- 🔍 **Search & filter** : Region, Level (Nursery/Primary/Secondary/University), Language of
   instruction, Ownership, Boarding/Day, Programs, Minimum rating
-- 🗺️ **Interactive map** — real institution locations, "find near me" support
-- 🏫 **Institution profiles** — description, programs, verified rating, location, contact info,
+- 🗺️ **Interactive map** : real institution locations, "find near me" support
+- 🏫 **Institution profiles** : description, programs, verified rating, location, contact info,
   related institutions
-- ⭐ **Verified ratings** — only students who confirm enrollment (via receipt, school ID, or
+- ⭐ **Verified ratings** : only students who confirm enrollment (via receipt, school ID, or
   matricule) can rate a school; only the aggregate average and count are shown publicly
-- 🌍 **Bilingual** — full French / English toggle across the entire site
-- 📱 **Fully responsive** — mobile-first design, works on any screen size
+- 🌍 **Bilingual** : full French / English toggle across the entire site
+- 📱 **Fully responsive** : mobile-first design, works on any screen size
 
 ### Admin Panel
 - 🔐 Secure staff login
@@ -160,18 +160,6 @@ Visit `/admin/login` using the admin account created by the seed script.
 
 ---
 
-## 🎨 Design System
-
-| Token | Value | Use |
-|---|---|---|
-| Forest | `#1F5D45` | Primary brand color |
-| Sienna | `#C1572B` | Buttons, calls to action |
-| Sunbeam | `#E8A93B` | Ratings, highlights |
-| Paper | `#F7F5EF` | Backgrounds |
-
-**Typography:** Fraunces (headings) · Inter (body & UI) · IBM Plex Mono (data & numbers)
-
----
 
 ## 🔒 Security
 
