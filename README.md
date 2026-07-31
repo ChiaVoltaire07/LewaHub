@@ -1,192 +1,179 @@
-# Lewahub
-
-A school discovery catalog platform for post-secondary and secondary institutions in Cameroon. Parents and students search, filter, and compare schools by location, curriculum system, and programs  with no account required to browse.
-
-![status](https://img.shields.io/badge/status-in%20development-teal)
 
 
----
+# 🎓 LewaHub
 
-## Table of Contents
+**Find the right verified school**
 
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
--[Architecture](#architecture)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Connecting to a Real Backend](#connecting-to-a-real-backend)
-- [Design Decisions](#design-decisions)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
+A school discovery platform for Cameroon — covering nursery, primary, secondary, and university-level
+institutions, with location-based search, verified student ratings, and an admin panel for managing
+the catalog.
+
 
 
 ---
 
-## Overview
+## 📖 Overview
 
-Lewahub centralizes school information that is currently scattered across word-of-mouth and informal channels location, fees, curriculum type (Anglophone / Francophone / Bilingual), accreditation, and programs offered  into a single, publicly browsable catalog.
+LewaHub helps parents and students in Cameroon discover and evaluate schools with confidence.
+Institutions are searchable by region, level, and program, locatable on a map, and rated by students
+who have verified their enrollment — so ratings reflect real experience, not anonymous reviews.
 
-Unlike a typical review-aggregation site, Lewahub does not rely on public user reviews as its trust signal. Instead, school quality is communicated through:
+The platform has two sides:
+- **Public site** — fully anonymous browsing, no account required
+- **Admin panel** — staff-only, for managing the institution catalog
 
-- An **in house evaluation program**: where the platform team directly assesses selected students and records a school-level score
-- **Admin reviewed AI content** :natural language search and weekly AI-drafted summaries, never auto-published without human approval
+---
 
-There is no login for the general public. Browsing, searching, and viewing school details work anonymously. Authentication exists only for the admin team managing listings, evaluations, and content review.
+## ✨ Features
 
-## Key Features
+### Public Site
+- 🔍 **Search & filter** — Region, Level (Nursery/Primary/Secondary/University), Language of
+  instruction, Ownership, Boarding/Day, Programs, Minimum rating
+- 🗺️ **Interactive map** — real institution locations, "find near me" support
+- 🏫 **Institution profiles** — description, programs, verified rating, location, contact info,
+  related institutions
+- ⭐ **Verified ratings** — only students who confirm enrollment (via receipt, school ID, or
+  matricule) can rate a school; only the aggregate average and count are shown publicly
+- 🌍 **Bilingual** — full French / English toggle across the entire site
+- 📱 **Fully responsive** — mobile-first design, works on any screen size
 
-**Public site**
-- Anonymous browsing ,that is  no account required
-- Keyword, region, curriculum type, fee range, boarding, and program/specialty filters
-- "Schools near you" on Home, using live geolocation with a graceful fallback to featured schools
-- Interactive map (Leaflet + OpenStreetMap) synced with search results , hover a card to highlight its pin, click a pin to highlight its card
-- School detail pages with subschools, programs, certificate types, and multi-campus support
-- "Not yet evaluated" vs "Evaluated" status shown transparently. No misleading star ratings
-- Related school recommendations
-- Public contact form and listing update request flow (no account needed)
+### Admin Panel
+- 🔐 Secure staff login
+- 📊 Dashboard with live catalog stats
+- 🏫 Full CRUD on institutions — add, edit, delete, all reflected instantly on the public site
+- 🧩 Smart forms — fields adapt to the institution's level (a primary school's form looks
+  different from a university's)
 
-**Admin panel** (authenticated)
-- Dashboard with pending submissions, evaluations, and AI-review counts
-- Add / edit / delete school listings, including subschools, programs, and campuses
-- Evaluation recording, with student identity verification (receipt / school ID / matricule) stored only as a **hashed reference** never the raw document or number
-- AI-generated content review queue (approve/reject before anything goes live)
-- Listing update request queue
+---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Frontend framework | React 18 + TypeScript + Vite |
-| Planned backend | Express + TypeScript, Prisma, PostgreSQL + PostGIS |
-| Styling | Tailwind CSS v4 |
-| Routing | React Router v6 |
-| Data fetching / caching | TanStack Query |
-| Forms & validation | React Hook Form + Zod |
-| Maps | Leaflet + React-Leaflet (OpenStreetMap tiles) |
-| Mock API (development) | Mock Service Worker (MSW) |
+| Frontend | React · Vite · TypeScript · Tailwind CSS · React Router |
+| Maps | Leaflet + OpenStreetMap |
+| Backend | Node.js · Express · TypeScript |
+| Database | PostgreSQL + PostGIS |
+| ORM | Prisma |
+| Caching | Redis |
+| Auth | JWT + bcrypt |
 
-## Architecture
- 
-Lewahub is a **layered monolith**  : one client-server application, not microservices. This was a deliberate choice; the team is small, the budget is limited, and the core data (schools, subschools, programs, evaluations) is tightly relational, so a single backend serving one database avoids the network overhead and operational cost that splitting into independent services would add without a corresponding benefit at this scale.
- 
-```mermaid
-flowchart TB
-    subgraph App["Lewahub application"]
-        Client["Client\nReact + Vite SPA"]
-        Server["Server\nExpress REST API"]
-        Client -->|HTTPS / REST| Server
-    end
- 
-    Server --> DB[("PostgreSQL\nPostGIS + pgvector")]
-    Server --> Map["Map tiles\nLeaflet + OpenStreetMap"]
-    Server --> AI["AI / LLM API\nsearch + summaries"]
-    Server --> Storage["File storage\nCloudflare R2"]
-```
- 
-**Layers inside the backend** (routes → services → data access) keep responsibilities separated even though everything deploys as one process:
- 
-- **Routes** : Express route handlers, one per resource (`/api/schools`, `/api/evaluations`, `/api/auth`, etc.)
-- **Services** : business logic (approval workflows, evaluation recording, AI-content review gating)
-- **Data access** : Prisma ORM against PostgreSQL
-**Why not microservices:** the project's own constraints , small team, limited budget, and closely coupled data best served by SQL joins rather than cross service network calls, all point the same direction. The layered structure preserves the option to extract a piece (e.g. AI search) into its own service later if it ever needs to scale or fail independently of the rest, without requiring a rewrite now.
- 
-**What's out of scope architecturally, on purpose:**
-- No microservices , that is  one deployable backend
-- No event driven message broker : the weekly AI summary job is a scheduled cron task calling the app's own API, not a pub/sub system
-- No public-account authentication : auth exists only for the admin/school owner facing side, not general browsing
-Full rationale, including alternatives considered, is documented in the project's Technical Requirements Specification (TRS).
- 
+**Architecture:** the backend follows a layered pattern (`routes → controllers → services →
+repositories`), organized into feature modules (institutions, programs, geolocation, evaluations,
+search, admin). The frontend mirrors this with a `features/<name>/` structure per page.
 
-## Project Structure
+---
+
+## 📂 Project Structure
 
 ```
-src/
-├── api/            # One function per backend endpoint (schools.ts, admin.ts, client.ts)
-├── types/          # TypeScript models matching the database schema
-├── mocks/          # MSW request handlers + seed data (development only)
-├── hooks/          # useAuth (admin session), useGeolocation
-├── layouts/        # PublicLayout (bottom nav mobile / top nav desktop), AdminLayout (sidebar)
-├── components/      # SchoolCard, MapView, and shared building blocks
-│   └── ui/          # Badge, Accordion, loading/empty/error states
-└── pages/
-    ├── admin/        # Login, Dashboard, ManageSchools, SchoolForm, Evaluations, AiReview, ListingRequests
-    └── ...           # Home, Search, SchoolDetails, About, Contact
+LewaHub/
+├── Frontend/
+│   └── src/
+│       ├── components/        # shared layout — Navbar, Footer
+│       ├── features/
+│       │   ├── home/
+│       │   ├── search/
+│       │   ├── school-details/
+│       │   ├── contact/
+│       │   ├── about/
+│       │   └── admin/
+│       ├── lib/                # shared API client
+│       └── App.tsx             # route definitions
+│
+└── Backend/
+    ├── src/
+    │   ├── modules/
+    │   │   ├── institutions/
+    │   │   ├── programs/
+    │   │   ├── geolocation/
+    │   │   ├── evaluations/
+    │   │   ├── search/
+    │   │   └── admin/
+    │   ├── middleware/
+    │   ├── config/
+    │   └── jobs/
+    └── prisma/
+        ├── schema.prisma
+        └── seed.ts
 ```
 
-```mermaid
-flowchart TB
-    subgraph App["Lewahub application"]
-        Client["Client\nReact + Vite SPA"]
-        Server["Server\nExpress REST API"]
-        Client -->|HTTPS / REST| Server
-    end
- 
-    Server --> DB[("PostgreSQL\nPostGIS + pgvector")]
-    Server --> Map["Map tiles\nLeaflet + OpenStreetMap"]
-    Server --> AI["AI / LLM API\nsearch + summaries"]
-    Server --> Storage["File storage\nCloudflare R2"]
-```
+---
 
+## 🚀 Getting Started
 
-## Architecture
- 
-Lewahub is a **layered monolith** — one client-server application. This was a deliberate choice: the team is small, the budget is limited, and the core data (schools, subschools, programs, evaluations) is tightly relational, so a single backend serving one database avoids the network overhead and operational cost that splitting into independent services would add without a corresponding benefit at this scale.
- 
+### Prerequisites
+- Node.js (v18+)
+- PostgreSQL with the PostGIS extension
+- Redis
 
-## Getting Started
-
-**Requirements:** Node.js 18+ and npm.
-
+### 1. Clone the repo
 ```bash
-git clone <your-repo-url>
-cd lewahub
+git clone https://github.com/ChiaVoltaire07/LewaHub.git
+cd LewaHub
+```
+
+### 2. Set up the database
+```sql
+CREATE DATABASE lewahub;
+\c lewahub
+CREATE EXTENSION postgis;
+```
+
+### 3. Backend
+```bash
+cd Backend
 npm install
+cp .env.example .env   # then fill in DATABASE_URL, REDIS_URL, JWT_SECRET
+npx prisma migrate dev
+npm run seed
 npm run dev
 ```
+Runs at `http://localhost:4000`.
 
-Open the local URL printed in your terminal (typically `http://localhost:5173`).
-
-
-## Environment Variables
-
-Create a `.env` file (see `.env.example`):
-
+### 4. Frontend
+```bash
+cd Frontend
+npm install
+echo "VITE_API_BASE_URL=http://localhost:4000/api/v1" > .env
+npm run dev
 ```
-VITE_API_BASE_URL=/api
-```
+Runs at `http://localhost:5173`.
 
-Point this at your real API's base URL once a backend is available.
+### 5. Admin access
+Visit `/admin/login` using the admin account created by the seed script.
 
-## Connecting to a Real Backend
+---
 
-The frontend is architected so switching from mock to live data requires **no component or hook changes**:
+## 🎨 Design System
 
-1. Set `VITE_API_BASE_URL` to your deployed API's URL.
-2. Delete the `src/mocks/` directory.
-3. Remove the MSW bootstrap block in `src/main.tsx` (marked with a comment).
+| Token | Value | Use |
+|---|---|---|
+| Forest | `#1F5D45` | Primary brand color |
+| Sienna | `#C1572B` | Buttons, calls to action |
+| Sunbeam | `#E8A93B` | Ratings, highlights |
+| Paper | `#F7F5EF` | Backgrounds |
 
-Every function in `src/api/` already calls real REST-style paths (`GET /schools`, `POST /evaluations`, etc.)  MSW was simply intercepting those same paths locally. The intended backend pairing is Express + Prisma + PostgreSQL with the PostGIS extension enabled for proximity search.
+**Typography:** Fraunces (headings) · Inter (body & UI) · IBM Plex Mono (data & numbers)
 
-## Design Decisions
+---
 
-A few intentional choices worth knowing before contributing:
+## 🔒 Security
 
-- **No public accounts or reviews.** This was a deliberate pivot away from a review-based trust model, to avoid the moderation and fraud burden of open public reviews at small-team scale.
-- **Student verification data is never stored raw.** Evaluation records keep only a one-way hashed reference to the verification method used (receipt / school ID / matricule) never the document, image, or number itself.
-- **AI content is never auto-published.** Natural language search falls back to keyword search on low confidence or timeout; weekly AI-drafted summaries sit in an admin queue until approved.
+- All admin write operations require a valid JWT
+- Passwords hashed with bcrypt
+- Student verification references are hashed, never stored raw
+- Input validation on every write endpoint
+- Rate limiting on public and auth endpoints
 
+---
 
-## Roadmap
+## 👥 Team
 
-- [ ] Connect to live Express/Prisma/PostgreSQL backend
-- [ ] Marker clustering on the map for higher listing density
-- [ ] Offline/PWA support with cached tiles and skeleton states
-- [ ] Natural-language search parsing via an LLM API
-- [ ] Weekly AI-drafted school summaries with source tracking
+Built collaboratively by a team of student developers in Cameroon.
 
-## Contributing
+---
 
-Issues and pull requests are welcome. Please open an issue describing the change before submitting a PR for anything beyond a small fix.
+## 📄 License
 
+This project is currently unlicensed / for academic use. Add a license file if you plan to open-source it.
