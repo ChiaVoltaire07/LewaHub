@@ -17,16 +17,20 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
 }) => {
   const activeChips: { key: keyof Filters; label: string; value?: string }[] = [];
 
-  // Add array filter chips
   filters.region.forEach(value => {
     const option = filterOptions.region.find(opt => opt.value === value);
     if (option) activeChips.push({ key: 'region', label: option.label, value });
   });
 
-  filters.institutionType.forEach(value => {
-    const option = filterOptions.institutionType.find(opt => opt.value === value);
-    if (option) activeChips.push({ key: 'institutionType', label: option.label, value });
+  filters.category.forEach(value => {
+    const option = filterOptions.category.find(opt => opt.value === value);
+    if (option) activeChips.push({ key: 'category', label: option.label, value });
   });
+
+  // Show "High School available" as a chip when active
+  if (filters.offersHighSchool) {
+    activeChips.push({ key: 'offersHighSchool', label: 'High School available' });
+  }
 
   filters.curriculum.forEach(value => {
     const option = filterOptions.curriculum.find(opt => opt.value === value);
@@ -43,7 +47,6 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
     if (option) activeChips.push({ key: 'feeRange', label: option.label, value });
   });
 
-  // Add top rated chip
   if (filters.topRated) {
     activeChips.push({ key: 'topRated', label: 'Top Rated' });
   }

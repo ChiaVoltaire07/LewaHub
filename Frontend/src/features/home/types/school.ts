@@ -1,4 +1,5 @@
-export type SchoolCategory = "Primary" | "Secondary" | "University" | "Tech Institute";
+/** The 3 categories that match the backend data model exactly. */
+export type SchoolCategory = "PrimaryNursery" | "Secondary" | "University";
 
 export type EvaluationStatus = "Evaluated" | "Pending Review";
 

@@ -1,8 +1,12 @@
+/**
+ * One-off helper: back-fills `imageUrl` on School rows that have a null or
+ * outdated image. Safe to re-run — it skips rows whose image is already correct.
+ */
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Reliable Unsplash image URLs for each institution
+// Curated Unsplash image URLs for each school
 const imageMap = {
   "University of Yaoundé I": "https://images.unsplash.com/photo-1562774053-701939374585?w=600&h=400&fit=crop",
   "University of Buea": "https://images.unsplash.com/photo-1592280771190-2e4e8a1d33b3?w=600&h=400&fit=crop",
@@ -19,32 +23,32 @@ const imageMap = {
   "Presbyterian Secondary School Kumba": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
   "Cameroon College of Education, Kumba": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
   "GHS Bamenda": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
+  "Lycée Bilingue de Bafoussam": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
   "École Maternelle Étoile": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop",
   "Petite Enfantine Camerounaise": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop",
   "Bright Beginnings Nursery School": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop",
   "Government Primary School Bertoua": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
   "Government Bilingual Primary School Maroua": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
   "Sacred Heart Primary School Ebolowa": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
-  "Lycée Bilingue de Bafoussam": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
 };
 
 async function main() {
-  const institutions = await prisma.institution.findMany({
+  const schools = await prisma.school.findMany({
     select: { id: true, name: true, imageUrl: true },
   });
 
-  for (const inst of institutions) {
-    const newImage = imageMap[inst.name];
-    if (newImage && inst.imageUrl !== newImage) {
-      await prisma.institution.update({
-        where: { id: inst.id },
+  for (const school of schools) {
+    const newImage = imageMap[school.name];
+    if (newImage && school.imageUrl !== newImage) {
+      await prisma.school.update({
+        where: { id: school.id },
         data: { imageUrl: newImage },
       });
-      console.log(`✓ Updated image for: ${inst.name}`);
+      console.log(`✓ Updated image for: ${school.name}`);
     } else if (!newImage) {
-      console.log(`⚠ No image mapping for: ${inst.name}`);
+      console.log(`⚠ No image mapping for: ${school.name}`);
     } else {
-      console.log(`- Already correct: ${inst.name}`);
+      console.log(`- Already correct: ${school.name}`);
     }
   }
 

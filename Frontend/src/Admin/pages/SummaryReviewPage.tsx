@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { getInstitution, updateInstitution, regenerateSummary } from "../lib/api";
+import { getSchool, updateSchool, regenerateSummary } from "../lib/api";
 
 export default function SummaryReviewPage() {
   const { id } = useParams();
@@ -20,16 +20,16 @@ export default function SummaryReviewPage() {
     if (!id || !token) return;
     (async () => {
       try {
-        const response = await getInstitution(id, token);
+        const response = await getSchool(id, token);
         if (response.error) {
           setError(response.error);
         } else {
-          const data = response.data || response;
+          const data = (response.data || response) as any;
           setAiSummary(data.aiSummary || "");
           setOriginalSummary(data.aiSummary || "");
         }
       } catch (err: any) {
-        setError(err.message || "Failed to load institution");
+        setError(err.message || "Failed to load school");
       } finally {
         setLoading(false);
       }
@@ -42,7 +42,7 @@ export default function SummaryReviewPage() {
     setSuccess("");
     setSaving(true);
     try {
-      const response = await updateInstitution(id, { aiSummary }, token);
+      const response = await updateSchool(id, { aiSummary }, token);
       if (response.error) {
         setError(response.error);
       } else {
@@ -151,7 +151,7 @@ export default function SummaryReviewPage() {
             color: "var(--ink, #14231C)",
             borderRadius: "8px",
           }}
-          placeholder="Enter or edit the AI-generated summary for this institution..."
+          placeholder="Enter or edit the AI-generated summary for this school..."
         />
 
         <div className="flex gap-3 mt-4">
@@ -172,7 +172,7 @@ export default function SummaryReviewPage() {
             {regenerating ? "Regenerating..." : "Regenerate"}
           </button>
           <button
-            onClick={() => navigate("/admin/institutions")}
+            onClick={() => navigate("/admin/schools")}
             className="px-5 py-2.5 text-sm font-medium rounded-lg min-h-[44px] transition-colors"
             style={{
               backgroundColor: "var(--paper, #F7F5EF)",

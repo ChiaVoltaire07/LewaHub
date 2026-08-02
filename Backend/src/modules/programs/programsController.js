@@ -3,8 +3,8 @@ import { programsService } from "./programsService.js";
 export const programsController = {
   async getPrograms(req, res, next) {
     try {
-      const { institutionId } = req.params;
-      const programs = await programsService.getPrograms(institutionId);
+      const { schoolId } = req.params;
+      const programs = await programsService.getPrograms(schoolId);
       res.json({ programs });
     } catch (err) {
       next(err);
@@ -13,8 +13,8 @@ export const programsController = {
 
   async addProgram(req, res, next) {
     try {
-      const { institutionId } = req.params;
-      const program = await programsService.addProgram(institutionId, req.body);
+      const { schoolId } = req.params;
+      const program = await programsService.addProgram(schoolId, req.body);
       res.status(201).json(program);
     } catch (err) {
       next(err);
@@ -23,8 +23,8 @@ export const programsController = {
 
   async updateProgram(req, res, next) {
     try {
-      const { institutionId, programId } = req.params;
-      const program = await programsService.updateProgram(institutionId, programId, req.body);
+      const { schoolId, programId } = req.params;
+      const program = await programsService.updateProgram(schoolId, programId, req.body);
       res.json(program);
     } catch (err) {
       next(err);
@@ -33,8 +33,8 @@ export const programsController = {
 
   async deleteProgram(req, res, next) {
     try {
-      const { institutionId, programId } = req.params;
-      const result = await programsService.deleteProgram(institutionId, programId);
+      const { schoolId, programId } = req.params;
+      const result = await programsService.deleteProgram(schoolId, programId);
       res.json(result);
     } catch (err) {
       next(err);

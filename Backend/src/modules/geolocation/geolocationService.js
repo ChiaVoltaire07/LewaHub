@@ -1,4 +1,4 @@
-import { institutionsRepository } from "../institutions/institutionsRepository.js";
+import { schoolsRepository } from "../schools/schoolsRepository.js";
 import { AppError } from "../../middleware/errorHandler.js";
 
 export const geolocationService = {
@@ -29,14 +29,14 @@ export const geolocationService = {
       throw new AppError("Latitude must be -90 to 90, longitude must be -180 to 180", 400);
     }
 
-    const result = await institutionsRepository.findAll({ page: 1, limit: 1000 });
+    const result = await schoolsRepository.findAll({ page: 1, limit: 1000 });
 
     const nearby = result.data
-      .map((inst) => ({
-        ...inst,
-        distance: this.calculateDistance(latitude, longitude, inst.latitude, inst.longitude),
+      .map((school) => ({
+        ...school,
+        distance: this.calculateDistance(latitude, longitude, school.latitude, school.longitude),
       }))
-      .filter((inst) => inst.distance <= radiusKm)
+      .filter((school) => school.distance <= radiusKm)
       .sort((a, b) => a.distance - b.distance);
 
     return {

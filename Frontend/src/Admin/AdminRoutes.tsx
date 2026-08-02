@@ -4,8 +4,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./components/AdminLayout";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
-import InstitutionsListPage from "./pages/InstitutionsListPage";
-import InstitutionFormPage from "./pages/InstitutionFormPage";
+import SchoolsListPage from "./pages/SchoolsListPage";
+import SchoolFormPage from "./pages/SchoolFormPage";
 import SettingsPage from "./pages/SettingsPage";
 
 export default function AdminRoutes() {
@@ -23,9 +23,9 @@ export default function AdminRoutes() {
         >
           <Route index element={<DashboardPage />} />
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="institutions" element={<InstitutionsListPage />} />
-          <Route path="institutions/new" element={<InstitutionFormPage />} />
-          <Route path="institutions/:id/edit" element={<InstitutionFormPage />} />
+          <Route path="schools" element={<SchoolsListPage />} />
+          <Route path="schools/new" element={<SchoolFormPage />} />
+          <Route path="schools/:id/edit" element={<SchoolFormPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
       </Routes>

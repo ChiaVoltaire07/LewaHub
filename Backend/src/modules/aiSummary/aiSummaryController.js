@@ -3,8 +3,8 @@ import { aiSummaryService } from "./aiSummaryService.js";
 export const aiSummaryController = {
   async regenerateSummary(req, res, next) {
     try {
-      const { institutionId } = req.params;
-      const result = await aiSummaryService.regenerateSummary(institutionId);
+      const { schoolId } = req.params;
+      const result = await aiSummaryService.regenerateSummary(schoolId);
       res.json(result);
     } catch (err) {
       next(err);

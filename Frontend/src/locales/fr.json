@@ -30,7 +30,7 @@
     },
     "featured": {
       "title": "Écoles en vedette",
-      "subtitle": "Institutions les mieux notées sélectionnées pour l'excellence et la qualité vérifiée.",
+      "subtitle": "Écoles les mieux notées sélectionnées pour l'excellence et la qualité vérifiée.",
       "viewAll": "Voir toutes les écoles",
       "loading": "Chargement...",
       "error": "Erreur lors du chargement des écoles",
@@ -64,7 +64,7 @@
     "description": "Chez LewaHub, nous croyons que chaque enfant mérite un accès à une éducation de qualité. Nous comblons le déficit d'information en fournissant un répertoire complet, transparent et vérifié des écoles à travers le Cameroun.",
     "mission": {
       "title": "Notre mission",
-      "desc": "Notre mission principale est de simplifier le processus de sélection scolaire pour les familles au Cameroun. Nous comprenons que choisir la bonne institution est l'une des décisions les plus critiques qu'un parent puisse prendre. En centralisant les données sur les frais, les programmes, les installations et l'emplacement, nous supprimons le stress et l'incertitude du processus.",
+      "desc": "Notre mission principale est de simplifier le processus de sélection scolaire pour les familles au Cameroun. Nous comprenons que choisir la bonne école est l'une des décisions les plus critiques qu'un parent puisse prendre. En centralisant les données sur les frais, les programmes, les installations et l'emplacement, nous supprimons le stress et l'incertitude du processus.",
       "accessibility": "Accessibilité",
       "accessibilityDesc": "Rendre les données scolaires gratuites et faciles d'accès pour tous.",
       "transparency": "Transparence",
@@ -83,7 +83,7 @@
       },
       "feedback": {
         "title": "Avis de la communauté",
-        "desc": "Nous modérons les avis des parents et des élèves pour garantir que les retours qualitatifs reflètent l'expérience réelle au sein de l'institution."
+        "desc": "Nous modérons les avis des parents et des élèves pour garantir que les retours qualitatifs reflètent l'expérience réelle au sein de l'école."
       }
     },
     "vision": {

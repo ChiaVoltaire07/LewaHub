@@ -4,7 +4,7 @@ import { searchSchools } from '../services/searchApi';
 
 const initialFilters: Filters = {
   region: [],
-  institutionType: [],
+  category: [],
   curriculum: [],
   degreeLevel: [],
   feeRange: [],

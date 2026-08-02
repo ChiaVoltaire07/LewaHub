@@ -3,11 +3,11 @@ import bcryptjs from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const institutions = [
+const schools = [
   {
     name: "University of Yaoundé I",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description:
       "Founded in 1962, the University of Yaoundé I is Cameroon's oldest and largest university. It serves over 40,000 students across faculties including Sciences, Arts & Humanities, Medicine, Law, and Economics. The main campus at Ngoa-Ekellé houses the prestigious Faculty of Medicine and Biomedical Sciences, the Faculty of Science, and the National Advanced School of Engineering (ENSPY). Known for its research output in tropical medicine and computer science, it consistently ranks among the top universities in Central Africa.",
     region: "Centre",
@@ -28,8 +28,8 @@ const institutions = [
   },
   {
     name: "University of Buea",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description:
       "Founded in 1992, the University of Buea is Cameroon's only English-speaking university located on the slopes of Mount Cameroon. It serves approximately 20,000 students across faculties including Arts, Education, Health Sciences, Science, and Social & Management Sciences. The university is particularly renowned for its Faculty of Health Sciences, which produces a significant portion of Cameroon's medical professionals, and its teacher education programs through the Advanced School of Translators and Interpreters (ASTI).",
     region: "Southwest",
@@ -50,8 +50,8 @@ const institutions = [
   },
   {
     name: "University of Douala",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "Located in Cameroon's economic capital, focused on commerce and technology.",
     region: "Littoral",
     city: "Douala",
@@ -70,8 +70,8 @@ const institutions = [
   },
   {
     name: "University of Ngaoundéré",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "Regional university serving the northern regions of Cameroon.",
     region: "Adamawa",
     city: "Ngaoundéré",
@@ -90,8 +90,8 @@ const institutions = [
   },
   {
     name: "University of Dschang",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "Specializes in agriculture, technology, and natural sciences.",
     region: "West",
     city: "Dschang",
@@ -110,8 +110,8 @@ const institutions = [
   },
   {
     name: "University of Yaoundé II",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "Specialized in social sciences, law, and humanities.",
     region: "Centre",
     city: "Yaoundé",
@@ -130,8 +130,8 @@ const institutions = [
   },
   {
     name: "ENSET Douala",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "National School of Engineering specializing in technical education.",
     region: "Littoral",
     city: "Douala",
@@ -150,8 +150,8 @@ const institutions = [
   },
   {
     name: "ENSET Bambili",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "Engineering school in the Northwest region focusing on practical training.",
     region: "Northwest",
     city: "Bambili",
@@ -170,8 +170,8 @@ const institutions = [
   },
   {
     name: "Catholic University of Cameroon",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "Private university with emphasis on liberal arts and professional studies.",
     region: "Centre",
     city: "Yaoundé",
@@ -181,7 +181,7 @@ const institutions = [
     website: "https://www.catuc.cm",
     imageUrl: "https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=600&h=400&fit=crop",
     contactEmail: "info@catuc.cm",
-    contactPhone: "+237 1 1 1 1 1 11",
+    contactPhone: "+237 111 11 11 11",
     verified: true,
     programs: [
       { name: "Business", level: "Bachelor", duration: "3 years", tuition: 400000 },
@@ -190,8 +190,8 @@ const institutions = [
   },
   {
     name: "Pan-African University of Science, Technology & Innovation",
-    type: "University",
-    level: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "International university promoting pan-African cooperation in STEM.",
     region: "Centre",
     city: "Yaoundé",
@@ -201,7 +201,7 @@ const institutions = [
     website: "https://www.pausti.org",
     imageUrl: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&h=400&fit=crop",
     contactEmail: "info@pausti.org",
-    contactPhone: "+237 2 2 2 2 2 22",
+    contactPhone: "+237 222 22 22 22",
     verified: true,
     programs: [
       { name: "Biotechnology", level: "Master", duration: "2 years", tuition: 500000 },
@@ -212,9 +212,9 @@ const institutions = [
   // Secondary Schools (6)
   {
     name: "Lycée Général Leclerc",
-    type: "School",
-    level: "Secondary",
-    description: "Premier secondary school in Yaoundé, established during colonial period.",
+    category: "Secondary",
+    offersHighSchool: true,
+    description: "Premier secondary school in Yaoundé, established during colonial period. Offers both O-Level and A-Level programmes.",
     region: "Centre",
     city: "Yaoundé",
     address: "Rue Fabien Eboué",
@@ -223,7 +223,7 @@ const institutions = [
     website: "https://www.lyceegl.cm",
     imageUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=400&fit=crop",
     contactEmail: "info@lyceegl.cm",
-    contactPhone: "+237 3 3 3 3 3 33",
+    contactPhone: "+237 333 33 33 33",
     verified: true,
     programs: [
       { name: "Advanced Level", level: "Secondary", duration: "2 years", tuition: 150000 },
@@ -232,8 +232,8 @@ const institutions = [
   },
   {
     name: "Collège Voltaire",
-    type: "School",
-    level: "Secondary",
+    category: "Secondary",
+    offersHighSchool: true,
     description: "Bilingual secondary school known for academic excellence.",
     region: "Littoral",
     city: "Douala",
@@ -243,7 +243,7 @@ const institutions = [
     website: "https://www.collegevoltaire.cm",
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@collegevoltaire.cm",
-    contactPhone: "+237 4 4 4 4 4 44",
+    contactPhone: "+237 444 44 44 44",
     verified: true,
     programs: [
       { name: "Science Track", level: "Secondary", duration: "2 years", tuition: 160000 },
@@ -252,8 +252,8 @@ const institutions = [
   },
   {
     name: "Presbyterian Secondary School Kumba",
-    type: "School",
-    level: "Secondary",
+    category: "Secondary",
+    offersHighSchool: false,
     description: "Mission school with long tradition of academic and religious education.",
     region: "Southwest",
     city: "Kumba",
@@ -263,7 +263,7 @@ const institutions = [
     website: "https://www.pressbkumba.cm",
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@pressbkumba.cm",
-    contactPhone: "+237 5 5 5 5 5 55",
+    contactPhone: "+237 555 55 55 55",
     verified: false,
     programs: [
       { name: "General Education", level: "Secondary", duration: "6 years", tuition: 100000 },
@@ -271,8 +271,8 @@ const institutions = [
   },
   {
     name: "Cameroon College of Education, Kumba",
-    type: "School",
-    level: "Secondary",
+    category: "Secondary",
+    offersHighSchool: false,
     description: "Teachers' college providing secondary education and teacher training.",
     region: "Southwest",
     city: "Kumba",
@@ -282,7 +282,7 @@ const institutions = [
     website: "https://www.ccedk.cm",
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@ccedk.cm",
-    contactPhone: "+237 6 6 6 6 6 66",
+    contactPhone: "+237 666 66 66 66",
     verified: false,
     programs: [
       { name: "Teacher Training", level: "Secondary", duration: "3 years", tuition: 110000 },
@@ -290,8 +290,8 @@ const institutions = [
   },
   {
     name: "GHS Bamenda",
-    type: "School",
-    level: "Secondary",
+    category: "Secondary",
+    offersHighSchool: false,
     description: "Government secondary school serving Northwest region.",
     region: "Northwest",
     city: "Bamenda",
@@ -301,7 +301,7 @@ const institutions = [
     website: "https://www.ghsbamenda.cm",
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@ghsbamenda.cm",
-    contactPhone: "+237 7 7 7 7 7 77",
+    contactPhone: "+237 777 77 77 77",
     verified: false,
     programs: [
       { name: "Secondary Education", level: "Secondary", duration: "6 years", tuition: 90000 },
@@ -309,9 +309,9 @@ const institutions = [
   },
   {
     name: "Lycée Bilingue de Bafoussam",
-    type: "School",
-    level: "Secondary",
-    description: "Public bilingual secondary school serving the West region's capital.",
+    category: "Secondary",
+    offersHighSchool: true,
+    description: "Public bilingual secondary school serving the West region's capital. Offers both O-Level and A-Level.",
     region: "West",
     city: "Bafoussam",
     address: "Avenue du 20 Mai, Bafoussam",
@@ -320,7 +320,7 @@ const institutions = [
     website: null,
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@lyceebafoussam.cm",
-    contactPhone: "+237 6 5 4 4 4 44",
+    contactPhone: "+237 654 44 44 44",
     verified: true,
     programs: [
       { name: "O'Level", level: "Secondary", duration: "4 years", tuition: 100000 },
@@ -328,11 +328,11 @@ const institutions = [
     ],
   },
 
-  // Nursery Schools (3)
+  // Primary / Nursery Schools (6)
   {
     name: "École Maternelle Étoile",
-    type: "School",
-    level: "Nursery",
+    category: "PrimaryNursery",
+    offersHighSchool: false,
     description: "Nursery school in Garoua known for a play-based early learning approach.",
     region: "North",
     city: "Garoua",
@@ -342,7 +342,7 @@ const institutions = [
     website: null,
     imageUrl: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop",
     contactEmail: "info@etoilenursery.cm",
-    contactPhone: "+237 6 9 9 9 9 99",
+    contactPhone: "+237 699 99 99 99",
     verified: true,
     programs: [
       { name: "Nursery Program", level: "Nursery", duration: "2 years", tuition: 60000 },
@@ -350,8 +350,8 @@ const institutions = [
   },
   {
     name: "Petite Enfantine Camerounaise",
-    type: "School",
-    level: "Nursery",
+    category: "PrimaryNursery",
+    offersHighSchool: false,
     description: "Private nursery offering bilingual early childhood education.",
     region: "Centre",
     city: "Yaoundé",
@@ -361,7 +361,7 @@ const institutions = [
     website: null,
     imageUrl: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop",
     contactEmail: "info@pecamerounaise.cm",
-    contactPhone: "+237 6 6 6 6 6 66",
+    contactPhone: "+237 666 66 66 66",
     verified: true,
     programs: [
       { name: "Pre-Nursery", level: "Nursery", duration: "1 year", tuition: 50000 },
@@ -370,8 +370,8 @@ const institutions = [
   },
   {
     name: "Bright Beginnings Nursery School",
-    type: "School",
-    level: "Nursery",
+    category: "PrimaryNursery",
+    offersHighSchool: false,
     description: "Community nursery focused on foundational literacy and numeracy.",
     region: "Southwest",
     city: "Buea",
@@ -381,18 +381,16 @@ const institutions = [
     website: null,
     imageUrl: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop",
     contactEmail: "info@brightbeginningsbuea.cm",
-    contactPhone: "+237 6 5 5 5 5 55",
+    contactPhone: "+237 655 55 55 55",
     verified: false,
     programs: [
       { name: "Early Years", level: "Nursery", duration: "2 years", tuition: 45000 },
     ],
   },
-
-  // Primary Schools (3)
   {
     name: "Government Primary School Bertoua",
-    type: "School",
-    level: "Primary",
+    category: "PrimaryNursery",
+    offersHighSchool: false,
     description: "Public primary school serving the East region's capital city.",
     region: "East",
     city: "Bertoua",
@@ -402,7 +400,7 @@ const institutions = [
     website: null,
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@gpsbertoua.cm",
-    contactPhone: "+237 6 8 8 8 8 88",
+    contactPhone: "+237 688 88 88 88",
     verified: false,
     programs: [
       { name: "Primary Education", level: "Primary", duration: "6 years", tuition: 40000 },
@@ -410,8 +408,8 @@ const institutions = [
   },
   {
     name: "Government Bilingual Primary School Maroua",
-    type: "School",
-    level: "Primary",
+    category: "PrimaryNursery",
+    offersHighSchool: false,
     description: "Public bilingual primary school in the Far North, teaching both French and English streams.",
     region: "Far North",
     city: "Maroua",
@@ -421,7 +419,7 @@ const institutions = [
     website: null,
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@gbpsmaroua.cm",
-    contactPhone: "+237 6 7 7 7 7 77",
+    contactPhone: "+237 677 77 77 77",
     verified: false,
     programs: [
       { name: "Bilingual Primary Education", level: "Primary", duration: "6 years", tuition: 45000 },
@@ -429,8 +427,8 @@ const institutions = [
   },
   {
     name: "Sacred Heart Primary School Ebolowa",
-    type: "School",
-    level: "Primary",
+    category: "PrimaryNursery",
+    offersHighSchool: false,
     description: "Mission-run primary school in the South region with a strong local reputation.",
     region: "South",
     city: "Ebolowa",
@@ -440,7 +438,7 @@ const institutions = [
     website: null,
     imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
     contactEmail: "info@sacredheartebolowa.cm",
-    contactPhone: "+237 6 6 5 5 5 55",
+    contactPhone: "+237 665 55 55 55",
     verified: true,
     programs: [
       { name: "Primary Education", level: "Primary", duration: "6 years", tuition: 70000 },
@@ -454,7 +452,7 @@ async function main() {
   try {
     // Clear existing data
     await prisma.program.deleteMany({});
-    await prisma.institution.deleteMany({});
+    await prisma.school.deleteMany({});
     await prisma.adminUser.deleteMany({});
     await prisma.verificationToken.deleteMany({});
 
@@ -471,23 +469,23 @@ async function main() {
     });
     console.log(`✓ Created admin user: ${admin.email}`);
 
-    // Create institutions with programs
-    for (const instData of institutions) {
-      const { programs, ...instFields } = instData;
-      const institution = await prisma.institution.create({
+    // Create schools with programs
+    for (const schoolData of schools) {
+      const { programs, ...schoolFields } = schoolData;
+      const school = await prisma.school.create({
         data: {
-          ...instFields,
+          ...schoolFields,
           programs: {
             create: programs || [],
           },
         },
         include: { programs: true },
       });
-      console.log(`✓ Created institution: ${institution.name} (${institution.type})`);
+      console.log(`✓ Created school: ${school.name} (${school.category})`);
     }
 
     console.log("\n✅ Seed completed successfully!");
-    console.log(`Total institutions: ${institutions.length}`);
+    console.log(`Total schools: ${schools.length}`);
     console.log("Database ready for use.\n");
   } catch (e) {
     console.error("❌ Seed failed:", e);

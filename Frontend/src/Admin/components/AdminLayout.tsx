@@ -4,8 +4,8 @@ import { useAuth } from "../contexts/AuthContext";
 
 const navItems = [
   { to: "/admin/dashboard", label: "Dashboard", icon: "grid" },
-  { to: "/admin/institutions/new", label: "Add School", icon: "plus" },
-  { to: "/admin/institutions", label: "Manage Schools", icon: "list" },
+  { to: "/admin/schools/new", label: "Add School", icon: "plus" },
+  { to: "/admin/schools", label: "Manage Schools", icon: "list" },
   { to: "/admin/settings", label: "Settings", icon: "settings" },
 ];
 
@@ -59,7 +59,7 @@ export default function AdminLayout() {
 
   const pageTitle = (() => {
     if (location.pathname === "/admin/dashboard") return "Dashboard";
-    if (location.pathname.startsWith("/admin/institutions")) {
+    if (location.pathname.startsWith("/admin/schools")) {
       if (location.pathname.includes("/new")) return "Add School";
       if (location.pathname.includes("/edit")) return "Edit School";
       return "Manage Schools";

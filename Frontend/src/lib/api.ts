@@ -89,44 +89,44 @@ class ApiClient {
   }
 
   /**
-   * Public endpoint: List all institutions with filters
+   * Public endpoint: List all schools with filters
    */
-  async getInstitutions(filters?: {
+  async getSchools(filters?: {
     search?: string;
-    type?: string;
+    category?: string;
     region?: string;
     page?: number;
     limit?: number;
   }) {
     const params = new URLSearchParams();
     if (filters?.search) params.append("search", filters.search);
-    if (filters?.type) params.append("type", filters.type);
+    if (filters?.category) params.append("category", filters.category);
     if (filters?.region) params.append("region", filters.region);
     if (filters?.page) params.append("page", filters.page.toString());
     if (filters?.limit) params.append("limit", filters.limit.toString());
 
     const queryString = params.toString() ? `?${params.toString()}` : "";
-    return this.request(`/institutions${queryString}`);
+    return this.request(`/schools${queryString}`);
   }
 
   /**
-   * Public endpoint: Get single institution by ID
+   * Public endpoint: Get single school by ID
    */
-  async getInstitution(id: string) {
-    return this.request(`/institutions/${id}`);
+  async getSchool(id: string) {
+    return this.request(`/schools/${id}`);
   }
 
   /**
-   * Public endpoint: Search institutions
+   * Public endpoint: Search schools
    */
   async search(query: string, filters?: {
-    type?: string;
+    category?: string;
     region?: string;
     page?: number;
     limit?: number;
   }) {
     const params = new URLSearchParams({ q: query });
-    if (filters?.type) params.append("type", filters.type);
+    if (filters?.category) params.append("category", filters.category);
     if (filters?.region) params.append("region", filters.region);
     if (filters?.page) params.append("page", filters.page.toString());
     if (filters?.limit) params.append("limit", filters.limit.toString());
@@ -135,7 +135,7 @@ class ApiClient {
   }
 
   /**
-   * Public endpoint: Find nearby institutions
+   * Public endpoint: Find nearby schools
    */
   async findNearby(latitude: number, longitude: number, radius: number = 50) {
     const params = new URLSearchParams({
@@ -147,10 +147,10 @@ class ApiClient {
   }
 
   /**
-   * Public endpoint: Get evaluation aggregate for institution
+   * Public endpoint: Get evaluation aggregate for school
    */
-  async getEvaluationAggregate(institutionId: string) {
-    return this.request(`/evaluations/${institutionId}/aggregate`);
+  async getEvaluationAggregate(schoolId: string) {
+    return this.request(`/evaluations/${schoolId}/aggregate`);
   }
 
   /**
@@ -164,10 +164,10 @@ class ApiClient {
   }
 
   /**
-   * Public endpoint: Get programs for an institution
+   * Public endpoint: Get programs for a school
    */
-  async getPrograms(institutionId: string) {
-    return this.request(`/institutions/${institutionId}/programs`);
+  async getPrograms(schoolId: string) {
+    return this.request(`/schools/${schoolId}/programs`);
   }
 
   // ============ ADMIN ENDPOINTS ============
@@ -190,10 +190,10 @@ class ApiClient {
   }
 
   /**
-   * Protected endpoint: Create institution
+   * Protected endpoint: Create school
    */
-  async createInstitution(data: any, token: string) {
-    return this.request("/institutions", {
+  async createSchool(data: any, token: string) {
+    return this.request("/schools", {
       method: "POST",
       body: data,
       token,
@@ -201,10 +201,10 @@ class ApiClient {
   }
 
   /**
-   * Protected endpoint: Update institution
+   * Protected endpoint: Update school
    */
-  async updateInstitution(id: string, data: any, token: string) {
-    return this.request(`/institutions/${id}`, {
+  async updateSchool(id: string, data: any, token: string) {
+    return this.request(`/schools/${id}`, {
       method: "PUT",
       body: data,
       token,
@@ -212,10 +212,10 @@ class ApiClient {
   }
 
   /**
-   * Protected endpoint: Delete institution
+   * Protected endpoint: Delete school
    */
-  async deleteInstitution(id: string, token: string) {
-    return this.request(`/institutions/${id}`, {
+  async deleteSchool(id: string, token: string) {
+    return this.request(`/schools/${id}`, {
       method: "DELETE",
       token,
     });
@@ -226,23 +226,23 @@ class ApiClient {
    */
   async recordEvaluation(
     studentId: string,
-    institutionId: string,
+    schoolId: string,
     score: number,
     notes: string,
     token: string
   ) {
     return this.request("/evaluations", {
       method: "POST",
-      body: { studentId, institutionId, score, notes },
+      body: { studentId, schoolId, score, notes },
       token,
     });
   }
 
   /**
-   * Protected endpoint: Add program to institution
+   * Protected endpoint: Add program to school
    */
-  async addProgram(institutionId: string, programData: any, token: string) {
-    return this.request(`/institutions/${institutionId}/programs`, {
+  async addProgram(schoolId: string, programData: any, token: string) {
+    return this.request(`/schools/${schoolId}/programs`, {
       method: "POST",
       body: programData,
       token,
@@ -253,12 +253,12 @@ class ApiClient {
    * Protected endpoint: Update program
    */
   async updateProgram(
-    institutionId: string,
+    schoolId: string,
     programId: string,
     data: any,
     token: string
   ) {
-    return this.request(`/institutions/${institutionId}/programs/${programId}`, {
+    return this.request(`/schools/${schoolId}/programs/${programId}`, {
       method: "PUT",
       body: data,
       token,
@@ -268,18 +268,18 @@ class ApiClient {
   /**
    * Protected endpoint: Delete program
    */
-  async deleteProgram(institutionId: string, programId: string, token: string) {
-    return this.request(`/institutions/${institutionId}/programs/${programId}`, {
+  async deleteProgram(schoolId: string, programId: string, token: string) {
+    return this.request(`/schools/${schoolId}/programs/${programId}`, {
       method: "DELETE",
       token,
     });
   }
 
   /**
-   * Protected endpoint: Regenerate AI summary for institution
+   * Protected endpoint: Regenerate AI summary for school
    */
-  async regenerateSummary(institutionId: string, token: string) {
-    return this.request(`/ai-summary/${institutionId}/regenerate`, {
+  async regenerateSummary(schoolId: string, token: string) {
+    return this.request(`/ai-summary/${schoolId}/regenerate`, {
       method: "POST",
       token,
     });

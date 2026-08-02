@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { recordEvaluation, verifyStudent, listInstitutions } from "../lib/api";
+import { recordEvaluation, verifyStudent, listSchools } from "../lib/api";
 
 interface Student {
   id: string;
@@ -8,7 +8,7 @@ interface Student {
   email: string;
 }
 
-interface Institution {
+interface School {
   id: string;
   name: string;
 }
@@ -29,10 +29,10 @@ export default function EvaluationsPage() {
   const [verifying, setVerifying] = useState(false);
   const [verifyError, setVerifyError] = useState("");
 
-  // Institution picker
-  const [institutionSearch, setInstitutionSearch] = useState("");
-  const [institutions, setInstitutions] = useState<Institution[]>([]);
-  const [selectedInstitution, setSelectedInstitution] = useState<Institution | null>(null);
+  // School picker
+  const [schoolSearch, setSchoolSearch] = useState("");
+  const [schools, setSchools] = useState<School[]>([]);
+  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [searchingInst, setSearchingInst] = useState(false);
 
   // Step 2: Record evaluation
@@ -70,25 +70,26 @@ export default function EvaluationsPage() {
     }
   };
 
-  const searchInstitutions = async (query: string) => {
-    setInstitutionSearch(query);
+  const searchSchools = async (query: string) => {
+    setSchoolSearch(query);
     if (!query.trim()) {
-      setInstitutions([]);
+      setSchools([]);
       return;
     }
     if (!token) return;
 
     setSearchingInst(true);
     try {
-      const response = await listInstitutions(token, {
+      const response = await listSchools(token, {
         search: query,
         limit: 10,
       });
 
       if (!response.error && response.data) {
-        setInstitutions(response.data.slice(0, 10).map((i: any) => ({
-          id: i.id,
-          name: i.name,
+        const data = response.data as any;
+        setSchools((data.data || data || []).slice(0, 10).map((s: any) => ({
+          id: s.id,
+          name: s.name,
         })));
       }
     } catch {
@@ -100,14 +101,14 @@ export default function EvaluationsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!student || !selectedInstitution || !token) return;
+    if (!student || !selectedSchool || !token) return;
     setSaveError("");
     setSuccess("");
     setSaving(true);
     try {
       const response = await recordEvaluation(
         student.id,
-        selectedInstitution.id,
+        selectedSchool.id,
         score,
         notes,
         token
@@ -121,7 +122,7 @@ export default function EvaluationsPage() {
         // Reset form
         setTimeout(() => {
           setStudent(null);
-          setSelectedInstitution(null);
+          setSelectedSchool(null);
           setScore(5);
           setNotes("");
           setSuccess("");
@@ -152,7 +153,7 @@ export default function EvaluationsPage() {
           {success}
           {aggregate && (
             <div className="mt-2 text-xs">
-              Institution aggregate rating: <strong>{aggregate.average.toFixed(1)}</strong> ({aggregate.count} evaluations)
+              School aggregate rating: <strong>{aggregate.average.toFixed(1)}</strong> ({aggregate.count} evaluations)
             </div>
           )}
         </div>
@@ -284,13 +285,13 @@ export default function EvaluationsPage() {
             )}
             <div>
               <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>
-                Institution
+                School
               </label>
               <input
                 type="text"
-                placeholder="Search institutions..."
-                value={institutionSearch}
-                onChange={(e) => searchInstitutions(e.target.value)}
+                placeholder="Search schools..."
+                value={schoolSearch}
+                onChange={(e) => searchSchools(e.target.value)}
                 className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
                 style={{
                   backgroundColor: "var(--paper, #F7F5EF)",
@@ -304,19 +305,19 @@ export default function EvaluationsPage() {
                   Searching...
                 </div>
               )}
-              {institutions.length > 0 && (
+              {schools.length > 0 && (
                 <div
                   className="mt-1 rounded-lg overflow-hidden"
                   style={{ border: "1px solid var(--line, #DCD6C6)" }}
                 >
-                  {institutions.map((inst) => (
+                  {schools.map((school) => (
                     <button
-                      key={inst.id}
+                      key={school.id}
                       type="button"
                       onClick={() => {
-                        setSelectedInstitution(inst);
-                        setInstitutionSearch(inst.name);
-                        setInstitutions([]);
+                        setSelectedSchool(school);
+                        setSchoolSearch(school.name);
+                        setSchools([]);
                       }}
                       className="w-full text-left px-4 py-2 text-sm transition-colors"
                       style={{
@@ -326,12 +327,12 @@ export default function EvaluationsPage() {
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--paper-deep, #EFEBDF)")}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "var(--paper, #F7F5EF)")}
                     >
-                      {inst.name}
+                      {school.name}
                     </button>
                   ))}
                 </div>
               )}
-              {selectedInstitution && (
+              {selectedSchool && (
                 <div
                   className="mt-2 p-2 rounded-lg text-xs"
                   style={{
@@ -340,7 +341,7 @@ export default function EvaluationsPage() {
                     borderRadius: "8px",
                   }}
                 >
-                  Selected: {selectedInstitution.name}
+                  Selected: {selectedSchool.name}
                 </div>
               )}
             </div>
@@ -383,7 +384,7 @@ export default function EvaluationsPage() {
             </div>
             <button
               type="submit"
-              disabled={saving || !student || !selectedInstitution}
+              disabled={saving || !student || !selectedSchool}
               className="w-full py-2.5 text-sm font-semibold text-white rounded-lg min-h-[44px] disabled:opacity-60 transition-colors"
               style={{ backgroundColor: "var(--sienna, #C1572B)", borderRadius: "8px" }}
             >

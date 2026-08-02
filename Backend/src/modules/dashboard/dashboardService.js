@@ -1,38 +1,38 @@
-import { institutionsRepository } from "../institutions/institutionsRepository.js";
+import { schoolsRepository } from "../schools/schoolsRepository.js";
 
 export const dashboardService = {
   async getDashboardStats() {
-    // Get all institutions
-    const instResult = await institutionsRepository.findAll({ page: 1, limit: 10000 });
-    const totalInstitutions = instResult.total;
+    // Get all schools
+    const schoolResult = await schoolsRepository.findAll({ page: 1, limit: 10000 });
+    const totalSchools = schoolResult.total;
 
-    // Count institutions without images
-    const missingImage = instResult.data.filter((i) => !i.imageUrl || i.imageUrl.length === 0)
+    // Count schools without images
+    const missingImage = schoolResult.data.filter((s) => !s.imageUrl || s.imageUrl.length === 0)
       .length;
 
-    // Count institutions without descriptions
-    const missingDescription = instResult.data.filter((i) => !i.description || i.description.length === 0)
+    // Count schools without descriptions
+    const missingDescription = schoolResult.data.filter((s) => !s.description || s.description.length === 0)
       .length;
 
     // Get verified count
-    const verifiedCount = instResult.data.filter((i) => i.verified).length;
+    const verifiedCount = schoolResult.data.filter((s) => s.verified).length;
 
-    // Get total views across all institutions
-    const totalViews = instResult.data.reduce((sum, i) => sum + (i.anonymousViews || 0), 0);
+    // Get total views across all schools
+    const totalViews = schoolResult.data.reduce((sum, s) => sum + (s.anonymousViews || 0), 0);
 
-    // Recent activity - last 5 institutions created or updated
-    const recentActivity = [...instResult.data]
+    // Recent activity - last 5 schools created or updated
+    const recentActivity = [...schoolResult.data]
       .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt))
       .slice(0, 5)
-      .map((i) => ({
-        id: i.id,
-        name: i.name,
+      .map((s) => ({
+        id: s.id,
+        name: s.name,
         action: "Updated",
-        timeAgo: getTimeAgo(new Date(i.updatedAt || i.createdAt)),
+        timeAgo: getTimeAgo(new Date(s.updatedAt || s.createdAt)),
       }));
 
     return {
-      totalInstitutions,
+      totalSchools,
       verifiedCount,
       missingImage,
       missingDescription,

@@ -54,7 +54,7 @@ function AcademicProgramCard({ schoolId }: AcademicProgramCardProps) {
       
       {programs.length === 0 ? (
         <p className="text-sm sm:text-base text-gray-600 leading-relaxed mb-6">
-          No programs available for this institution.
+          No programs available for this school.
         </p>
       ) : (
         <div className="space-y-3 mb-6">

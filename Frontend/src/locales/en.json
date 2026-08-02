@@ -30,7 +30,7 @@
     },
     "featured": {
       "title": "Featured Schools",
-      "subtitle": "Top-rated institutions hand-picked for excellence and verified quality.",
+      "subtitle": "Top-rated schools hand-picked for excellence and verified quality.",
       "viewAll": "View all schools",
       "loading": "Loading...",
       "error": "Error loading schools",
@@ -64,7 +64,7 @@
     "description": "At LewaHub, we believe every child deserves access to a quality education. We bridge the information gap by providing a comprehensive, transparent, and verified directory of schools across Cameroon.",
     "mission": {
       "title": "Our Mission",
-      "desc": "Our primary mission is to simplify the school selection process for families in Cameroon. We understand that choosing the right institution is one of the most critical decisions a parent can make. By centralizing data on fees, curriculum, facilities, and location, we remove the stress and uncertainty from the process.",
+      "desc": "Our primary mission is to simplify the school selection process for families in Cameroon. We understand that choosing the right school is one of the most critical decisions a parent can make. By centralizing data on fees, curriculum, facilities, and location, we remove the stress and uncertainty from the process.",
       "accessibility": "Accessibility",
       "accessibilityDesc": "Making school data free and easy to access for everyone.",
       "transparency": "Transparency",
@@ -83,7 +83,7 @@
       },
       "feedback": {
         "title": "Community Feedback",
-        "desc": "We moderate parent and student reviews to ensure that qualitative feedback reflects the real-world experience at the institution."
+        "desc": "We moderate parent and student reviews to ensure that qualitative feedback reflects the real-world experience at the school."
       }
     },
     "vision": {

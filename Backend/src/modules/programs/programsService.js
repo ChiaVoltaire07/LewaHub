@@ -1,19 +1,19 @@
-import { institutionsRepository } from "../institutions/institutionsRepository.js";
+import { schoolsRepository } from "../schools/schoolsRepository.js";
 import { AppError } from "../../middleware/errorHandler.js";
 
 export const programsService = {
-  async getPrograms(institutionId) {
-    const inst = await institutionsRepository.findById(institutionId);
-    if (!inst) {
-      throw new AppError("Institution not found", 404);
+  async getPrograms(schoolId) {
+    const school = await schoolsRepository.findById(schoolId);
+    if (!school) {
+      throw new AppError("School not found", 404);
     }
-    return inst.programs;
+    return school.programs;
   },
 
-  async addProgram(institutionId, programData) {
-    const inst = await institutionsRepository.findById(institutionId);
-    if (!inst) {
-      throw new AppError("Institution not found", 404);
+  async addProgram(schoolId, programData) {
+    const school = await schoolsRepository.findById(schoolId);
+    if (!school) {
+      throw new AppError("School not found", 404);
     }
 
     if (!programData.name || !programData.level) {
@@ -25,42 +25,42 @@ export const programsService = {
       ...programData,
     };
 
-    inst.programs = inst.programs || [];
-    inst.programs.push(newProgram);
+    school.programs = school.programs || [];
+    school.programs.push(newProgram);
 
-    await institutionsRepository.update(institutionId, { programs: inst.programs });
+    await schoolsRepository.update(schoolId, { programs: school.programs });
     return newProgram;
   },
 
-  async updateProgram(institutionId, programId, programData) {
-    const inst = await institutionsRepository.findById(institutionId);
-    if (!inst) {
-      throw new AppError("Institution not found", 404);
+  async updateProgram(schoolId, programId, programData) {
+    const school = await schoolsRepository.findById(schoolId);
+    if (!school) {
+      throw new AppError("School not found", 404);
     }
 
-    const programIdx = inst.programs.findIndex((p) => p.id === programId);
+    const programIdx = school.programs.findIndex((p) => p.id === programId);
     if (programIdx === -1) {
       throw new AppError("Program not found", 404);
     }
 
-    inst.programs[programIdx] = { ...inst.programs[programIdx], ...programData, id: programId };
-    await institutionsRepository.update(institutionId, { programs: inst.programs });
-    return inst.programs[programIdx];
+    school.programs[programIdx] = { ...school.programs[programIdx], ...programData, id: programId };
+    await schoolsRepository.update(schoolId, { programs: school.programs });
+    return school.programs[programIdx];
   },
 
-  async deleteProgram(institutionId, programId) {
-    const inst = await institutionsRepository.findById(institutionId);
-    if (!inst) {
-      throw new AppError("Institution not found", 404);
+  async deleteProgram(schoolId, programId) {
+    const school = await schoolsRepository.findById(schoolId);
+    if (!school) {
+      throw new AppError("School not found", 404);
     }
 
-    const programIdx = inst.programs.findIndex((p) => p.id === programId);
+    const programIdx = school.programs.findIndex((p) => p.id === programId);
     if (programIdx === -1) {
       throw new AppError("Program not found", 404);
     }
 
-    inst.programs.splice(programIdx, 1);
-    await institutionsRepository.update(institutionId, { programs: inst.programs });
+    school.programs.splice(programIdx, 1);
+    await schoolsRepository.update(schoolId, { programs: school.programs });
     return { success: true };
   },
 };

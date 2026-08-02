@@ -6,19 +6,19 @@ interface HeroBannerProps {
   schoolId?: string;
 }
 
-interface Institution {
+interface School {
   id: string;
   name: string;
   city: string;
   region: string;
-  type: string;
+  category: string;
   imageUrl?: string;
   programs?: any[];
 }
 
 function HeroBanner({ schoolId }: HeroBannerProps) {
   const { t } = useTranslation();
-  const [school, setSchool] = useState<Institution | null>(null);
+  const [school, setSchool] = useState<School | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,9 +29,9 @@ function HeroBanner({ schoolId }: HeroBannerProps) {
 
     const loadSchool = async () => {
       try {
-        const response = await api.getInstitution(schoolId);
+        const response = await api.getSchool(schoolId);
         if (!response.error && response.data) {
-          setSchool(response.data as Institution);
+          setSchool(response.data as School);
         }
       } catch (err) {
         console.error('Failed to load school details:', err);
@@ -69,7 +69,7 @@ function HeroBanner({ schoolId }: HeroBannerProps) {
        
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-4">
           <span className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30">
-            {school?.type || 'School'}
+            {school?.category || 'School'}
           </span>
           {school?.programs && school.programs.length > 0 && (
             <span className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium bg-white/20 backdrop-blur-sm text-white border border-white/30">

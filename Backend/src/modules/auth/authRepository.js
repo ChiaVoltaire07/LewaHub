@@ -1,5 +1,7 @@
 // Repository layer - admin storage
-// In Phase 2, will use Prisma
+// Uses in-memory fallback and Prisma when configured
+
+import { usePrisma, prismaClient } from "../../lib/database.js";
 
 let admins = [
   {
@@ -13,14 +15,40 @@ let admins = [
 
 export const authRepository = {
   async findByEmail(email) {
+    if (usePrisma && prismaClient) {
+      try {
+        return await prismaClient.adminUser.findUnique({
+          where: { email: email.toLowerCase() },
+        });
+      } catch (err) {
+        console.error("Prisma admin findByEmail failed:", err.message);
+      }
+    }
     return admins.find((a) => a.email === email.toLowerCase());
   },
 
   async findById(id) {
+    if (usePrisma && prismaClient) {
+      try {
+        return await prismaClient.adminUser.findUnique({
+          where: { id },
+        });
+      } catch (err) {
+        console.error("Prisma admin findById failed:", err.message);
+      }
+    }
     return admins.find((a) => a.id === id);
   },
 
   async create(data) {
+    if (usePrisma && prismaClient) {
+      try {
+        return await prismaClient.adminUser.create({ data });
+      } catch (err) {
+        console.error("Prisma admin create failed:", err.message);
+      }
+    }
+
     const newAdmin = {
       id: `admin-${Date.now()}`,
       ...data,
@@ -31,6 +59,17 @@ export const authRepository = {
   },
 
   async update(id, data) {
+    if (usePrisma && prismaClient) {
+      try {
+        return await prismaClient.adminUser.update({
+          where: { id },
+          data,
+        });
+      } catch (err) {
+        console.error("Prisma admin update failed:", err.message);
+      }
+    }
+
     const idx = admins.findIndex((a) => a.id === id);
     if (idx === -1) return null;
     admins[idx] = { ...admins[idx], ...data };

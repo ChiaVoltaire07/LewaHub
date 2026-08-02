@@ -46,7 +46,7 @@ export default function Footer() {
                 maxWidth: "300px",
               }}
             >
-              Connecting students with the best educational institutions in Cameroon
+              Connecting students with the best schools in Cameroon
             </p>
           </div>
 

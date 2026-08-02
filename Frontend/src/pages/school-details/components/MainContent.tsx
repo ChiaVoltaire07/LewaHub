@@ -2,7 +2,7 @@ import React from 'react';
 import FeeCard from './FeeCard';
 import AcademicProgramCard from './AcademicProgramCard';
 import MapCard from './MapCard';
-import InstitutionInfoCard from './InstitutionInfoCard';
+import SchoolInfoCard from './SchoolInfoCard';
 
 interface MainContentProps {
   mapRef: React.RefObject<HTMLDivElement | null>;
@@ -22,7 +22,7 @@ function MainContent({ mapRef, schoolId }: MainContentProps) {
       
         <div className="space-y-6 sm:space-y-8">
           <MapCard mapRef={mapRef} schoolId={schoolId} />
-          <InstitutionInfoCard schoolId={schoolId} />
+          <SchoolInfoCard schoolId={schoolId} />
         </div>
       </div>
     </section>

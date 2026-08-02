@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { listInstitutions, deleteInstitution } from "../lib/api";
+import { listSchools, deleteSchool } from "../lib/api";
 
-interface Institution {
+interface School {
   id: string;
   name: string;
-  type: string;
-  level: string;
+  category: string;
+  offersHighSchool: boolean;
   region: string;
   city: string;
   verified: boolean;
   updatedAt?: string;
 }
 
-export default function InstitutionsListPage() {
+export default function SchoolsListPage() {
   const { token } = useAuth();
   const navigate = useNavigate();
-  const [institutions, setInstitutions] = useState<Institution[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
-  const [filterLevel, setFilterLevel] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
   const [filterRegion, setFilterRegion] = useState("");
   const [filterVerified, setFilterVerified] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -31,7 +31,7 @@ export default function InstitutionsListPage() {
   const [totalItems, setTotalItems] = useState(0);
   const pageSize = 10;
 
-  const fetchInstitutions = async (page = 1) => {
+  const fetchSchools = async (page = 1) => {
     setLoading(true);
     setError("");
     try {
@@ -40,9 +40,9 @@ export default function InstitutionsListPage() {
         return;
       }
 
-      const response = await listInstitutions(token, {
+      const response = await listSchools(token, {
         search: search || undefined,
-        level: filterLevel || undefined,
+        category: filterCategory || undefined,
         region: filterRegion || undefined,
         verified: filterVerified || undefined,
         page,
@@ -55,27 +55,27 @@ export default function InstitutionsListPage() {
       }
 
       const data = (response as any).data || response;
-      setInstitutions(data.data || data || []);
+      setSchools(data.data || data || []);
       setTotalItems(data.total || 0);
       setCurrentPage(data.page || 1);
     } catch (err: any) {
-      setError(err.message || "Failed to load institutions");
+      setError(err.message || "Failed to load schools");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchInstitutions(1);
+    fetchSchools(1);
   }, [token]);
 
   const handleDelete = async (id: string) => {
     if (!token) return;
     setDeleting(true);
     try {
-      const response = await deleteInstitution(id, token);
+      const response = await deleteSchool(id, token);
       if (!response.error) {
-        setInstitutions((prev) => prev.filter((i) => i.id !== id));
+        setSchools((prev) => prev.filter((s) => s.id !== id));
         setDeleteId(null);
       } else {
         setError(response.error);
@@ -89,7 +89,7 @@ export default function InstitutionsListPage() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchInstitutions(1);
+    fetchSchools(1);
   };
 
   const toggleSelect = (id: string) => {
@@ -102,10 +102,10 @@ export default function InstitutionsListPage() {
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.size === institutions.length) {
+    if (selectedIds.size === schools.length) {
       setSelectedIds(new Set());
     } else {
-      setSelectedIds(new Set(institutions.map((i) => i.id)));
+      setSelectedIds(new Set(schools.map((s) => s.id)));
     }
   };
 
@@ -121,11 +121,11 @@ export default function InstitutionsListPage() {
             School Management
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--ink, #14231C)", opacity: 0.7 }}>
-            Manage all institutions in the database.
+            Manage all schools in the database.
           </p>
         </div>
         <Link
-          to="/admin/institutions/new"
+          to="/admin/schools/new"
           className="px-4 py-2.5 text-sm font-semibold text-white rounded-lg transition-colors"
           style={{ backgroundColor: "var(--sienna, #C1572B)", borderRadius: "8px" }}
         >
@@ -194,8 +194,8 @@ export default function InstitutionsListPage() {
           <option value="South">South</option>
         </select>
         <select
-          value={filterLevel}
-          onChange={(e) => setFilterLevel(e.target.value)}
+          value={filterCategory}
+          onChange={(e) => setFilterCategory(e.target.value)}
           className="px-3 py-2.5 text-sm rounded-lg outline-none"
           style={{
             backgroundColor: "var(--paper, #F7F5EF)",
@@ -204,9 +204,8 @@ export default function InstitutionsListPage() {
             borderRadius: "8px",
           }}
         >
-          <option value="">All levels</option>
-          <option value="Nursery">Nursery</option>
-          <option value="Primary">Primary</option>
+          <option value="">All categories</option>
+          <option value="PrimaryNursery">Primary / Nursery</option>
           <option value="Secondary">Secondary</option>
           <option value="University">University</option>
         </select>
@@ -236,17 +235,17 @@ export default function InstitutionsListPage() {
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin w-8 h-8 border-2 border-t-transparent rounded-full" style={{ borderColor: "var(--forest, #1F5D45)", borderTopColor: "transparent" }} />
         </div>
-      ) : institutions.length === 0 ? (
+      ) : schools.length === 0 ? (
         <div className="p-8 text-center rounded-lg" style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", borderRadius: "14px", border: "1px solid var(--line, #DCD6C6)" }}>
           <p className="text-sm" style={{ color: "var(--ink, #14231C)" }}>
-            No institutions yet — add the first one
+            No schools yet — add the first one
           </p>
           <Link
-            to="/admin/institutions/new"
+            to="/admin/schools/new"
             className="inline-block mt-3 px-4 py-2 text-sm font-semibold text-white rounded-lg"
             style={{ backgroundColor: "var(--sienna, #C1572B)", borderRadius: "8px" }}
           >
-            Add Institution
+            Add School
           </Link>
         </div>
       ) : (
@@ -259,7 +258,7 @@ export default function InstitutionsListPage() {
                   <th className="px-4 py-3 w-10">
                     <input
                       type="checkbox"
-                      checked={selectedIds.size === institutions.length && institutions.length > 0}
+                      checked={selectedIds.size === schools.length && schools.length > 0}
                       onChange={toggleSelectAll}
                       className="w-4 h-4 rounded"
                       style={{ accentColor: "var(--forest, #1F5D45)" }}
@@ -273,15 +272,15 @@ export default function InstitutionsListPage() {
                 </tr>
               </thead>
               <tbody>
-                {institutions.map((inst, idx) => {
-                  const initials = inst.name.slice(0, 2).toUpperCase();
+                {schools.map((school, idx) => {
+                  const initials = school.name.slice(0, 2).toUpperCase();
                   const badgeBg =
-                    inst.level === "University" ? "rgba(31,93,69,0.18)"
-                    : inst.level === "Secondary" ? "rgba(232,169,59,0.22)"
+                    school.category === "University" ? "rgba(31,93,69,0.18)"
+                    : school.category === "Secondary" ? "rgba(232,169,59,0.22)"
                     : "rgba(31,93,69,0.12)";
                   return (
                     <tr
-                      key={inst.id}
+                      key={school.id}
                       style={{
                         backgroundColor: idx % 2 === 0 ? "var(--paper, #F7F5EF)" : "var(--paper-deep, #EFEBDF)",
                         transition: "background-color 0.15s",
@@ -294,8 +293,8 @@ export default function InstitutionsListPage() {
                       <td className="px-4 py-3">
                         <input
                           type="checkbox"
-                          checked={selectedIds.has(inst.id)}
-                          onChange={() => toggleSelect(inst.id)}
+                          checked={selectedIds.has(school.id)}
+                          onChange={() => toggleSelect(school.id)}
                           className="w-4 h-4 rounded"
                           style={{ accentColor: "var(--forest, #1F5D45)" }}
                         />
@@ -309,33 +308,33 @@ export default function InstitutionsListPage() {
                             {initials}
                           </span>
                           <div>
-                            <div className="text-sm font-medium" style={{ color: "var(--ink, #14231C)" }}>{inst.name}</div>
+                            <div className="text-sm font-medium" style={{ color: "var(--ink, #14231C)" }}>{school.name}</div>
                             <div className="text-xs" style={{ fontFamily: "'IBM Plex Mono', monospace", color: "var(--ink, #14231C)", opacity: 0.6 }}>
-                              {inst.id}
+                              {school.id}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-sm" style={{ color: "var(--ink, #14231C)" }}>{inst.region}</td>
+                      <td className="px-4 py-3 text-sm" style={{ color: "var(--ink, #14231C)" }}>{school.region}</td>
                       <td className="px-4 py-3">
                         <span
                           className="inline-block px-2.5 py-0.5 text-xs font-medium rounded-full"
                           style={{
-                            backgroundColor: inst.verified ? "rgba(31, 93, 69, 0.15)" : "rgba(193, 87, 43, 0.1)",
-                            color: inst.verified ? "var(--forest, #1F5D45)" : "var(--sienna, #C1572B)",
+                            backgroundColor: school.verified ? "rgba(31, 93, 69, 0.15)" : "rgba(193, 87, 43, 0.1)",
+                            color: school.verified ? "var(--forest, #1F5D45)" : "var(--sienna, #C1572B)",
                             borderRadius: "9999px",
                           }}
                         >
-                          {inst.verified ? "Verified" : "Unverified"}
+                          {school.verified ? "Verified" : "Unverified"}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-xs" style={{ fontFamily: "'IBM Plex Mono', monospace", color: "var(--ink, #14231C)", opacity: 0.7 }}>
-                        {inst.updatedAt ? new Date(inst.updatedAt).toLocaleDateString() : "—"}
+                        {school.updatedAt ? new Date(school.updatedAt).toLocaleDateString() : "—"}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
-                            onClick={() => navigate(`/admin/institutions/${inst.id}/edit`)}
+                            onClick={() => navigate(`/admin/schools/${school.id}/edit`)}
                             className="p-2 rounded-lg transition-colors"
                             style={{ color: "var(--forest, #1F5D45)" }}
                             title="Edit"
@@ -346,7 +345,7 @@ export default function InstitutionsListPage() {
                             </svg>
                           </button>
                           <button
-                            onClick={() => setDeleteId(inst.id)}
+                            onClick={() => setDeleteId(school.id)}
                             className="p-2 rounded-lg transition-colors"
                             style={{ color: "var(--sienna, #C1572B)" }}
                             title="Delete"
@@ -367,11 +366,11 @@ export default function InstitutionsListPage() {
 
           {/* Mobile cards */}
           <div className="md:hidden space-y-3">
-            {institutions.map((inst) => {
-              const initials = inst.name.slice(0, 2).toUpperCase();
+            {schools.map((school) => {
+              const initials = school.name.slice(0, 2).toUpperCase();
               return (
                 <div
-                  key={inst.id}
+                  key={school.id}
                   className="p-4 rounded-xl"
                   style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)" }}
                 >
@@ -379,8 +378,8 @@ export default function InstitutionsListPage() {
                     <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
-                        checked={selectedIds.has(inst.id)}
-                        onChange={() => toggleSelect(inst.id)}
+                        checked={selectedIds.has(school.id)}
+                        onChange={() => toggleSelect(school.id)}
                         className="w-4 h-4 rounded"
                         style={{ accentColor: "var(--forest, #1F5D45)" }}
                       />
@@ -388,33 +387,33 @@ export default function InstitutionsListPage() {
                         {initials}
                       </span>
                       <div>
-                        <div className="text-sm font-medium" style={{ color: "var(--ink, #14231C)" }}>{inst.name}</div>
+                        <div className="text-sm font-medium" style={{ color: "var(--ink, #14231C)" }}>{school.name}</div>
                         <div className="text-xs" style={{ fontFamily: "'IBM Plex Mono', monospace", color: "var(--ink, #14231C)", opacity: 0.6 }}>
-                          {inst.id}
+                          {school.id}
                         </div>
                       </div>
                     </div>
                     <span
                       className="inline-block px-2 py-0.5 text-xs font-medium rounded-full"
                       style={{
-                        backgroundColor: inst.verified ? "rgba(31, 93, 69, 0.15)" : "rgba(193, 87, 43, 0.1)",
-                        color: inst.verified ? "var(--forest, #1F5D45)" : "var(--sienna, #C1572B)",
+                        backgroundColor: school.verified ? "rgba(31, 93, 69, 0.15)" : "rgba(193, 87, 43, 0.1)",
+                        color: school.verified ? "var(--forest, #1F5D45)" : "var(--sienna, #C1572B)",
                         borderRadius: "9999px",
                       }}
                     >
-                      {inst.verified ? "Verified" : "Unverified"}
+                      {school.verified ? "Verified" : "Unverified"}
                     </span>
                   </div>
                   <div className="flex gap-2 mt-3">
                     <button
-                      onClick={() => navigate(`/admin/institutions/${inst.id}/edit`)}
+                      onClick={() => navigate(`/admin/schools/${school.id}/edit`)}
                       className="flex-1 py-2.5 text-xs font-medium rounded-lg text-white min-h-[44px]"
                       style={{ backgroundColor: "var(--forest, #1F5D45)", borderRadius: "8px" }}
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => setDeleteId(inst.id)}
+                      onClick={() => setDeleteId(school.id)}
                       className="flex-1 py-2.5 text-xs font-medium rounded-lg text-white min-h-[44px]"
                       style={{ backgroundColor: "var(--sienna, #C1572B)", borderRadius: "8px" }}
                     >
@@ -436,7 +435,7 @@ export default function InstitutionsListPage() {
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
-                    onClick={() => fetchInstitutions(page)}
+                    onClick={() => fetchSchools(page)}
                     className="w-8 h-8 text-xs font-medium rounded-lg transition-colors"
                     style={{
                       backgroundColor: page === currentPage ? "var(--forest, #1F5D45)" : "var(--paper-deep, #EFEBDF)",
@@ -462,7 +461,7 @@ export default function InstitutionsListPage() {
           >
             <h3 className="text-lg font-semibold mb-2" style={{ color: "var(--ink, #14231C)" }}>Confirm Delete</h3>
             <p className="text-sm mb-6" style={{ color: "var(--ink, #14231C)", opacity: 0.7 }}>
-              Are you sure you want to delete this institution? This action cannot be undone.
+              Are you sure you want to delete this school? This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button

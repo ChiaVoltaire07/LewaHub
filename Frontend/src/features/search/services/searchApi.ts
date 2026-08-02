@@ -4,10 +4,10 @@ import api from '../../../lib/api';
 export const searchSchools = async (filters: Filters): Promise<School[]> => {
   try {
     // Fetch from backend with applied filters
-    const response = await api.getInstitutions({
+    const response = await api.getSchools({
       search: filters.searchQuery || undefined,
       region: filters.region.length > 0 ? filters.region[0] : undefined,
-      type: filters.institutionType.length > 0 ? filters.institutionType[0] : undefined,
+      category: filters.category.length > 0 ? filters.category[0] : undefined,
       page: 1,
       limit: 50,
     });
@@ -20,29 +20,29 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
     // Backend returns { data, total, page, limit }
     const results: any[] = (response as any).data || [];
 
-    // Map backend institutions to frontend School type
-    let mappedSchools = results.map((inst: any) => ({
-      id: inst.id,
-      name: inst.name,
-      region: inst.region,
-      institutionType: inst.type,
-      schoolLevel: inst.level || inst.type,
-      curriculum: inst.programs?.map((p: any) => p.level) || [],
-      degreeLevel: inst.programs?.map((p: any) => p.level) || [],
-      programs: inst.programs?.map((p: any) => p.name) || [],
-      feeRange: inst.programs?.[0]?.tuition ? `${inst.programs[0].tuition}` : '0',
-      topRated: inst.verified || false,
-      rating: 4.5, // Placeholder
-      image: inst.imageUrl || inst.logo || '',
+    // Map backend schools to frontend School type
+    let mappedSchools: School[] = results.map((school: any) => ({
+      id: school.id,
+      name: school.name,
+      region: school.region,
+      category: school.category,
+      offersHighSchool: school.offersHighSchool || false,
+      curriculum: school.programs?.map((p: any) => p.level) || [],
+      degreeLevel: school.programs?.map((p: any) => p.level) || [],
+      programs: school.programs?.map((p: any) => p.name) || [],
+      feeRange: school.programs?.[0]?.tuition ? `${school.programs[0].tuition}` : '0',
+      topRated: school.verified || false,
+      rating: 4.5, // Placeholder until ratings are implemented
+      image: school.imageUrl || school.logo || '',
       location: {
-        lat: inst.latitude || 5.5,
-        lng: inst.longitude || 12.5,
-        address: inst.address || inst.city || '',
+        lat: school.latitude || 5.5,
+        lng: school.longitude || 12.5,
+        address: school.address || school.city || '',
       },
-      description: inst.description || '',
+      description: school.description || '',
     }));
 
-    // Apply client-side filters for curriculum and degree level if needed
+    // Apply client-side filters
     if (filters.curriculum.length > 0) {
       mappedSchools = mappedSchools.filter(school =>
         school.curriculum.some(c => filters.curriculum.includes(c))
@@ -53,6 +53,11 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
       mappedSchools = mappedSchools.filter(school =>
         school.degreeLevel.some(d => filters.degreeLevel.includes(d))
       );
+    }
+
+    // Filter by offersHighSchool — only meaningful for Secondary schools
+    if (filters.offersHighSchool) {
+      mappedSchools = mappedSchools.filter(school => school.offersHighSchool === true);
     }
 
     if (filters.topRated) {
@@ -68,34 +73,34 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
 
 export const getSchoolById = async (id: string): Promise<School | null> => {
   try {
-    const response = await api.getInstitution(id);
+    const response = await api.getSchool(id);
 
     if (response.error) {
       console.error('Get school error:', response.error);
       return null;
     }
 
-    // Backend returns the institution directly (not wrapped in data)
-    const inst: any = (response as any).data || response;
+    // Backend returns the school directly (not wrapped in data)
+    const school: any = (response as any).data || response;
     return {
-      id: inst.id,
-      name: inst.name,
-      region: inst.region,
-      institutionType: inst.type,
-      schoolLevel: inst.level || inst.type,
-      curriculum: inst.programs?.map((p: any) => p.level) || [],
-      degreeLevel: inst.programs?.map((p: any) => p.level) || [],
-      programs: inst.programs?.map((p: any) => p.name) || [],
-      feeRange: inst.programs?.[0]?.tuition ? `${inst.programs[0].tuition}` : '0',
-      topRated: inst.verified || false,
+      id: school.id,
+      name: school.name,
+      region: school.region,
+      category: school.category,
+      offersHighSchool: school.offersHighSchool || false,
+      curriculum: school.programs?.map((p: any) => p.level) || [],
+      degreeLevel: school.programs?.map((p: any) => p.level) || [],
+      programs: school.programs?.map((p: any) => p.name) || [],
+      feeRange: school.programs?.[0]?.tuition ? `${school.programs[0].tuition}` : '0',
+      topRated: school.verified || false,
       rating: 4.5,
-      image: inst.imageUrl || inst.logo || '',
+      image: school.imageUrl || school.logo || '',
       location: {
-        lat: inst.latitude || 5.5,
-        lng: inst.longitude || 12.5,
-        address: inst.address || inst.city || '',
+        lat: school.latitude || 5.5,
+        lng: school.longitude || 12.5,
+        address: school.address || school.city || '',
       },
-      description: inst.description || '',
+      description: school.description || '',
     };
   } catch (err) {
     console.error('Get school API error:', err);

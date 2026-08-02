@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { getDashboardStats } from "../lib/api";
 
 interface DashboardStats {
-  totalInstitutions: number;
+  totalSchools: number;
   verifiedCount: number;
   missingImage: number;
   missingDescription: number;
@@ -59,7 +59,7 @@ export default function DashboardPage() {
   }
 
   const cards = [
-    { label: "Total Institutions", value: stats?.totalInstitutions ?? 0 },
+    { label: "Total Schools", value: stats?.totalSchools ?? 0 },
     { label: "Missing Image", value: stats?.missingImage ?? 0 },
     { label: "Missing Description", value: stats?.missingDescription ?? 0 },
   ];
@@ -72,7 +72,7 @@ export default function DashboardPage() {
             System Overview
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--ink, #14231C)", opacity: 0.7 }}>
-            Live status of your institutions and data quality.
+            Live status of your schools and data quality.
           </p>
         </div>
         <span
@@ -109,7 +109,7 @@ export default function DashboardPage() {
       {/* Action cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
         <Link
-          to="/admin/institutions/new"
+          to="/admin/schools/new"
           className="p-5 transition-shadow hover:shadow-md"
           style={{
             backgroundColor: "var(--forest, #1F5D45)",
@@ -120,7 +120,7 @@ export default function DashboardPage() {
           <div className="flex items-start justify-between">
             <div>
               <div className="font-semibold text-sm mb-1">Add School</div>
-              <div className="text-xs opacity-80">Create a new institution record</div>
+              <div className="text-xs opacity-80">Create a new school record</div>
             </div>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19" />
@@ -128,7 +128,7 @@ export default function DashboardPage() {
             </svg>
           </div>
           <div className="flex items-center gap-1 mt-4 text-xs opacity-70">
-            <span>New institution</span>
+            <span>New school</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
@@ -137,7 +137,7 @@ export default function DashboardPage() {
         </Link>
 
         <Link
-          to="/admin/institutions"
+          to="/admin/schools"
           className="p-5 transition-shadow hover:shadow-md"
           style={{
             backgroundColor: "var(--paper-deep, #EFEBDF)",
@@ -160,7 +160,7 @@ export default function DashboardPage() {
             </svg>
           </div>
           <div className="flex items-center gap-1 mt-4 text-xs opacity-70" style={{ color: "var(--ink, #14231C)" }}>
-            <span>All institutions</span>
+            <span>All schools</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />

@@ -3,8 +3,8 @@ import { Filters } from '../types';
 
 const initialFilters: Filters = {
   region: [],
-  institutionType: [],
-  schoolLevel: [],
+  category: [],
+  offersHighSchool: undefined,
   curriculum: [],
   degreeLevel: [],
   feeRange: [],
@@ -28,7 +28,10 @@ export const useFilters = () => {
     setFilters(prev => ({ ...prev, [key]: value }));
   }, []);
 
-  const toggleArrayFilter = useCallback((key: 'region' | 'institutionType' | 'schoolLevel' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating', value: string) => {
+  const toggleArrayFilter = useCallback((
+    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating',
+    value: string
+  ) => {
     setFilters(prev => {
       // Handle single-value filters (distance, minRating)
       if (key === 'distance' || key === 'minRating') {
@@ -36,7 +39,7 @@ export const useFilters = () => {
         return { ...prev, [key]: prev[key] === numValue ? undefined : numValue };
       }
       // Handle array filters
-      const currentArray = prev[key] || [];
+      const currentArray = (prev[key] as string[]) || [];
       const newArray = currentArray.includes(value)
         ? currentArray.filter(item => item !== value)
         : [...currentArray, value];
@@ -46,6 +49,13 @@ export const useFilters = () => {
 
   const toggleTopRated = useCallback(() => {
     setFilters(prev => ({ ...prev, topRated: !prev.topRated }));
+  }, []);
+
+  const toggleOffersHighSchool = useCallback(() => {
+    setFilters(prev => ({
+      ...prev,
+      offersHighSchool: prev.offersHighSchool ? undefined : true,
+    }));
   }, []);
 
   const setSearchQuery = useCallback((query: string) => {
@@ -64,8 +74,10 @@ export const useFilters = () => {
     setIsFilterDrawerOpen(false);
   }, []);
 
-  const hasActiveFilters = filters.region.length > 0 ||
-    filters.institutionType.length > 0 ||
+  const hasActiveFilters =
+    filters.region.length > 0 ||
+    filters.category.length > 0 ||
+    !!filters.offersHighSchool ||
     filters.curriculum.length > 0 ||
     filters.degreeLevel.length > 0 ||
     filters.feeRange.length > 0 ||
@@ -77,6 +89,7 @@ export const useFilters = () => {
     updateFilter,
     toggleArrayFilter,
     toggleTopRated,
+    toggleOffersHighSchool,
     setSearchQuery,
     resetFilters,
     openFilterDrawer,

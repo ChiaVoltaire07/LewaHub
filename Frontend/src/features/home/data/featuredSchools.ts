@@ -1,14 +1,17 @@
 import type { School } from "../types/school";
 
 /**
- * Mock data for the Home page. Replace with a call to the schools service
- * once the catalog API is available.
+ * Mock data for the Home page featured schools carousel.
+ * Replace with a live API call once the catalog service is wired up.
+ *
+ * Categories must match the backend 3-category model exactly:
+ *   "PrimaryNursery" | "Secondary" | "University"
  */
 export const featuredSchools: School[] = [
   {
     id: "saint-benedict-high-school",
     name: "Saint Benedict High School",
-    category: "Primary",
+    category: "Secondary",
     city: "Yaoundé",
     region: "Centre Region",
     rating: 4.8,
@@ -39,7 +42,8 @@ export const featuredSchools: School[] = [
   {
     id: "bafoussam-tech-hub",
     name: "Bafoussam Tech Hub",
-    category: "Tech Institute",
+    // Tech institutes fall under University in the 3-category model
+    category: "University",
     city: "Bafoussam",
     region: "West Region",
     rating: 4.5,
@@ -49,7 +53,7 @@ export const featuredSchools: School[] = [
   {
     id: "petit-pas-primary-center",
     name: "Petit-Pas Primary Center",
-    category: "Primary",
+    category: "PrimaryNursery",
     city: "Kribi",
     region: "South Region",
     rating: 4.9,

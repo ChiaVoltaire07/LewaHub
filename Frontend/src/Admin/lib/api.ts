@@ -7,6 +7,9 @@ export async function apiRequest<T = any>(
 ): Promise<T> {
   const method = options?.method || "GET";
   const response = await api.request<T>(endpoint, { method, body: options?.body, token });
+  if (response.error) {
+    throw new Error(response.error);
+  }
   return response.data as T;
 }
 
@@ -18,59 +21,67 @@ export async function getDashboardStats(token: string) {
   return api.getDashboardStats(token);
 }
 
-export async function listInstitutions(
+export async function listSchools(
   token: string,
   filters?: Record<string, any>
 ) {
-  // For admin, we use authenticated endpoint
-  return api.request("/institutions", { token, ...filters });
+  const params = new URLSearchParams();
+  if (filters?.search) params.append("search", filters.search);
+  if (filters?.category) params.append("category", filters.category);
+  if (filters?.region) params.append("region", filters.region);
+  if (filters?.verified !== undefined) params.append("verified", String(filters.verified));
+  if (filters?.page) params.append("page", String(filters.page));
+  if (filters?.limit) params.append("limit", String(filters.limit));
+
+  const queryString = params.toString() ? `?${params.toString()}` : "";
+  return api.request(`/schools${queryString}`, { token });
 }
 
-export async function getInstitution(id: string, token: string) {
-  return api.request(`/institutions/${id}`, { token });
+export async function getSchool(id: string, token: string) {
+  return api.request(`/schools/${id}`, { token });
 }
 
-export async function createInstitution(data: any, token: string) {
-  return api.createInstitution(data, token);
+export async function createSchool(data: any, token: string) {
+  return api.createSchool(data, token);
 }
 
-export async function updateInstitution(id: string, data: any, token: string) {
-  return api.updateInstitution(id, data, token);
+export async function updateSchool(id: string, data: any, token: string) {
+  return api.updateSchool(id, data, token);
 }
 
-export async function deleteInstitution(id: string, token: string) {
-  return api.deleteInstitution(id, token);
+export async function deleteSchool(id: string, token: string) {
+  return api.deleteSchool(id, token);
 }
 
 export async function recordEvaluation(
   studentId: string,
-  institutionId: string,
+  schoolId: string,
   score: number,
   notes: string,
   token: string
 ) {
-  return api.recordEvaluation(studentId, institutionId, score, notes, token);
+  return api.recordEvaluation(studentId, schoolId, score, notes, token);
 }
 
-export async function addProgram(institutionId: string, programData: any, token: string) {
-  return api.addProgram(institutionId, programData, token);
+export async function addProgram(schoolId: string, programData: any, token: string) {
+  return api.addProgram(schoolId, programData, token);
 }
 
 export async function updateProgram(
-  institutionId: string,
+  schoolId: string,
   programId: string,
   data: any,
   token: string
 ) {
-  return api.updateProgram(institutionId, programId, data, token);
+  return api.updateProgram(schoolId, programId, data, token);
 }
 
-export async function deleteProgram(institutionId: string, programId: string, token: string) {
-  return api.deleteProgram(institutionId, programId, token);
+export async function deleteProgram(schoolId: string, programId: string, token: string) {
+  return api.deleteProgram(schoolId, programId, token);
 }
 
-export async function regenerateSummary(institutionId: string, token: string) {
-  return api.regenerateSummary(institutionId, token);
+export async function regenerateSummary(schoolId: string, token: string) {
+  return api.regenerateSummary(schoolId, token);
 }
 
 export async function verifyStudent(email?: string, phone?: string) {

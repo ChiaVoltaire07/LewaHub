@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Globe, Mail, Phone } from 'lucide-react';
 import api from '../../../lib/api';
 
-interface InstitutionInfoCardProps {
+interface SchoolInfoCardProps {
   schoolId?: string;
 }
 
-interface Institution {
+interface School {
   name: string;
   website?: string;
   contactEmail?: string;
@@ -15,8 +15,8 @@ interface Institution {
   verified?: boolean;
 }
 
-function InstitutionInfoCard({ schoolId }: InstitutionInfoCardProps) {
-  const [institution, setInstitution] = useState<Institution | null>(null);
+function SchoolInfoCard({ schoolId }: SchoolInfoCardProps) {
+  const [school, setSchool] = useState<School | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,46 +25,46 @@ function InstitutionInfoCard({ schoolId }: InstitutionInfoCardProps) {
       return;
     }
 
-    const loadInstitution = async () => {
+    const loadSchool = async () => {
       try {
-        const response = await api.getInstitution(schoolId);
+        const response = await api.getSchool(schoolId);
         if (!response.error && response.data) {
-          setInstitution(response.data);
+          setSchool(response.data as School);
         }
       } catch (err) {
-        console.error('Failed to load institution info:', err);
+        console.error('Failed to load school info:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    loadInstitution();
+    loadSchool();
   }, [schoolId]);
 
-  const infoItems = institution ? [
+  const infoItems = school ? [
     {
       icon: Globe,
       label: 'Website',
-      value: institution.website || 'Not provided',
+      value: school.website || 'Not provided',
       color: 'text-blue-600',
       bg: 'bg-blue-50',
-      isLink: !!institution.website,
+      isLink: !!school.website,
     },
     {
       icon: Mail,
       label: 'Email',
-      value: institution.contactEmail || 'Not provided',
+      value: school.contactEmail || 'Not provided',
       color: 'text-purple-600',
       bg: 'bg-purple-50',
-      isLink: !!institution.contactEmail,
+      isLink: !!school.contactEmail,
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: institution.contactPhone || 'Not provided',
+      value: school.contactPhone || 'Not provided',
       color: 'text-primary-700',
       bg: 'bg-primary-50',
-      isLink: !!institution.contactPhone,
+      isLink: !!school.contactPhone,
     },
   ] : [];
 
@@ -121,4 +121,4 @@ function InstitutionInfoCard({ schoolId }: InstitutionInfoCardProps) {
   );
 }
 
-export default InstitutionInfoCard;
+export default SchoolInfoCard;

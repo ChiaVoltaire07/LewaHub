@@ -24,7 +24,7 @@ export default function SettingsPage() {
     try {
       await apiRequest("/admin/settings/password", {
         method: "PUT",
-        body: JSON.stringify({ currentPassword, newPassword }),
+        body: { currentPassword, newPassword },
       }, token);
       setSuccess("Password updated successfully");
       setCurrentPassword("");

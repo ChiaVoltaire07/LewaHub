@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { apiRequest } from "../lib/api";
+import { apiRequest, getSchool, createSchool, updateSchool } from "../lib/api";
 
 interface Program {
   id?: string;
@@ -11,10 +11,10 @@ interface Program {
   tuition: number;
 }
 
-interface InstitutionData {
+interface SchoolData {
   name: string;
-  type: string;
-  level: string;
+  category: string;
+  offersHighSchool: boolean;
   description: string;
   region: string;
   city: string;
@@ -27,12 +27,18 @@ interface InstitutionData {
   verified: boolean;
   programs: Program[];
   imageUrl: string;
+  ageRange?: string;
+  studentTeacherRatio?: string;
+  curriculum?: string;
+  annualFee?: number;
+  classesOffered?: string[];
+  programType?: string;
 }
 
-const emptyForm: InstitutionData = {
+const emptyForm: SchoolData = {
   name: "",
-  type: "University",
-  level: "University",
+  category: "PrimaryNursery",
+  offersHighSchool: false,
   description: "",
   region: "",
   city: "",
@@ -45,41 +51,46 @@ const emptyForm: InstitutionData = {
   verified: false,
   programs: [],
   imageUrl: "",
+  ageRange: "",
+  studentTeacherRatio: "",
+  curriculum: "",
+  annualFee: undefined,
+  classesOffered: [],
+  programType: "",
 };
 
-const LEVELS = ["Nursery", "Primary", "Secondary", "University"] as const;
+const CATEGORIES = ["PrimaryNursery", "Secondary", "University"] as const;
 
-export default function InstitutionFormPage() {
+export default function SchoolFormPage() {
   const { id } = useParams();
   const { token } = useAuth();
   const navigate = useNavigate();
   const isEdit = !!id;
 
-  const [form, setForm] = useState<InstitutionData>(emptyForm);
+  const [form, setForm] = useState<SchoolData>(emptyForm);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isEdit) return;
     (async () => {
       try {
-        const data = await apiRequest<InstitutionData>(`/institutions/${id}`, {}, token || undefined);
+        const data = await getSchool(id!, token || undefined);
         setForm({
           ...emptyForm,
           ...data,
           programs: data.programs || [],
         });
       } catch (err: any) {
-        setError(err.message || "Failed to load institution");
+        setError(err.message || "Failed to load school");
       } finally {
         setLoading(false);
       }
     })();
   }, [id, isEdit, token]);
 
-  const updateField = <K extends keyof InstitutionData>(key: K, value: InstitutionData[K]) => {
+  const updateField = <K extends keyof SchoolData>(key: K, value: SchoolData[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -116,13 +127,13 @@ export default function InstitutionFormPage() {
         longitude: Number(form.longitude),
       };
       if (isEdit) {
-        await apiRequest(`/institutions/${id}`, { method: "PUT", body: payload }, token || undefined);
+        await updateSchool(id!, payload, token || undefined);
       } else {
-        await apiRequest("/institutions", { method: "POST", body: payload }, token || undefined);
+        await createSchool(payload, token || undefined);
       }
-      navigate("/admin/institutions");
+      navigate("/admin/schools");
     } catch (err: any) {
-      setError(err.message || "Failed to save institution");
+      setError(err.message || "Failed to save school");
     } finally {
       setSaving(false);
     }
@@ -137,15 +148,15 @@ export default function InstitutionFormPage() {
   }
 
   const renderAcademicFields = () => {
-    if (form.level === "Nursery" || form.level === "Primary") {
+    if (form.category === "PrimaryNursery") {
       return (
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Age Range Accepted</label>
             <input
               type="text"
-              value={(form as any).ageRange || ""}
-              onChange={(e) => updateField("ageRange" as any, e.target.value)}
+              value={form.ageRange || ""}
+              onChange={(e) => updateField("ageRange", e.target.value)}
               placeholder="e.g. 3–6 years"
               className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
               style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
@@ -155,8 +166,8 @@ export default function InstitutionFormPage() {
             <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Student-Teacher Ratio</label>
             <input
               type="text"
-              value={(form as any).studentTeacherRatio || ""}
-              onChange={(e) => updateField("studentTeacherRatio" as any, e.target.value)}
+              value={form.studentTeacherRatio || ""}
+              onChange={(e) => updateField("studentTeacherRatio", e.target.value)}
               placeholder="e.g. 1:8"
               className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
               style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
@@ -165,59 +176,8 @@ export default function InstitutionFormPage() {
           <div>
             <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Curriculum</label>
             <select
-              value={(form as any).curriculum || ""}
-              onChange={(e) => updateField("curriculum" as any, e.target.value)}
-              className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
-              style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
-            >
-              <option value="">Select...</option>
-              <option value="Anglophone">Anglophone</option>
-              <option value="Francophone">Francophone</option>
-              <option value="Bilingual">Bilingual</option>
-            </select>
-          </div>
-          {(form.level === "Nursery" || form.level === "Primary") && (
-            <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Annual Fee</label>
-              <input
-                type="number"
-                value={(form as any).annualFee || ""}
-                onChange={(e) => updateField("annualFee" as any, e.target.value)}
-                className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
-                style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
-              />
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    if (form.level === "Secondary") {
-      return (
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Classes Offered</label>
-            <div className="flex flex-wrap gap-2">
-              {["Form 1", "Form 2", "Form 3", "Form 4", "Form 5"].map((c) => (
-                <label key={c} className="flex items-center gap-2 text-sm" style={{ color: "var(--ink, #14231C)" }}>
-                  <input
-                    type="checkbox"
-                    checked={((form as any).classesOffered || []).includes(c)}
-                    onChange={(e) => {
-                      const current = (form as any).classesOffered || [];
-                      updateField("classesOffered" as any, e.target.checked ? [...current, c] : current.filter((x: string) => x !== c));
-                    }}
-                  />
-                  {c}
-                </label>
-              ))}
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Curriculum</label>
-            <select
-              value={(form as any).curriculum || ""}
-              onChange={(e) => updateField("curriculum" as any, e.target.value)}
+              value={form.curriculum || ""}
+              onChange={(e) => updateField("curriculum", e.target.value)}
               className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
               style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
             >
@@ -231,8 +191,57 @@ export default function InstitutionFormPage() {
             <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Annual Fee</label>
             <input
               type="number"
-              value={(form as any).annualFee || ""}
-              onChange={(e) => updateField("annualFee" as any, e.target.value)}
+              value={form.annualFee || ""}
+              onChange={(e) => updateField("annualFee", parseFloat(e.target.value) || undefined)}
+              className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
+              style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    if (form.category === "Secondary") {
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Classes Offered</label>
+            <div className="flex flex-wrap gap-2">
+              {["Form 1", "Form 2", "Form 3", "Form 4", "Form 5", "Lower Sixth", "Upper Sixth"].map((c) => (
+                <label key={c} className="flex items-center gap-2 text-sm" style={{ color: "var(--ink, #14231C)" }}>
+                  <input
+                    type="checkbox"
+                    checked={(form.classesOffered || []).includes(c)}
+                    onChange={(e) => {
+                      const current = form.classesOffered || [];
+                      updateField("classesOffered", e.target.checked ? [...current, c] : current.filter((x: string) => x !== c));
+                    }}
+                  />
+                  {c}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Curriculum</label>
+            <select
+              value={form.curriculum || ""}
+              onChange={(e) => updateField("curriculum", e.target.value)}
+              className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
+              style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
+            >
+              <option value="">Select...</option>
+              <option value="Anglophone">Anglophone</option>
+              <option value="Francophone">Francophone</option>
+              <option value="Bilingual">Bilingual</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Annual Fee</label>
+            <input
+              type="number"
+              value={form.annualFee || ""}
+              onChange={(e) => updateField("annualFee", parseFloat(e.target.value) || undefined)}
               className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
               style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
             />
@@ -240,8 +249,8 @@ export default function InstitutionFormPage() {
           <div>
             <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Program Type</label>
             <select
-              value={(form as any).programType || ""}
-              onChange={(e) => updateField("programType" as any, e.target.value)}
+              value={form.programType || ""}
+              onChange={(e) => updateField("programType", e.target.value)}
               className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
               style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
             >
@@ -250,11 +259,40 @@ export default function InstitutionFormPage() {
               <option value="Boarding">Boarding</option>
             </select>
           </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="offersHighSchool"
+              checked={form.offersHighSchool}
+              onChange={(e) => updateField("offersHighSchool", e.target.checked)}
+              className="w-4 h-4 rounded"
+              style={{ accentColor: "var(--forest, #1F5D45)" }}
+            />
+            <label htmlFor="offersHighSchool" className="text-sm" style={{ color: "var(--ink, #14231C)" }}>
+              This school also offers High School (Lower/Upper Sixth)
+            </label>
+          </div>
+          {form.offersHighSchool && (
+            <div className="p-4 rounded-lg space-y-3" style={{ backgroundColor: "var(--paper, #F7F5EF)", border: "1px dashed var(--line, #DCD6C6)" }}>
+              <p className="text-xs font-medium" style={{ color: "var(--ink, #14231C)" }}>High School Details</p>
+              <div>
+                <label className="block text-xs font-medium mb-1" style={{ color: "var(--ink, #14231C)" }}>High School Programs</label>
+                <textarea
+                  value={(form as any).highSchoolPrograms || ""}
+                  onChange={(e) => updateField("highSchoolPrograms" as any, e.target.value)}
+                  placeholder="e.g. Sciences, Literature, Economics"
+                  rows={2}
+                  className="w-full px-3 py-2 text-xs rounded-lg outline-none resize-y"
+                  style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       );
     }
 
-    if (form.level === "University") {
+    if (form.category === "University") {
       return (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -339,7 +377,7 @@ export default function InstitutionFormPage() {
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold" style={{ color: "var(--ink, #14231C)", fontFamily: "Fraunces, serif" }}>
-            {isEdit ? form.name || "Edit Institution" : "Add New Institution"}
+            {isEdit ? form.name || "Edit School" : "Add New School"}
           </h1>
           <p className="text-sm mt-1" style={{ color: "var(--ink, #14231C)", opacity: 0.7 }}>
             {isEdit ? "Update the details below." : "Fill in the details to create a new listing."}
@@ -348,7 +386,7 @@ export default function InstitutionFormPage() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => navigate("/admin/institutions")}
+            onClick={() => navigate("/admin/schools")}
             className="px-4 py-2 text-sm font-medium rounded-lg"
             style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
           >
@@ -356,8 +394,8 @@ export default function InstitutionFormPage() {
           </button>
           <button
             type="submit"
+            form="school-form"
             disabled={saving}
-            onClick={handleSubmit}
             className="px-5 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-60"
             style={{ backgroundColor: "var(--sienna, #C1572B)", borderRadius: "8px" }}
           >
@@ -372,7 +410,7 @@ export default function InstitutionFormPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+      <form id="school-form" onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
         <div className="space-y-6">
           <div
             className="p-5 rounded-xl"
@@ -392,31 +430,16 @@ export default function InstitutionFormPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Level</label>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Category</label>
                 <select
-                  value={form.level}
-                  onChange={(e) => updateField("level", e.target.value)}
+                  value={form.category}
+                  onChange={(e) => updateField("category", e.target.value)}
                   className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
                   style={{ backgroundColor: "var(--paper, #F7F5EF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
                 >
-                  {LEVELS.map((l) => (
-                    <option key={l} value={l}>{l}</option>
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>{c === "PrimaryNursery" ? "Primary / Nursery" : c}</option>
                   ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Type</label>
-                <select
-                  value={form.type}
-                  onChange={(e) => updateField("type", e.target.value)}
-                  className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
-                  style={{ backgroundColor: "var(--paper, #F7F5EF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
-                >
-                  <option value="University">University</option>
-                  <option value="Institute">Institute</option>
-                  <option value="College">College</option>
-                  <option value="Polytechnic">Polytechnic</option>
-                  <option value="High School">High School</option>
                 </select>
               </div>
               <div>
@@ -535,17 +558,16 @@ export default function InstitutionFormPage() {
             </label>
             <div className="flex gap-2 pt-2">
               <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={saving}
+                type="submit"
                 className="flex-1 py-2.5 text-sm font-semibold text-white rounded-lg disabled:opacity-60"
                 style={{ backgroundColor: "var(--sienna, #C1572B)", borderRadius: "8px" }}
+                disabled={saving}
               >
                 {saving ? "Saving..." : isEdit ? "Update" : "Save"}
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/admin/institutions")}
+                onClick={() => navigate("/admin/schools")}
                 className="px-4 py-2.5 text-sm font-medium rounded-lg"
                 style={{ backgroundColor: "var(--paper, #F7F5EF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
               >

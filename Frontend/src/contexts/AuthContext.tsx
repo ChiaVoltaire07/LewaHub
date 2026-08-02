@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import { apiRequest } from "../lib/api";
+import api from "../lib/api";
 
 interface Admin {
   id: string;
@@ -18,30 +18,35 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const stored = sessionStorage.getItem("admin_token");
-  const storedAdmin = stored ? (() => {
-    try {
-      const payload = JSON.parse(atob(stored.split(".")[1]));
-      return { id: payload.sub || payload.id || "", email: payload.email || "", name: payload.name };
-    } catch {
-      return null;
-    }
-  })() : null;
+  const stored = sessionStorage.getItem("admin_token") || localStorage.getItem("admin_token");
+  const storedAdmin = stored
+    ? (() => {
+        try {
+          const payload = JSON.parse(atob(stored.split(".")[1]));
+          return { id: payload.sub || payload.id || "", email: payload.email || "", name: payload.name };
+        } catch {
+          return null;
+        }
+      })()
+    : null;
 
   const [token, setToken] = useState<string | null>(stored);
   const [admin, setAdmin] = useState<Admin | null>(storedAdmin);
 
   const login = useCallback(async (email: string, password: string, keepSignedIn = false) => {
-    const res = await apiRequest<{ token: string; admin: Admin }>("/admin/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-    setToken(res.token);
-    setAdmin(res.admin);
+    const res = await api.adminLogin(email, password);
+    if (res.error) {
+      throw new Error(res.error);
+    }
+    const data = (res as any).data || res;
+    const newToken: string = data.token;
+    const newAdmin: Admin = data.admin;
+    setToken(newToken);
+    setAdmin(newAdmin);
     if (keepSignedIn) {
-      localStorage.setItem("admin_token", res.token);
+      localStorage.setItem("admin_token", newToken);
     } else {
-      sessionStorage.setItem("admin_token", res.token);
+      sessionStorage.setItem("admin_token", newToken);
     }
   }, []);
 

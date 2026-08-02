@@ -2,8 +2,9 @@ export interface School {
   id: string;
   name: string;
   region: string;
-  institutionType: string;
-  schoolLevel: string;
+  /** Matches the backend 3-category model: "PrimaryNursery" | "Secondary" | "University" */
+  category: string;
+  offersHighSchool?: boolean;
   curriculum: string[];
   degreeLevel: string[];
   programs: string[];
@@ -21,8 +22,10 @@ export interface School {
 
 export interface Filters {
   region: string[];
-  institutionType: string[];
-  schoolLevel: string[];
+  /** Single category filter matching the backend: "PrimaryNursery" | "Secondary" | "University" */
+  category: string[];
+  /** Extra filter: when set to true, shows only Secondary schools that offer High School */
+  offersHighSchool?: boolean;
   curriculum: string[];
   degreeLevel: string[];
   feeRange: string[];

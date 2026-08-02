@@ -8,6 +8,16 @@ interface SearchCardProps {
   onViewDetails?: (school: School) => void;
 }
 
+/** Convert the internal category key to a human-readable label */
+function categoryLabel(category: string): string {
+  switch (category) {
+    case 'PrimaryNursery': return 'Primary / Nursery';
+    case 'Secondary': return 'Secondary';
+    case 'University': return 'University';
+    default: return category;
+  }
+}
+
 const SearchCard: React.FC<SearchCardProps> = ({ school, onViewDetails }) => {
   return (
     <div className={styles.card}>
@@ -26,7 +36,10 @@ const SearchCard: React.FC<SearchCardProps> = ({ school, onViewDetails }) => {
 
         <div className={styles.location}>
           <MapPin size={14} />
-          <span>{school.region} • {school.institutionType}</span>
+          <span>
+            {school.region} &bull; {categoryLabel(school.category)}
+            {school.offersHighSchool && ' (incl. High School)'}
+          </span>
         </div>
 
         <div className={styles.tags}>
@@ -44,7 +57,7 @@ const SearchCard: React.FC<SearchCardProps> = ({ school, onViewDetails }) => {
           </span>
         </div>
 
-        <button 
+        <button
           className={styles.viewButton}
           onClick={() => onViewDetails?.(school)}
         >

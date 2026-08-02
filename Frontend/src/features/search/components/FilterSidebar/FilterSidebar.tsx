@@ -6,8 +6,12 @@ import styles from './FilterSidebar.module.css';
 
 interface FilterSidebarProps {
   filters: Filters;
-  onToggleArrayFilter: (key: 'region' | 'institutionType' | 'schoolLevel' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating', value: string) => void;
+  onToggleArrayFilter: (
+    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating',
+    value: string
+  ) => void;
   onToggleTopRated: () => void;
+  onToggleOffersHighSchool?: () => void;
   onReset: () => void;
   onClose?: () => void;
   isMobile?: boolean;
@@ -41,19 +45,24 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   filters,
   onToggleArrayFilter,
   onToggleTopRated,
+  onToggleOffersHighSchool,
   onReset,
   onClose,
   isMobile = false,
   viewMode = 'list',
   onViewModeChange
 }) => {
-  const activeFilterCount = 
+  const activeFilterCount =
     filters.region.length +
-    filters.institutionType.length +
+    filters.category.length +
+    (filters.offersHighSchool ? 1 : 0) +
     filters.curriculum.length +
     filters.degreeLevel.length +
     filters.feeRange.length +
     (filters.topRated ? 1 : 0);
+
+  // The "High School available" checkbox only makes sense when Secondary is selected
+  const secondarySelected = filters.category.includes('Secondary');
 
   return (
     <div className={`${styles.sidebar} ${isMobile ? styles.mobile : ''}`}>
@@ -102,19 +111,28 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           onToggle={(value) => onToggleArrayFilter('region', value)}
         />
 
+        {/* Single 3-category filter replaces the old "School Type" + "School Level" pair */}
         <FilterSection
-          title="Institution Type"
-          options={filterOptions.institutionType}
-          selectedValues={filters.institutionType}
-          onToggle={(value) => onToggleArrayFilter('institutionType', value)}
+          title="Category"
+          options={filterOptions.category}
+          selectedValues={filters.category}
+          onToggle={(value) => onToggleArrayFilter('category', value)}
         />
 
-        <FilterSection
-          title="School Level"
-          options={filterOptions.schoolLevel}
-          selectedValues={filters.schoolLevel}
-          onToggle={(value) => onToggleArrayFilter('schoolLevel', value)}
-        />
+        {/* High School checkbox — only shown when "Secondary" is an active category filter */}
+        {secondarySelected && onToggleOffersHighSchool && (
+          <div className={styles.filterSection}>
+            <label className={styles.topRatedOption}>
+              <input
+                type="checkbox"
+                checked={!!filters.offersHighSchool}
+                onChange={onToggleOffersHighSchool}
+              />
+              <span className={styles.checkbox}></span>
+              <span className={styles.optionLabel}>High School available (Lower/Upper Sixth)</span>
+            </label>
+          </div>
+        )}
 
         <FilterSection
           title="Curriculum"

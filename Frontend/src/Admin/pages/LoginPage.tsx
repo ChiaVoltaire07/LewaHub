@@ -55,7 +55,7 @@ export default function LoginPage() {
             Staff Access
           </h1>
           <p className="text-sm mb-6" style={{ color: "var(--ink, #14231C)", opacity: 0.7 }}>
-            Sign in to manage your institutions
+            Sign in to manage your schools
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -73,7 +73,7 @@ export default function LoginPage() {
             )}
             <div>
               <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>
-                Institutional Email
+                Work Email
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "var(--ink, #14231C)", opacity: 0.5 }}>

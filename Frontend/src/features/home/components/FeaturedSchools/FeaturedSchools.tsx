@@ -5,10 +5,10 @@ import api from "../../../../lib/api";
 import SchoolCard from "./SchoolCard";
 import styles from "./FeaturedSchools.module.css";
 
-interface Institution {
+interface School {
   id: string;
   name: string;
-  type: string;
+  category: string;
   city: string;
   region: string;
   imageUrl?: string;
@@ -18,7 +18,7 @@ interface Institution {
 
 export default function FeaturedSchools() {
   const { t } = useTranslation();
-  const [schools, setSchools] = useState<Institution[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +26,7 @@ export default function FeaturedSchools() {
     const loadFeaturedSchools = async () => {
       try {
         setLoading(true);
-        const response = await api.getInstitutions({
+        const response = await api.getSchools({
           page: 1,
           limit: 6,
         });
@@ -36,18 +36,18 @@ export default function FeaturedSchools() {
           return;
         }
 
-        // Map backend institutions to frontend School type
-        const mappedSchools = ((response.data as any[]) || []).slice(0, 6).map((inst: any) => ({
-          id: inst.id,
-          name: inst.name,
-          type: inst.type,
-          category: inst.type,
-          region: inst.region,
-          city: inst.city,
+        // Map backend schools to frontend School type
+        const mappedSchools = ((response.data as any[]) || []).slice(0, 6).map((school: any) => ({
+          id: school.id,
+          name: school.name,
+          type: school.category,
+          category: school.category,
+          region: school.region,
+          city: school.city,
           rating: 4.5, // Placeholder - could fetch real ratings from evaluations
-          featured: inst.verified,
-          status: inst.verified ? "Evaluated" : "Pending Review",
-          imagePlaceholder: inst.imageUrl || "linear-gradient(135deg, #0F766E, #134E4A)",
+          featured: school.verified,
+          status: school.verified ? "Evaluated" : "Pending Review",
+          imagePlaceholder: school.imageUrl || "linear-gradient(135deg, #0F766E, #134E4A)",
         }));
 
         setSchools(mappedSchools);

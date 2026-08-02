@@ -8,8 +8,12 @@ interface MobileFilterDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   filters: Filters;
-  onToggleArrayFilter: (key: 'region' | 'institutionType' | 'schoolLevel' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating', value: string) => void;
+  onToggleArrayFilter: (
+    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating',
+    value: string
+  ) => void;
   onToggleTopRated: () => void;
+  onToggleOffersHighSchool?: () => void;
   onReset: () => void;
   resultCount?: number;
 }
@@ -20,14 +24,16 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
   filters,
   onToggleArrayFilter,
   onToggleTopRated,
+  onToggleOffersHighSchool,
   onReset,
   resultCount = 237
 }) => {
   const [showMoreFilters, setShowMoreFilters] = useState(false);
 
-  const activeFilterCount = 
+  const activeFilterCount =
     filters.region.length +
-    filters.institutionType.length +
+    filters.category.length +
+    (filters.offersHighSchool ? 1 : 0) +
     filters.curriculum.length +
     filters.degreeLevel.length +
     filters.feeRange.length +
@@ -37,6 +43,9 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
     (filters.topRated ? 1 : 0) +
     (filters.distance ? 1 : 0) +
     (filters.minRating ? 1 : 0);
+
+  // Show High School checkbox only when Secondary category is selected
+  const secondarySelected = filters.category.includes('Secondary');
 
   return (
     <>
@@ -52,7 +61,7 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
               </button>
             </div>
             <div className={styles.content}>
-              {/* Minimum Rating - Star Tagged */}
+              {/* Minimum Rating */}
               <div className={styles.filterSection}>
                 <h3 className={styles.filterLabel}>Minimum Rating</h3>
                 <div className={styles.ratingOptions}>
@@ -69,7 +78,7 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
                 </div>
               </div>
 
-              {/* Region - Pills */}
+              {/* Region */}
               <div className={styles.filterSection}>
                 <h3 className={styles.filterLabel}>Region</h3>
                 <div className={styles.pillContainer}>
@@ -85,15 +94,15 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
                 </div>
               </div>
 
-              {/* Institution Type - Pills */}
+              {/* Single 3-category filter replacing the old separate type + level filters */}
               <div className={styles.filterSection}>
-                <h3 className={styles.filterLabel}>Institution Type</h3>
+                <h3 className={styles.filterLabel}>Category</h3>
                 <div className={styles.pillContainer}>
-                  {filterOptions.institutionType.map(option => (
+                  {filterOptions.category.map(option => (
                     <button
                       key={option.value}
-                      className={`${styles.pill} ${(filters.institutionType || []).includes(option.value) ? styles.active : ''}`}
-                      onClick={() => onToggleArrayFilter('institutionType', option.value)}
+                      className={`${styles.pill} ${(filters.category || []).includes(option.value) ? styles.active : ''}`}
+                      onClick={() => onToggleArrayFilter('category', option.value)}
                     >
                       {option.label}
                     </button>
@@ -101,32 +110,31 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
                 </div>
               </div>
 
-              {/* School Level - Pills */}
-              <div className={styles.filterSection}>
-                <h3 className={styles.filterLabel}>School Level</h3>
-                <div className={styles.pillContainer}>
-                  {filterOptions.schoolLevel.map(option => (
-                    <button
-                      key={option.value}
-                      className={`${styles.pill} ${(filters.schoolLevel || []).includes(option.value) ? styles.active : ''}`}
-                      onClick={() => onToggleArrayFilter('schoolLevel', option.value)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
+              {/* High School checkbox — only shown when Secondary is active */}
+              {secondarySelected && onToggleOffersHighSchool && (
+                <div className={styles.filterSection}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={!!filters.offersHighSchool}
+                      onChange={onToggleOffersHighSchool}
+                      style={{ width: '16px', height: '16px' }}
+                    />
+                    <span>High School available (Lower/Upper Sixth)</span>
+                  </label>
                 </div>
-              </div>
+              )}
 
               {/* More Filters - Collapsible */}
               <div className={styles.moreFiltersSection}>
-                <button 
+                <button
                   className={styles.moreFiltersButton}
                   onClick={() => setShowMoreFilters(!showMoreFilters)}
                 >
                   <span>More filters</span>
                   <ChevronDown size={20} className={showMoreFilters ? styles.rotated : ''} />
                 </button>
-                
+
                 {showMoreFilters && (
                   <div className={styles.moreFiltersContent}>
                     {/* Ownership */}

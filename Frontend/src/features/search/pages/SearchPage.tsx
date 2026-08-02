@@ -1,5 +1,5 @@
 import "../../../styles/search-global.css";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import SearchBar from '../components/SearchBar/SearchBar';
@@ -9,19 +9,22 @@ import SearchResults from '../components/SearchResults/SearchResults';
 import MapView from '../components/MapView/MapView';
 import BottomMapToggle from '../components/BottomMapToggle/BottomMapToggle';
 import ActiveFilters from '../components/ActiveFilters/ActiveFilters';
-import { useSearch } from '../hooks/useSearch';
 import { useFilters } from '../hooks/useFilters';
+import { searchSchools } from '../services/searchApi';
 import { School } from '../types';
 import { sortOptions } from '../data/mockSchools';
 import styles from './SearchPage.module.css';
 
 const SearchPage: React.FC = () => {
-  const { filteredSchools, isLoading, filters, error, updateFilter, resetFilters } = useSearch();
+  // Single source of truth for all filter state
   const {
+    filters,
     isFilterDrawerOpen,
     toggleArrayFilter,
     toggleTopRated,
+    toggleOffersHighSchool,
     setSearchQuery,
+    resetFilters,
     openFilterDrawer,
     closeFilterDrawer,
     hasActiveFilters
@@ -30,23 +33,45 @@ const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
   const [sortBy, setSortBy] = useState('rating');
+  const [schools, setSchools] = useState<School[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Re-fetch whenever any filter changes
+  useEffect(() => {
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
+    searchSchools(filters)
+      .then((results) => {
+        if (!cancelled) setSchools(results);
+      })
+      .catch((err) => {
+        if (!cancelled) setError('Failed to fetch schools. Please try again.');
+        console.error(err);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [filters]);
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
-    updateFilter('searchQuery', query);
   };
 
   const handleRemoveFilter = (key: keyof typeof filters, value?: string) => {
     if (key === 'topRated') {
       toggleTopRated();
-    } else if (value && ['region', 'institutionType', 'curriculum', 'degreeLevel', 'feeRange'].includes(key)) {
+    } else if (key === 'offersHighSchool') {
+      toggleOffersHighSchool();
+    } else if (value && ['region', 'category', 'curriculum', 'degreeLevel', 'feeRange'].includes(key)) {
       toggleArrayFilter(key as any, value);
     }
   };
 
   const handleClearAll = () => {
     resetFilters();
-    setSearchQuery('');
   };
 
   const handleViewDetails = (school: School) => {
@@ -91,6 +116,7 @@ const SearchPage: React.FC = () => {
               filters={filters}
               onToggleArrayFilter={toggleArrayFilter}
               onToggleTopRated={toggleTopRated}
+              onToggleOffersHighSchool={toggleOffersHighSchool}
               onReset={resetFilters}
               viewMode={viewMode}
               onViewModeChange={setViewMode}
@@ -103,7 +129,7 @@ const SearchPage: React.FC = () => {
             <div className={styles.resultsHeader}>
               <div className={styles.resultsInfo}>
                 <h1 className={styles.resultsTitle}>
-                  {filteredSchools.length} {filteredSchools.length === 1 ? 'School' : 'Schools'} Found
+                  {schools.length} {schools.length === 1 ? 'School' : 'Schools'} Found
                 </h1>
                 <div className={styles.sortContainer}>
                   <label className={styles.sortLabel}>Sort by:</label>
@@ -125,7 +151,7 @@ const SearchPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Results and Map */}
+            {/* Error banner */}
             {error && (
               <div className={styles.errorContainer} style={{
                 backgroundColor: "rgba(193, 87, 43, 0.1)",
@@ -138,25 +164,26 @@ const SearchPage: React.FC = () => {
                 <p><strong>Error:</strong> {error}</p>
               </div>
             )}
+
             {viewMode === 'list' ? (
               <SearchResults
-                schools={filteredSchools}
+                schools={schools}
                 isLoading={isLoading}
                 onViewDetails={handleViewDetails}
               />
             ) : (
               <MapView
-                schools={filteredSchools}
+                schools={schools}
                 onSchoolClick={handleViewDetails}
               />
             )}
 
-            {/* Desktop Map */}
+            {/* Desktop Map (shown below results in list mode) */}
             {viewMode === 'list' && (
               <div className={styles.desktopMap}>
                 <h2 className={styles.mapTitle}>Map View</h2>
                 <MapView
-                  schools={filteredSchools}
+                  schools={schools}
                   onSchoolClick={handleViewDetails}
                 />
               </div>
@@ -168,13 +195,13 @@ const SearchPage: React.FC = () => {
         <div className={styles.mobileLayout}>
           {viewMode === 'list' ? (
             <SearchResults
-              schools={filteredSchools}
+              schools={schools}
               isLoading={isLoading}
               onViewDetails={handleViewDetails}
             />
           ) : (
             <MapView
-              schools={filteredSchools}
+              schools={schools}
               onSchoolClick={handleViewDetails}
             />
           )}
@@ -187,8 +214,9 @@ const SearchPage: React.FC = () => {
           filters={filters}
           onToggleArrayFilter={toggleArrayFilter}
           onToggleTopRated={toggleTopRated}
+          onToggleOffersHighSchool={toggleOffersHighSchool}
           onReset={resetFilters}
-          resultCount={filteredSchools.length}
+          resultCount={schools.length}
         />
 
         {/* Mobile Bottom Toggle */}

@@ -19,7 +19,7 @@ interface MapCardProps {
   schoolId?: string;
 }
 
-interface Institution {
+interface School {
   name: string;
   address: string;
   latitude: number;
@@ -41,13 +41,13 @@ function MapUpdater({ position, initial }: { position: [number, number]; initial
 }
 
 function MapCard({ mapRef, schoolId }: MapCardProps) {
-  const [institution, setInstitution] = useState<Institution | null>(null);
+  const [school, setSchool] = useState<School | null>(null);
   const [loading, setLoading] = useState(true);
   const [mapReady, setMapReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const position: [number, number] = institution 
-    ? [institution.latitude, institution.longitude] 
+  const position: [number, number] = school 
+    ? [school.latitude, school.longitude] 
     : defaultPosition;
 
   useEffect(() => {
@@ -56,28 +56,28 @@ function MapCard({ mapRef, schoolId }: MapCardProps) {
       return;
     }
 
-    const loadInstitution = async () => {
+    const loadSchool = async () => {
       try {
-        const response = await api.getInstitution(schoolId);
+        const response = await api.getSchool(schoolId);
         if (!response.error && response.data) {
-          setInstitution(response.data as Institution);
+          setSchool(response.data as School);
         }
       } catch (err) {
-        console.error('Failed to load institution for map:', err);
+        console.error('Failed to load school for map:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    loadInstitution();
+    loadSchool();
   }, [schoolId]);
 
   // Ensure map container has height and invalidate size once loaded
   useEffect(() => {
-    if (institution && !loading) {
+    if (school && !loading) {
       setMapReady(true);
     }
-  }, [institution, loading]);
+  }, [school, loading]);
 
   return (
     <div ref={mapRef} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
@@ -94,19 +94,19 @@ function MapCard({ mapRef, schoolId }: MapCardProps) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <MapUpdater position={position} initial={false} />
-          {institution && (
+          {school && (
             <Marker position={position}>
               <Popup>
                 <div className="text-sm">
-                  <strong>{institution.name}</strong><br />
-                  {institution.address}
+                  <strong>{school.name}</strong><br />
+                  {school.address}
                 </div>
               </Popup>
             </Marker>
           )}
         </MapContainer>
       )}
-      {!mapReady && !loading && !institution && (
+      {!mapReady && !loading && !school && (
         <div style={{ width: '100%', height: '250px' }} className="flex items-center justify-center bg-gray-100">
           <p className="text-sm text-gray-500">Location not available</p>
         </div>
@@ -120,7 +120,7 @@ function MapCard({ mapRef, schoolId }: MapCardProps) {
         <div className="flex items-start gap-2">
           <MapPin className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
           <p className="text-sm text-gray-600">
-            {institution ? `${institution.address}, ${institution.city}, ${institution.region}` : 'Location information loading...'}
+            {school ? `${school.address}, ${school.city}, ${school.region}` : 'Location information loading...'}
           </p>
         </div>
       </div>

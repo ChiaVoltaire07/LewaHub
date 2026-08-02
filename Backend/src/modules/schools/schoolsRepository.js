@@ -4,11 +4,12 @@
 import { usePrisma, prismaClient } from "../../lib/database.js";
 
 // In-memory storage (fallback)
-let institutions = [
+let schools = [
   {
-    id: "inst-1",
+    id: "school-1",
     name: "University of Yaoundé I",
-    type: "University",
+    category: "University",
+    offersHighSchool: false,
     description: "The oldest and largest university in Cameroon, located in the capital city.",
     region: "Centre",
     city: "Yaoundé",
@@ -20,7 +21,7 @@ let institutions = [
     contactPhone: "+237 222 22 22 22",
     verified: true,
     imageUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=400&fit=crop",
-    aiSummary: "University of Yaoundé I is Cameroon's premier higher education institution, offering a wide range of programs across multiple faculties. Known for its strong research output and central location in the capital.",
+    aiSummary: "University of Yaoundé I is Cameroon's premier higher education establishment, offering a wide range of programs across multiple faculties. Known for its strong research output and central location in the capital.",
     programs: [
       { id: "prog-1", name: "Computer Science", level: "Bachelor", duration: "3 years", tuition: 250000 },
       { id: "prog-2", name: "Medicine", level: "Doctorate", duration: "7 years", tuition: 500000 },
@@ -31,7 +32,7 @@ let institutions = [
   },
 ];
 
-export const institutionsRepository = {
+export const schoolsRepository = {
   async findAll(filters = {}) {
     if (usePrisma && prismaClient) {
       return this._prismaFindAll(filters);
@@ -40,24 +41,32 @@ export const institutionsRepository = {
   },
 
   async _inMemoryFindAll(filters = {}) {
-    let result = [...institutions];
+    let result = [...schools];
 
     if (filters.search) {
       const q = filters.search.toLowerCase();
       result = result.filter(
-        (i) =>
-          i.name.toLowerCase().includes(q) ||
-          i.city.toLowerCase().includes(q) ||
-          i.region.toLowerCase().includes(q)
+        (s) =>
+          s.name.toLowerCase().includes(q) ||
+          s.city.toLowerCase().includes(q) ||
+          s.region.toLowerCase().includes(q)
       );
     }
 
-    if (filters.type) {
-      result = result.filter((i) => i.type === filters.type);
+    if (filters.category) {
+      result = result.filter((s) => s.category === filters.category);
+    }
+
+    if (filters.offersHighSchool !== undefined) {
+      result = result.filter((s) => s.offersHighSchool === filters.offersHighSchool);
     }
 
     if (filters.region) {
-      result = result.filter((i) => i.region === filters.region);
+      result = result.filter((s) => s.region === filters.region);
+    }
+
+    if (filters.verified !== undefined) {
+      result = result.filter((s) => s.verified === filters.verified);
     }
 
     const page = filters.page || 1;
@@ -80,21 +89,23 @@ export const institutionsRepository = {
           { region: { contains: q, mode: "insensitive" } },
         ];
       }
-      if (filters.type) where.type = filters.type;
+      if (filters.category) where.category = filters.category;
+      if (filters.offersHighSchool !== undefined) where.offersHighSchool = filters.offersHighSchool;
       if (filters.region) where.region = filters.region;
+      if (filters.verified !== undefined) where.verified = filters.verified;
 
       const page = filters.page || 1;
       const limit = filters.limit || 10;
       const skip = (page - 1) * limit;
 
       const [data, total] = await Promise.all([
-        prismaClient.institution.findMany({
+        prismaClient.school.findMany({
           where,
           skip,
           take: limit,
           include: { programs: true },
         }),
-        prismaClient.institution.count({ where }),
+        prismaClient.school.count({ where }),
       ]);
 
       return { data, total, page, limit };
@@ -107,7 +118,7 @@ export const institutionsRepository = {
   async findById(id) {
     if (usePrisma && prismaClient) {
       try {
-        return await prismaClient.institution.findUnique({
+        return await prismaClient.school.findUnique({
           where: { id },
           include: { programs: true },
         });
@@ -115,16 +126,16 @@ export const institutionsRepository = {
         console.error("Prisma query failed:", err.message);
       }
     }
-    return institutions.find((i) => i.id === id);
+    return schools.find((s) => s.id === id);
   },
 
   async create(data) {
     if (usePrisma && prismaClient) {
       try {
-        const { programs, ...instData } = data;
-        return await prismaClient.institution.create({
+        const { programs, ...schoolData } = data;
+        return await prismaClient.school.create({
           data: {
-            ...instData,
+            ...schoolData,
             programs: programs ? { create: programs } : undefined,
           },
           include: { programs: true },
@@ -134,26 +145,26 @@ export const institutionsRepository = {
       }
     }
 
-    const newInst = {
-      id: `inst-${Date.now()}`,
+    const newSchool = {
+      id: `school-${Date.now()}`,
       ...data,
       programs: data.programs || [],
       anonymousViews: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    institutions.push(newInst);
-    return newInst;
+    schools.push(newSchool);
+    return newSchool;
   },
 
   async update(id, data) {
     if (usePrisma && prismaClient) {
       try {
-        const { programs, ...instData } = data;
-        return await prismaClient.institution.update({
+        const { programs, ...schoolData } = data;
+        return await prismaClient.school.update({
           where: { id },
           data: {
-            ...instData,
+            ...schoolData,
             programs: programs
               ? {
                   deleteMany: {},
@@ -174,37 +185,37 @@ export const institutionsRepository = {
       }
     }
 
-    const idx = institutions.findIndex((i) => i.id === id);
+    const idx = schools.findIndex((s) => s.id === id);
     if (idx === -1) return null;
-    institutions[idx] = {
-      ...institutions[idx],
+    schools[idx] = {
+      ...schools[idx],
       ...data,
       id,
       updatedAt: new Date().toISOString(),
     };
-    return institutions[idx];
+    return schools[idx];
   },
 
   async delete(id) {
     if (usePrisma && prismaClient) {
       try {
-        await prismaClient.institution.delete({ where: { id } });
+        await prismaClient.school.delete({ where: { id } });
         return true;
       } catch (err) {
         console.error("Prisma delete failed:", err.message);
       }
     }
 
-    const idx = institutions.findIndex((i) => i.id === id);
+    const idx = schools.findIndex((s) => s.id === id);
     if (idx === -1) return false;
-    institutions.splice(idx, 1);
+    schools.splice(idx, 1);
     return true;
   },
 
   async incrementViews(id) {
     if (usePrisma && prismaClient) {
       try {
-        return await prismaClient.institution.update({
+        return await prismaClient.school.update({
           where: { id },
           data: { anonymousViews: { increment: 1 } },
           include: { programs: true },
@@ -214,11 +225,11 @@ export const institutionsRepository = {
       }
     }
 
-    const inst = institutions.find((i) => i.id === id);
-    if (inst) {
-      inst.anonymousViews = (inst.anonymousViews || 0) + 1;
+    const school = schools.find((s) => s.id === id);
+    if (school) {
+      school.anonymousViews = (school.anonymousViews || 0) + 1;
     }
-    return inst;
+    return school;
   },
 
   async findNearby(latitude, longitude, radiusKm = 50) {
@@ -231,7 +242,7 @@ export const institutionsRepository = {
               ST_MakePoint(longitude, latitude)::geography,
               ST_MakePoint(${longitude}, ${latitude})::geography
             ) / 1000 as distance_km
-          FROM "Institution"
+          FROM "School"
           WHERE ST_DWithin(
             ST_MakePoint(longitude, latitude)::geography,
             ST_MakePoint(${longitude}, ${latitude})::geography,
@@ -249,21 +260,21 @@ export const institutionsRepository = {
     const toRad = (deg) => (deg * Math.PI) / 180;
     const earthRadiusKm = 6371;
 
-    const nearby = institutions
-      .map((inst) => {
-        const dLat = toRad(inst.latitude - latitude);
-        const dLon = toRad(inst.longitude - longitude);
+    const nearby = schools
+      .map((school) => {
+        const dLat = toRad(school.latitude - latitude);
+        const dLon = toRad(school.longitude - longitude);
         const a =
           Math.sin(dLat / 2) * Math.sin(dLat / 2) +
           Math.cos(toRad(latitude)) *
-            Math.cos(toRad(inst.latitude)) *
+            Math.cos(toRad(school.latitude)) *
             Math.sin(dLon / 2) *
             Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = earthRadiusKm * c;
-        return { ...inst, distance };
+        return { ...school, distance };
       })
-      .filter((inst) => inst.distance <= radiusKm)
+      .filter((school) => school.distance <= radiusKm)
       .sort((a, b) => a.distance - b.distance);
 
     return nearby;

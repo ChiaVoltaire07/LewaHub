@@ -7,7 +7,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 // Import route modules
 import authRoutes from "./modules/auth/authRoutes.js";
-import institutionsRoutes from "./modules/institutions/institutionsRoutes.js";
+import schoolsRoutes from "./modules/schools/schoolsRoutes.js";
 import programsRoutes from "./modules/programs/programsRoutes.js";
 import searchRoutes from "./modules/search/searchRoutes.js";
 import aiSummaryRoutes from "./modules/aiSummary/aiSummaryRoutes.js";
@@ -49,8 +49,8 @@ app.use("/api/v1/admin/login", loginLimiter);
 app.use("/api/v1/admin", authRoutes);
 app.use("/api/v1/admin/dashboard", dashboardRoutes);
 app.use("/api/v1/admin/settings", settingsRoutes);
-app.use("/api/v1/institutions", institutionsRoutes);
-app.use("/api/v1/institutions/:institutionId/programs", programsRoutes);
+app.use("/api/v1/schools", schoolsRoutes);
+app.use("/api/v1/schools/:schoolId/programs", programsRoutes);
 app.use("/api/v1/search", searchRoutes);
 app.use("/api/v1/ai-summary", aiSummaryRoutes);
 app.use("/api/v1/geolocation", geolocationRoutes);
@@ -60,18 +60,15 @@ app.get("/api/v1/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// Error handling middleware (must be last)
-app.use(errorHandler);
-
-// 404 handler
+// 404 handler (must come before error handler)
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
+// Error handling middleware (must be last)
+app.use(errorHandler);
+
 // Start server
 app.listen(config.port, () => {
   console.log(`\n✓ LewaHub API running on http://localhost:${config.port}/api/v1`);
-  console.log(`\nTest credentials:`);
-  console.log(`  Email: admin@lewahub.com`);
-  console.log(`  Password: admin123\n`);
 });

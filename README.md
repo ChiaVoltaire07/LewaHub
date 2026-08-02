@@ -4,8 +4,8 @@
 
 **Find the right verified school**
 
-A school discovery platform for Cameroon — covering nursery, primary, secondary, and university-level
-institutions, with location-based search, verified student ratings, and an admin panel for managing
+A school discovery platform for Cameroon — covering Primary/Nursery, Secondary, and University
+schools, with location-based search, verified student ratings, and an admin panel for managing
 the catalog.
 
 
@@ -15,23 +15,23 @@ the catalog.
 ## 📖 Overview
 
 LewaHub helps parents and students in Cameroon discover and evaluate schools with confidence.
-Institutions are searchable by region, level, and program, locatable on a map, and rated by students
+Schools are searchable by region, category, and program, locatable on a map, and rated by students
 who have verified their enrollment — so ratings reflect real experience, not anonymous reviews.
 
 The platform has two sides:
 - **Public site** — fully anonymous browsing, no account required
-- **Admin panel** — staff-only, for managing the institution catalog
+- **Admin panel** — staff-only, for managing the school catalog
 
 ---
 
 ## ✨ Features
 
 ### Public Site
-- 🔍 **Search & filter** — Region, Level (Nursery/Primary/Secondary/University), Language of
+- 🔍 **Search & filter** — Region, Category (Primary/Nursery · Secondary · University), Language of
   instruction, Ownership, Boarding/Day, Programs, Minimum rating
-- 🗺️ **Interactive map** — real institution locations, "find near me" support
-- 🏫 **Institution profiles** — description, programs, verified rating, location, contact info,
-  related institutions
+- 🗺️ **Interactive map** — real school locations, "find near me" support
+- 🏫 **School profiles** — description, programs, verified rating, location, contact info,
+  related schools
 - ⭐ **Verified ratings** — only students who confirm enrollment (via receipt, school ID, or
   matricule) can rate a school; only the aggregate average and count are shown publicly
 - 🌍 **Bilingual** — full French / English toggle across the entire site
@@ -40,9 +40,25 @@ The platform has two sides:
 ### Admin Panel
 - 🔐 Secure staff login
 - 📊 Dashboard with live catalog stats
-- 🏫 Full CRUD on institutions — add, edit, delete, all reflected instantly on the public site
-- 🧩 Smart forms — fields adapt to the institution's level (a primary school's form looks
-  different from a university's)
+- 🏫 Full CRUD on schools — add, edit, delete, all reflected instantly on the public site
+- 🧩 Smart forms — fields adapt to the school's category (a Primary/Nursery form looks
+  different from a University's); Secondary schools can optionally flag `offersHighSchool`
+  to indicate they also run Lower/Upper Sixth alongside O-Level
+
+---
+
+## 🗂️ School Category Model
+
+LewaHub uses exactly **3 categories**, matching the database schema:
+
+| Category value | Displayed as | Notes |
+|---|---|---|
+| `PrimaryNursery` | Primary / Nursery | Nursery and primary schools combined |
+| `Secondary` | Secondary | May have `offersHighSchool: true` for schools that also run A-Level (Lower/Upper Sixth) |
+| `University` | University | Includes colleges and technical institutes |
+
+There is no separate "High School" category — a secondary school that offers both O-Level and
+A-Level is a single `Secondary` record with `offersHighSchool: true`.
 
 ---
 
@@ -52,14 +68,13 @@ The platform has two sides:
 |---|---|
 | Frontend | React · Vite · TypeScript · Tailwind CSS · React Router |
 | Maps | Leaflet + OpenStreetMap |
-| Backend | Node.js · Express · TypeScript |
+| Backend | Node.js · Express |
 | Database | PostgreSQL + PostGIS |
 | ORM | Prisma |
-| Caching | Redis |
 | Auth | JWT + bcrypt |
 
 **Architecture:** the backend follows a layered pattern (`routes → controllers → services →
-repositories`), organized into feature modules (institutions, programs, geolocation, evaluations,
+repositories`), organized into feature modules (schools, programs, geolocation, evaluations,
 search, admin). The frontend mirrors this with a `features/<name>/` structure per page.
 
 ---
@@ -84,18 +99,16 @@ LewaHub/
 └── Backend/
     ├── src/
     │   ├── modules/
-    │   │   ├── institutions/
+    │   │   ├── schools/
     │   │   ├── programs/
     │   │   ├── geolocation/
-    │   │   ├── evaluations/
     │   │   ├── search/
     │   │   └── admin/
     │   ├── middleware/
-    │   ├── config/
-    │   └── jobs/
+    │   └── config/
     └── prisma/
         ├── schema.prisma
-        └── seed.ts
+        └── seed.js
 ```
 
 ---
@@ -105,7 +118,6 @@ LewaHub/
 ### Prerequisites
 - Node.js (v18+)
 - PostgreSQL with the PostGIS extension
-- Redis
 
 ### 1. Clone the repo
 ```bash
@@ -124,7 +136,7 @@ CREATE EXTENSION postgis;
 ```bash
 cd Backend
 npm install
-cp .env.example .env   # then fill in DATABASE_URL, REDIS_URL, JWT_SECRET
+cp .env.example .env   # then fill in DATABASE_URL, JWT_SECRET
 npx prisma migrate dev
 npm run seed
 npm run dev
@@ -162,7 +174,6 @@ Visit `/admin/login` using the admin account created by the seed script.
 
 - All admin write operations require a valid JWT
 - Passwords hashed with bcrypt
-- Student verification references are hashed, never stored raw
 - Input validation on every write endpoint
 - Rate limiting on public and auth endpoints
 
