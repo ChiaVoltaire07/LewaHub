@@ -78,7 +78,6 @@ class ApiClient {
       const data = await response.json();
       return {
         data: data as T,
-        ...data, // Spread response for backward compatibility
       };
     } catch (err: any) {
       console.error("API request failed:", err);
@@ -95,6 +94,10 @@ class ApiClient {
     search?: string;
     category?: string;
     region?: string;
+    language?: string;
+    ownership?: string;
+    boarding?: string;
+    program?: string;
     page?: number;
     limit?: number;
   }) {
@@ -102,6 +105,10 @@ class ApiClient {
     if (filters?.search) params.append("search", filters.search);
     if (filters?.category) params.append("category", filters.category);
     if (filters?.region) params.append("region", filters.region);
+    if (filters?.language) params.append("language", filters.language);
+    if (filters?.ownership) params.append("ownership", filters.ownership);
+    if (filters?.boarding) params.append("boarding", filters.boarding);
+    if (filters?.program) params.append("program", filters.program);
     if (filters?.page) params.append("page", filters.page.toString());
     if (filters?.limit) params.append("limit", filters.limit.toString());
 
@@ -144,23 +151,6 @@ class ApiClient {
       radius: radius.toString(),
     });
     return this.request(`/geolocation/nearby?${params.toString()}`);
-  }
-
-  /**
-   * Public endpoint: Get evaluation aggregate for school
-   */
-  async getEvaluationAggregate(schoolId: string) {
-    return this.request(`/evaluations/${schoolId}/aggregate`);
-  }
-
-  /**
-   * Public endpoint: Verify student email/phone for evaluation
-   */
-  async verifyStudent(email?: string, phone?: string, verificationToken?: string) {
-    return this.request("/evaluations/verify-student", {
-      method: "POST",
-      body: { email, phone, verificationToken },
-    });
   }
 
   /**
@@ -222,23 +212,6 @@ class ApiClient {
   }
 
   /**
-   * Protected endpoint: Record evaluation (admin)
-   */
-  async recordEvaluation(
-    studentId: string,
-    schoolId: string,
-    score: number,
-    notes: string,
-    token: string
-  ) {
-    return this.request("/evaluations", {
-      method: "POST",
-      body: { studentId, schoolId, score, notes },
-      token,
-    });
-  }
-
-  /**
    * Protected endpoint: Add program to school
    */
   async addProgram(schoolId: string, programData: any, token: string) {
@@ -280,6 +253,33 @@ class ApiClient {
    */
   async regenerateSummary(schoolId: string, token: string) {
     return this.request(`/ai-summary/${schoolId}/regenerate`, {
+      method: "POST",
+      token,
+    });
+  }
+
+  /**
+   * Protected endpoint: List AI summary drafts for review
+   */
+  async listSummaryDrafts(status: string = "DRAFT", token: string) {
+    return this.request(`/ai-summary/drafts?status=${status}`, { token });
+  }
+
+  /**
+   * Protected endpoint: Approve an AI summary draft
+   */
+  async approveSummaryDraft(draftId: string, token: string) {
+    return this.request(`/ai-summary/drafts/${draftId}/approve`, {
+      method: "POST",
+      token,
+    });
+  }
+
+  /**
+   * Protected endpoint: Reject an AI summary draft
+   */
+  async rejectSummaryDraft(draftId: string, token: string) {
+    return this.request(`/ai-summary/drafts/${draftId}/reject`, {
       method: "POST",
       token,
     });

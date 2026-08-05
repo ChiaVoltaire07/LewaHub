@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -16,21 +17,20 @@ import geolocationRoutes from "./modules/geolocation/geolocationRoutes.js";
 import settingsRoutes from "./modules/settings/settingsRoutes.js";
 const app = express();
 
-// Security middleware
+
 app.use(helmet());
 
-// CORS configuration
 const corsOptions = {
   origin: [config.frontendUrl, "http://localhost:5173", "http://localhost:5174", "http://localhost:3000"],
   credentials: true,
 };
 app.use(cors(corsOptions));
 
-// Body parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
@@ -44,8 +44,6 @@ const loginLimiter = rateLimit({
 
 app.use("/api/v1/", limiter);
 app.use("/api/v1/admin/login", loginLimiter);
-
-// Routes
 app.use("/api/v1/admin", authRoutes);
 app.use("/api/v1/admin/dashboard", dashboardRoutes);
 app.use("/api/v1/admin/settings", settingsRoutes);

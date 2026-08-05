@@ -1,6 +1,7 @@
 import express from "express";
 import { schoolsController } from "./schoolsController.js";
 import { authMiddleware } from "../../middleware/auth.js";
+import { validate, createSchoolSchema, updateSchoolSchema } from "../../middleware/validate.js";
 
 const router = express.Router();
 
@@ -10,8 +11,8 @@ router.get("/", schoolsController.listSchools);
 router.get("/:id", schoolsController.getSchoolById);
 
 // Admin routes
-router.post("/", authMiddleware, schoolsController.createSchool);
-router.put("/:id", authMiddleware, schoolsController.updateSchool);
+router.post("/", authMiddleware, validate(createSchoolSchema), schoolsController.createSchool);
+router.put("/:id", authMiddleware, validate(updateSchoolSchema), schoolsController.updateSchool);
 router.delete("/:id", authMiddleware, schoolsController.deleteSchool);
 
 export default router;

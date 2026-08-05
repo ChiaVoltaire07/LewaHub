@@ -9,7 +9,7 @@ interface MobileFilterDrawerProps {
   onClose: () => void;
   filters: Filters;
   onToggleArrayFilter: (
-    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating',
+    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'language' | 'distance' | 'minRating',
     value: string
   ) => void;
   onToggleTopRated: () => void;
@@ -137,6 +137,22 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
 
                 {showMoreFilters && (
                   <div className={styles.moreFiltersContent}>
+                    {/* Language */}
+                    <div className={styles.filterSection}>
+                      <h3 className={styles.filterLabel}>Language</h3>
+                      <div className={styles.pillContainer}>
+                        {filterOptions.language.map(option => (
+                          <button
+                            key={option.value}
+                            className={`${styles.pill} ${(filters.language || []).includes(option.value) ? styles.active : ''}`}
+                            onClick={() => onToggleArrayFilter('language', option.value)}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     {/* Ownership */}
                     <div className={styles.filterSection}>
                       <h3 className={styles.filterLabel}>Ownership</h3>

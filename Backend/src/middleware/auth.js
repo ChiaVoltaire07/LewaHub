@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import { config } from "../config/env.js";
 
+const JWT_OPTIONS = { algorithms: ["HS256"] };
+
 export const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -8,7 +10,7 @@ export const authMiddleware = (req, res, next) => {
   }
   try {
     const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, config.jwtSecret);
+    const decoded = jwt.verify(token, config.jwtSecret, JWT_OPTIONS);
     req.admin = decoded;
     next();
   } catch (err) {
@@ -21,7 +23,7 @@ export const optionalAuth = (req, res, next) => {
   if (authHeader && authHeader.startsWith("Bearer ")) {
     try {
       const token = authHeader.split(" ")[1];
-      const decoded = jwt.verify(token, config.jwtSecret);
+      const decoded = jwt.verify(token, config.jwtSecret, JWT_OPTIONS);
       req.admin = decoded;
     } catch (err) {
       // Optional, so we don't fail if invalid

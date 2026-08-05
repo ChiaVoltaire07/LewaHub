@@ -11,10 +11,18 @@ interface Program {
   tuition: number;
 }
 
+interface SchoolImage {
+  id?: string;
+  url: string;
+  caption?: string;
+  order?: number;
+}
+
 interface SchoolData {
   name: string;
   category: string;
   offersHighSchool: boolean;
+  secondaryStreams: string[];
   description: string;
   region: string;
   city: string;
@@ -27,6 +35,7 @@ interface SchoolData {
   verified: boolean;
   programs: Program[];
   imageUrl: string;
+  images: SchoolImage[];
   ageRange?: string;
   studentTeacherRatio?: string;
   curriculum?: string;
@@ -39,6 +48,7 @@ const emptyForm: SchoolData = {
   name: "",
   category: "PrimaryNursery",
   offersHighSchool: false,
+  secondaryStreams: [],
   description: "",
   region: "",
   city: "",
@@ -51,6 +61,7 @@ const emptyForm: SchoolData = {
   verified: false,
   programs: [],
   imageUrl: "",
+  images: [],
   ageRange: "",
   studentTeacherRatio: "",
   curriculum: "",
@@ -113,6 +124,28 @@ export default function SchoolFormPage() {
     setForm((prev) => ({
       ...prev,
       programs: prev.programs.filter((_, i) => i !== idx),
+    }));
+  };
+
+  const addImage = () => {
+    setForm((prev) => ({
+      ...prev,
+      images: [...prev.images, { url: "", caption: "", order: prev.images.length }],
+    }));
+  };
+
+  const updateImage = (idx: number, field: keyof SchoolImage, value: string) => {
+    setForm((prev) => {
+      const images = [...prev.images];
+      images[idx] = { ...images[idx], [field]: value };
+      return { ...prev, images };
+    });
+  };
+
+  const removeImage = (idx: number) => {
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== idx),
     }));
   };
 
@@ -204,6 +237,24 @@ export default function SchoolFormPage() {
     if (form.category === "Secondary") {
       return (
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Streams Offered</label>
+            <div className="flex flex-wrap gap-2">
+              {["General", "Technical", "Commercial"].map((s) => (
+                <label key={s} className="flex items-center gap-2 text-sm" style={{ color: "var(--ink, #14231C)" }}>
+                  <input
+                    type="checkbox"
+                    checked={(form.secondaryStreams || []).includes(s)}
+                    onChange={(e) => {
+                      const current = form.secondaryStreams || [];
+                      updateField("secondaryStreams", e.target.checked ? [...current, s] : current.filter((x: string) => x !== s));
+                    }}
+                  />
+                  {s}
+                </label>
+              ))}
+            </div>
+          </div>
           <div>
             <label className="block text-sm font-medium mb-1.5" style={{ color: "var(--ink, #14231C)" }}>Classes Offered</label>
             <div className="flex flex-wrap gap-2">
@@ -508,6 +559,61 @@ export default function SchoolFormPage() {
               className="w-full px-4 py-2.5 text-sm rounded-lg outline-none"
               style={{ backgroundColor: "var(--paper, #F7F5EF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
             />
+
+            <div className="mt-5">
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-medium" style={{ color: "var(--ink, #14231C)" }}>Facility Images</label>
+                <button
+                  type="button"
+                  onClick={addImage}
+                  className="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
+                  style={{ color: "var(--forest, #1F5D45)", backgroundColor: "rgba(31, 93, 69, 0.1)", borderRadius: "8px" }}
+                >
+                  + Add image
+                </button>
+              </div>
+              {form.images.length === 0 && (
+                <p className="text-xs mb-2" style={{ color: "var(--ink, #14231C)", opacity: 0.5 }}>
+                  No facility images added yet.
+                </p>
+              )}
+              <div className="space-y-2">
+                {form.images.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-lg"
+                    style={{ backgroundColor: "var(--paper, #F7F5EF)", border: "1px solid var(--line, #DCD6C6)" }}
+                  >
+                    <input
+                      type="url"
+                      placeholder="Image URL"
+                      value={img.url}
+                      onChange={(e) => updateImage(idx, "url", e.target.value)}
+                      className="w-full px-3 py-1.5 text-xs rounded-lg outline-none mb-2"
+                      style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
+                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Caption (optional)"
+                        value={img.caption || ""}
+                        onChange={(e) => updateImage(idx, "caption", e.target.value)}
+                        className="flex-1 px-3 py-1.5 text-xs rounded-lg outline-none"
+                        style={{ backgroundColor: "var(--paper-deep, #EFEBDF)", border: "1px solid var(--line, #DCD6C6)", color: "var(--ink, #14231C)", borderRadius: "8px" }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(idx)}
+                        className="px-2 py-1.5 text-xs font-medium rounded-lg text-white"
+                        style={{ backgroundColor: "var(--sienna, #C1572B)", borderRadius: "8px" }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div

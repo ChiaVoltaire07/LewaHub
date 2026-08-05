@@ -1,5 +1,8 @@
 import { schoolsRepository } from "../schools/schoolsRepository.js";
 import { AppError } from "../../middleware/errorHandler.js";
+import { cacheGet, cacheSet } from "../../config/redis.js";
+
+const NEARBY_CACHE_PREFIX = "geolocation:nearby:";
 
 export const geolocationService = {
   // Haversine formula for calculating distance between two coordinates
@@ -29,6 +32,14 @@ export const geolocationService = {
       throw new AppError("Latitude must be -90 to 90, longitude must be -180 to 180", 400);
     }
 
+    const cacheKey = `${NEARBY_CACHE_PREFIX}${latitude},${longitude},${radiusKm}`;
+
+    // Try cache first
+    const cached = await cacheGet(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const result = await schoolsRepository.findAll({ page: 1, limit: 1000 });
 
     const nearby = result.data
@@ -39,11 +50,16 @@ export const geolocationService = {
       .filter((school) => school.distance <= radiusKm)
       .sort((a, b) => a.distance - b.distance);
 
-    return {
+    const response = {
       center: { latitude, longitude },
       radius: radiusKm,
       results: nearby,
       count: nearby.length,
     };
+
+    // Cache the result
+    await cacheSet(cacheKey, response);
+
+    return response;
   },
 };

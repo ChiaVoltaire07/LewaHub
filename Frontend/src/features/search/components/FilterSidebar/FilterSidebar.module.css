@@ -199,6 +199,30 @@
   color: var(--ink);
 }
 
+.resultCount {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--forest);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.textInput {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.textInput:focus {
+  border-color: var(--forest);
+}
+
 .viewToggle {
   display: flex;
   gap: 8px;

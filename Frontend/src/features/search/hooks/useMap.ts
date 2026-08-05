@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { School } from '../types';
 
+const DEFAULT_SCHOOL_IMAGE =
+  'https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
 export const useMap = (schools: School[]) => {
   const [map, setMap] = useState<L.Map | null>(null);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
@@ -42,7 +45,7 @@ export const useMap = (schools: School[]) => {
           .addTo(map)
           .bindPopup(`
             <div style="min-width: 200px;">
-              <img src="${school.image}" alt="${school.name}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" />
+              <img src="${school.image || DEFAULT_SCHOOL_IMAGE}" alt="${school.name}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" onerror="this.src='${DEFAULT_SCHOOL_IMAGE}'" />
               <h3 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #1E293B;">${school.name}</h3>
               <p style="margin: 0 0 8px 0; font-size: 13px; color: #64748B;">${school.location.address}</p>
               <button onclick="window.viewSchoolDetails('${school.id}')" style="background: #0F766E; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; width: 100%;">

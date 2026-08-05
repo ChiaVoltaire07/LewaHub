@@ -7,7 +7,7 @@ import styles from './FilterSidebar.module.css';
 interface FilterSidebarProps {
   filters: Filters;
   onToggleArrayFilter: (
-    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating',
+    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'language' | 'distance' | 'minRating',
     value: string
   ) => void;
   onToggleTopRated: () => void;
@@ -17,6 +17,8 @@ interface FilterSidebarProps {
   isMobile?: boolean;
   viewMode?: 'list' | 'map';
   onViewModeChange?: (mode: 'list' | 'map') => void;
+  resultCount?: number;
+  onProgramChange?: (value: string) => void;
 }
 
 const FilterSection: React.FC<{
@@ -50,7 +52,9 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   onClose,
   isMobile = false,
   viewMode = 'list',
-  onViewModeChange
+  onViewModeChange,
+  resultCount = 0,
+  onProgramChange
 }) => {
   const activeFilterCount =
     filters.region.length +
@@ -59,7 +63,12 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     filters.curriculum.length +
     filters.degreeLevel.length +
     filters.feeRange.length +
-    (filters.topRated ? 1 : 0);
+    (filters.topRated ? 1 : 0) +
+    (filters.ownership?.length || 0) +
+    (filters.boarding?.length || 0) +
+    (filters.programs?.length || 0) +
+    (filters.language?.length || 0) +
+    (filters.minRating !== undefined ? 1 : 0);
 
   // The "High School available" checkbox only makes sense when Secondary is selected
   const secondarySelected = filters.category.includes('Secondary');
@@ -95,25 +104,23 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         )}
 
-        {activeFilterCount > 0 && (
-          <div className={styles.header}>
-            <h3 className={styles.title}>Filters</h3>
+        <div className={styles.header}>
+          <h3 className={styles.title}>Filters</h3>
+          {activeFilterCount > 0 && (
             <button className={styles.resetButton} onClick={onReset}>
-              Reset All
+              Clear all
             </button>
-          </div>
-        )}
+          )}
+        </div>
 
-        <FilterSection
-          title="Region"
-          options={filterOptions.region}
-          selectedValues={filters.region}
-          onToggle={(value) => onToggleArrayFilter('region', value)}
-        />
+        {/* Results count — live feedback that a filter click did something */}
+        <div className={styles.resultCount}>
+          {resultCount} {resultCount === 1 ? 'school' : 'schools'} found
+        </div>
 
-        {/* Single 3-category filter replaces the old "School Type" + "School Level" pair */}
+        {/* Level/category first (broadest cut) */}
         <FilterSection
-          title="Category"
+          title="Level / Category"
           options={filterOptions.category}
           selectedValues={filters.category}
           onToggle={(value) => onToggleArrayFilter('category', value)}
@@ -134,6 +141,59 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         )}
 
+        {/* Region second */}
+        <FilterSection
+          title="Region"
+          options={filterOptions.region}
+          selectedValues={filters.region}
+          onToggle={(value) => onToggleArrayFilter('region', value)}
+        />
+
+        {/* Language of instruction */}
+        <FilterSection
+          title="Language"
+          options={filterOptions.language}
+          selectedValues={filters.language || []}
+          onToggle={(value) => onToggleArrayFilter('language', value)}
+        />
+
+        {/* Ownership */}
+        <FilterSection
+          title="Ownership"
+          options={filterOptions.ownership}
+          selectedValues={filters.ownership || []}
+          onToggle={(value) => onToggleArrayFilter('ownership', value)}
+        />
+
+        {/* Boarding / Day */}
+        <FilterSection
+          title="Boarding / Day"
+          options={filterOptions.boarding}
+          selectedValues={filters.boarding || []}
+          onToggle={(value) => onToggleArrayFilter('boarding', value)}
+        />
+
+        {/* Programs (free-text) */}
+        <div className={styles.filterSection}>
+          <h3 className={styles.filterTitle}>Programs</h3>
+          <input
+            type="text"
+            placeholder="Search by program, e.g. Computer Science"
+            value={filters.programs?.[0] || ''}
+            onChange={(e) => onProgramChange?.(e.target.value)}
+            className={styles.textInput}
+          />
+        </div>
+
+        {/* Minimum rating */}
+        <FilterSection
+          title="Minimum Rating"
+          options={filterOptions.minRating}
+          selectedValues={filters.minRating !== undefined ? [String(filters.minRating)] : []}
+          onToggle={(value) => onToggleArrayFilter('minRating', value)}
+        />
+
+        {/* Curriculum */}
         <FilterSection
           title="Curriculum"
           options={filterOptions.curriculum}
@@ -141,6 +201,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           onToggle={(value) => onToggleArrayFilter('curriculum', value)}
         />
 
+        {/* Degree Level */}
         <FilterSection
           title="Degree Level"
           options={filterOptions.degreeLevel}
@@ -148,6 +209,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           onToggle={(value) => onToggleArrayFilter('degreeLevel', value)}
         />
 
+        {/* Fee Range */}
         <FilterSection
           title="Fee Range"
           options={filterOptions.feeRange}

@@ -53,16 +53,6 @@ export async function deleteSchool(id: string, token: string) {
   return api.deleteSchool(id, token);
 }
 
-export async function recordEvaluation(
-  studentId: string,
-  schoolId: string,
-  score: number,
-  notes: string,
-  token: string
-) {
-  return api.recordEvaluation(studentId, schoolId, score, notes, token);
-}
-
 export async function addProgram(schoolId: string, programData: any, token: string) {
   return api.addProgram(schoolId, programData, token);
 }
@@ -84,6 +74,15 @@ export async function regenerateSummary(schoolId: string, token: string) {
   return api.regenerateSummary(schoolId, token);
 }
 
-export async function verifyStudent(email?: string, phone?: string) {
-  return api.verifyStudent(email, phone);
+export async function listSummaryDrafts(status: string, token: string) {
+  return api.listSummaryDrafts(status, token);
 }
+
+export async function approveSummaryDraft(draftId: string, token: string) {
+  return api.approveSummaryDraft(draftId, token);
+}
+
+export async function rejectSummaryDraft(draftId: string, token: string) {
+  return api.rejectSummaryDraft(draftId, token);
+}
+

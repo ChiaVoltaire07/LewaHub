@@ -18,11 +18,18 @@ function categoryLabel(category: string): string {
   }
 }
 
+const DEFAULT_SCHOOL_IMAGE =
+  'https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
 const SearchCard: React.FC<SearchCardProps> = ({ school, onViewDetails }) => {
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
-        <img src={school.image} alt={school.name} className={styles.image} />
+        <img
+          src={school.image || DEFAULT_SCHOOL_IMAGE}
+          alt={school.name}
+          className={styles.image}
+        />
         {school.topRated && <span className={styles.topRatedBadge}>Top Rated</span>}
       </div>
 

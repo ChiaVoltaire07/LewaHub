@@ -20,6 +20,11 @@ const schools = [
     contactEmail: "info@uy1.uninet.cm",
     contactPhone: "+237 222 22 22 22",
     verified: true,
+    images: [
+      { url: "https://images.unsplash.com/photo-1562774053-701939374585?w=600&h=400&fit=crop", caption: "Main Campus", order: 0 },
+      { url: "https://images.unsplash.com/photo-1523050854058-8df90110c3c9?w=600&h=400&fit=crop", caption: "Library", order: 1 },
+      { url: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=400&fit=crop", caption: "Lecture Hall", order: 2 },
+    ],
     programs: [
       { name: "Computer Science", level: "Bachelor", duration: "3 years", tuition: 250000 },
       { name: "Medicine", level: "Doctorate", duration: "7 years", tuition: 500000 },
@@ -214,6 +219,7 @@ const schools = [
     name: "Lycée Général Leclerc",
     category: "Secondary",
     offersHighSchool: true,
+    secondaryStreams: ["General"],
     description: "Premier secondary school in Yaoundé, established during colonial period. Offers both O-Level and A-Level programmes.",
     region: "Centre",
     city: "Yaoundé",
@@ -225,6 +231,10 @@ const schools = [
     contactEmail: "info@lyceegl.cm",
     contactPhone: "+237 333 33 33 33",
     verified: true,
+    images: [
+      { url: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&h=400&fit=crop", caption: "School Building", order: 0 },
+      { url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop", caption: "Classroom", order: 1 },
+    ],
     programs: [
       { name: "Advanced Level", level: "Secondary", duration: "2 years", tuition: 150000 },
       { name: "O'Level", level: "Secondary", duration: "4 years", tuition: 120000 },
@@ -234,6 +244,7 @@ const schools = [
     name: "Collège Voltaire",
     category: "Secondary",
     offersHighSchool: true,
+    secondaryStreams: ["General", "Technical"],
     description: "Bilingual secondary school known for academic excellence.",
     region: "Littoral",
     city: "Douala",
@@ -248,12 +259,15 @@ const schools = [
     programs: [
       { name: "Science Track", level: "Secondary", duration: "2 years", tuition: 160000 },
       { name: "Arts Track", level: "Secondary", duration: "2 years", tuition: 140000 },
+      { name: "Electrical Installation", level: "Technical", duration: "3 years", tuition: 180000 },
+      { name: "Mechanical Workshop", level: "Technical", duration: "3 years", tuition: 180000 },
     ],
   },
   {
     name: "Presbyterian Secondary School Kumba",
     category: "Secondary",
     offersHighSchool: false,
+    secondaryStreams: ["General"],
     description: "Mission school with long tradition of academic and religious education.",
     region: "Southwest",
     city: "Kumba",
@@ -273,6 +287,7 @@ const schools = [
     name: "Cameroon College of Education, Kumba",
     category: "Secondary",
     offersHighSchool: false,
+    secondaryStreams: ["General", "Commercial"],
     description: "Teachers' college providing secondary education and teacher training.",
     region: "Southwest",
     city: "Kumba",
@@ -286,12 +301,15 @@ const schools = [
     verified: false,
     programs: [
       { name: "Teacher Training", level: "Secondary", duration: "3 years", tuition: 110000 },
+      { name: "Accounting", level: "Commercial", duration: "3 years", tuition: 120000 },
+      { name: "Secretarial Studies", level: "Commercial", duration: "3 years", tuition: 120000 },
     ],
   },
   {
     name: "GHS Bamenda",
     category: "Secondary",
     offersHighSchool: false,
+    secondaryStreams: ["General"],
     description: "Government secondary school serving Northwest region.",
     region: "Northwest",
     city: "Bamenda",
@@ -311,6 +329,7 @@ const schools = [
     name: "Lycée Bilingue de Bafoussam",
     category: "Secondary",
     offersHighSchool: true,
+    secondaryStreams: ["General", "Technical", "Commercial"],
     description: "Public bilingual secondary school serving the West region's capital. Offers both O-Level and A-Level.",
     region: "West",
     city: "Bafoussam",
@@ -325,6 +344,10 @@ const schools = [
     programs: [
       { name: "O'Level", level: "Secondary", duration: "4 years", tuition: 100000 },
       { name: "Advanced Level", level: "Secondary", duration: "2 years", tuition: 130000 },
+      { name: "Building Construction", level: "Technical", duration: "3 years", tuition: 150000 },
+      { name: "Metalwork", level: "Technical", duration: "3 years", tuition: 150000 },
+      { name: "Commerce", level: "Commercial", duration: "3 years", tuition: 140000 },
+      { name: "Bookkeeping", level: "Commercial", duration: "3 years", tuition: 140000 },
     ],
   },
 
@@ -451,6 +474,7 @@ async function main() {
 
   try {
     // Clear existing data
+    await prisma.schoolDraftSummary.deleteMany({});
     await prisma.program.deleteMany({});
     await prisma.school.deleteMany({});
     await prisma.adminUser.deleteMany({});
@@ -469,17 +493,20 @@ async function main() {
     });
     console.log(`✓ Created admin user: ${admin.email}`);
 
-    // Create schools with programs
+    // Create schools with programs and images
     for (const schoolData of schools) {
-      const { programs, ...schoolFields } = schoolData;
+      const { programs, images, ...schoolFields } = schoolData;
       const school = await prisma.school.create({
         data: {
           ...schoolFields,
           programs: {
             create: programs || [],
           },
+          images: {
+            create: images || [],
+          },
         },
-        include: { programs: true },
+        include: { programs: true, images: true },
       });
       console.log(`✓ Created school: ${school.name} (${school.category})`);
     }

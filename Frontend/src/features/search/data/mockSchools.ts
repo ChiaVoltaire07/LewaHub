@@ -300,6 +300,26 @@ export const filterOptions = {
     { value: '100000-300000', label: '100,000 - 300,000 XAF' },
     { value: '300000-500000', label: '300,000 - 500,000 XAF' },
     { value: '500000+', label: 'Above 500,000 XAF' }
+  ],
+  language: [
+    { value: 'Anglophone', label: 'Anglophone' },
+    { value: 'Francophone', label: 'Francophone' },
+    { value: 'Bilingual', label: 'Bilingual' }
+  ],
+  ownership: [
+    { value: 'Public', label: 'Public' },
+    { value: 'Private', label: 'Private' },
+    { value: 'Mission', label: 'Mission' }
+  ],
+  boarding: [
+    { value: 'Day', label: 'Day' },
+    { value: 'Boarding', label: 'Boarding' },
+    { value: 'Both', label: 'Both' }
+  ],
+  minRating: [
+    { value: '3', label: '3+ Stars' },
+    { value: '4', label: '4+ Stars' },
+    { value: '4.5', label: '4.5+ Stars' }
   ]
 };
 

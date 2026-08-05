@@ -36,6 +36,7 @@ export interface Filters {
   ownership?: string[];
   boarding?: string[];
   programs?: string[];
+  language?: string[];
 }
 
 export interface SearchState {

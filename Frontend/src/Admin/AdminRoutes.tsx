@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import SchoolsListPage from "./pages/SchoolsListPage";
 import SchoolFormPage from "./pages/SchoolFormPage";
 import SettingsPage from "./pages/SettingsPage";
+import DraftReviewPage from "./pages/DraftReviewPage";
 
 export default function AdminRoutes() {
   return (
@@ -27,6 +28,7 @@ export default function AdminRoutes() {
           <Route path="schools/new" element={<SchoolFormPage />} />
           <Route path="schools/:id/edit" element={<SchoolFormPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="drafts" element={<DraftReviewPage />} />
         </Route>
       </Routes>
     </AuthProvider>

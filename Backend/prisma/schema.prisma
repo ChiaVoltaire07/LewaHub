@@ -24,6 +24,14 @@ model School {
   name            String
   category        String            // "PrimaryNursery" | "Secondary" | "University"
   offersHighSchool Boolean @default(false)  // only meaningful when category = "Secondary"
+  secondaryStreams String[] @default([])   // e.g. ["General"], ["General", "Technical"] — only meaningful when category = "Secondary"
+  ageRange        String?            // e.g. "3-6 years" — PrimaryNursery
+  studentTeacherRatio String?        // e.g. "1:8" — PrimaryNursery
+  curriculum      String?            // "Anglophone" | "Francophone" | "Bilingual"
+  annualFee       Int?               // in local currency
+  classesOffered  String[] @default([])  // e.g. ["Form 1", "Form 2"] — Secondary
+  programType     String?            // "Day" | "Boarding" — Secondary
+  highSchoolPrograms String? @db.Text  // e.g. "Sciences, Literature" — Secondary with high school
   description     String   @db.Text
   region          String
   city            String
@@ -34,10 +42,15 @@ model School {
   imageUrl        String?
   contactEmail    String?
   contactPhone    String?
+  language        String?  // "Anglophone" | "Francophone" | "Bilingual"
+  ownership       String?  // "Public" | "Private" | "Mission"
+  boarding        String?  // "Day" | "Boarding" | "Both"
   verified        Boolean  @default(false)
   aiSummary       String?  @db.Text
   anonymousViews  Int      @default(0)
   programs        Program[]
+  draftSummaries  SchoolDraftSummary[]
+  images          SchoolImage[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -60,6 +73,30 @@ model Program {
   updatedAt       DateTime @updatedAt
 
   @@index([schoolId])
+}
+
+model SchoolImage {
+  id       String @id @default(cuid())
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  url      String
+  caption  String?
+  order    Int    @default(0)
+
+  @@index([schoolId])
+}
+
+model SchoolDraftSummary {
+  id        String   @id @default(cuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  status    String   @default("DRAFT") // DRAFT | APPROVED | REJECTED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId])
+  @@index([status])
 }
 
 model VerificationToken {

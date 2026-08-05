@@ -2,6 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { School } from '../../types';
 import styles from './MapView.module.css';
 
+const DEFAULT_SCHOOL_IMAGE =
+  'https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
 // Cameroon bounds to restrict the map view
 const CAMEROON_BOUNDS: [[number, number], [number, number]] = [
   [1.6, 8.4],   // southwest corner
@@ -72,7 +75,7 @@ const MapView: React.FC<MapViewProps> = ({
           .addTo(map)
           .bindPopup(`
             <div style="min-width: 200px; padding: 8px; font-family: Inter, sans-serif;">
-              <img src="${school.image}" alt="${school.name}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" />
+              <img src="${school.image || DEFAULT_SCHOOL_IMAGE}" alt="${school.name}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;" onerror="this.src='${DEFAULT_SCHOOL_IMAGE}'" />
               <h3 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #14231C; font-family: Georgia, serif;">${school.name}</h3>
               <p style="margin: 0 0 8px 0; font-size: 13px; color: #14231C; opacity: 0.7;">${school.location.address}</p>
               <button onclick="window.selectSchool('${school.id}')" style="background: #C1572B; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; width: 100%; font-weight: 600;">

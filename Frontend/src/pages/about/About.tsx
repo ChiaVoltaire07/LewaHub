@@ -25,7 +25,12 @@ const About = () => {
                 <img 
                   className="w-full h-full object-cover" 
                   alt="A clean, professional photograph of a bright, modern classroom in Cameroon with warm sunlight filtering through windows."
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrIccq-M-EdaxKhskSZX86Y80NkiCbJKiCIHA61aC1Q3mya7zWgxDi8nyvZG1QKX6OB6Oh2WtaQQibKWUYY0Qw94-0HQ6cRsAe0eAbz4U5Pnb8TesdAVHdrzciVb24qwkblKAzBvHPhXWjNxVRt1vPl0FomW2nvDE6gnE0Hxyuy9cIj3xAc--WYOC5_UxDFh6DY7aEjmVyvKEnR9z6rgDaEobmK8q-qkh-nNIQAtFQ7_8bSrMVReTx4A"
+                  src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                  onError={(event) => {
+                    const target = event.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+                  }}
                 />
               </div>
             </div>

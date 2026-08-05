@@ -4,6 +4,8 @@ import { authRepository } from "./authRepository.js";
 import { config } from "../../config/env.js";
 import { AppError } from "../../middleware/errorHandler.js";
 
+const JWT_OPTIONS = { algorithms: ["HS256"] };
+
 export const authService = {
   async login(email, password) {
     const admin = await authRepository.findByEmail(email);
@@ -20,7 +22,7 @@ export const authService = {
     const token = jwt.sign(
       { sub: admin.id, email: admin.email, name: admin.name },
       config.jwtSecret,
-      { expiresIn: "24h" }
+      { expiresIn: "24h", algorithm: "HS256" }
     );
 
     return {
@@ -36,7 +38,7 @@ export const authService = {
 
   async verifyToken(token) {
     try {
-      const decoded = jwt.verify(token, config.jwtSecret);
+      const decoded = jwt.verify(token, config.jwtSecret, JWT_OPTIONS);
       return decoded;
     } catch (err) {
       throw new AppError("Invalid token", 401);

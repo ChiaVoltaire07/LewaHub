@@ -66,9 +66,9 @@ export default function SummaryReviewPage() {
       if (response.error) {
         setError(response.error);
       } else {
-        const newSummary = response.aiSummary;
+        const newSummary = response.content || response.aiSummary;
         setAiSummary(newSummary);
-        setSuccess("Summary regenerated!");
+        setSuccess(response.message || "Summary draft created! Approve it from the AI Summary Review page to publish.");
       }
     } catch (err: any) {
       setError(err.message || "Failed to regenerate summary");

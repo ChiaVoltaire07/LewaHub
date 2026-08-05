@@ -19,4 +19,34 @@ export const aiSummaryController = {
       next(err);
     }
   },
+
+  async listDrafts(req, res, next) {
+    try {
+      const { status = "DRAFT" } = req.query;
+      const drafts = await aiSummaryService.listDrafts(status);
+      res.json({ drafts });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async approveDraft(req, res, next) {
+    try {
+      const { draftId } = req.params;
+      const result = await aiSummaryService.approveDraft(draftId);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async rejectDraft(req, res, next) {
+    try {
+      const { draftId } = req.params;
+      const result = await aiSummaryService.rejectDraft(draftId);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  },
 };

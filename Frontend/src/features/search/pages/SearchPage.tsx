@@ -24,6 +24,7 @@ const SearchPage: React.FC = () => {
     toggleTopRated,
     toggleOffersHighSchool,
     setSearchQuery,
+    setProgramFilter,
     resetFilters,
     openFilterDrawer,
     closeFilterDrawer,
@@ -120,6 +121,8 @@ const SearchPage: React.FC = () => {
               onReset={resetFilters}
               viewMode={viewMode}
               onViewModeChange={setViewMode}
+              resultCount={schools.length}
+              onProgramChange={setProgramFilter}
             />
           </aside>
 

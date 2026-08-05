@@ -14,7 +14,8 @@ const initialFilters: Filters = {
   minRating: undefined,
   ownership: [],
   boarding: [],
-  programs: []
+  programs: [],
+  language: []
 };
 
 export const useFilters = () => {
@@ -29,7 +30,7 @@ export const useFilters = () => {
   }, []);
 
   const toggleArrayFilter = useCallback((
-    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'distance' | 'minRating',
+    key: 'region' | 'category' | 'curriculum' | 'degreeLevel' | 'feeRange' | 'ownership' | 'boarding' | 'programs' | 'language' | 'distance' | 'minRating',
     value: string
   ) => {
     setFilters(prev => {
@@ -62,6 +63,10 @@ export const useFilters = () => {
     setFilters(prev => ({ ...prev, searchQuery: query }));
   }, []);
 
+  const setProgramFilter = useCallback((value: string) => {
+    setFilters(prev => ({ ...prev, programs: value ? [value] : [] }));
+  }, []);
+
   const resetFilters = useCallback(() => {
     setFilters(initialFilters);
   }, []);
@@ -81,7 +86,12 @@ export const useFilters = () => {
     filters.curriculum.length > 0 ||
     filters.degreeLevel.length > 0 ||
     filters.feeRange.length > 0 ||
-    filters.topRated;
+    filters.topRated ||
+    (filters.ownership?.length || 0) > 0 ||
+    (filters.boarding?.length || 0) > 0 ||
+    (filters.programs?.length || 0) > 0 ||
+    (filters.language?.length || 0) > 0 ||
+    filters.minRating !== undefined;
 
   return {
     filters,
@@ -91,6 +101,7 @@ export const useFilters = () => {
     toggleTopRated,
     toggleOffersHighSchool,
     setSearchQuery,
+    setProgramFilter,
     resetFilters,
     openFilterDrawer,
     closeFilterDrawer,

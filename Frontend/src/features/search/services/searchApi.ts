@@ -1,13 +1,27 @@
 import { School, Filters } from '../types';
 import api from '../../../lib/api';
 
+const DEFAULT_SCHOOL_IMAGE =
+  'https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+
+const normalizeSchoolArray = (payload: any): any[] => {
+  if (Array.isArray(payload?.data)) return payload.data;
+  if (Array.isArray(payload)) return payload;
+  return [];
+};
+
 export const searchSchools = async (filters: Filters): Promise<School[]> => {
   try {
     // Fetch from backend with applied filters
+    // Backend supports comma-separated multi-values for region/category/language/ownership/boarding
     const response = await api.getSchools({
       search: filters.searchQuery || undefined,
-      region: filters.region.length > 0 ? filters.region[0] : undefined,
-      category: filters.category.length > 0 ? filters.category[0] : undefined,
+      region: filters.region.length > 0 ? filters.region.join(',') : undefined,
+      category: filters.category.length > 0 ? filters.category.join(',') : undefined,
+      language: filters.language?.length ? filters.language.join(',') : undefined,
+      ownership: filters.ownership?.length ? filters.ownership.join(',') : undefined,
+      boarding: filters.boarding?.length ? filters.boarding.join(',') : undefined,
+      program: filters.programs?.length ? filters.programs[0] : undefined,
       page: 1,
       limit: 50,
     });
@@ -18,7 +32,7 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
     }
 
     // Backend returns { data, total, page, limit }
-    const results: any[] = (response as any).data || [];
+    const results: any[] = normalizeSchoolArray((response as any).data);
 
     // Map backend schools to frontend School type
     let mappedSchools: School[] = results.map((school: any) => ({
@@ -32,8 +46,8 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
       programs: school.programs?.map((p: any) => p.name) || [],
       feeRange: school.programs?.[0]?.tuition ? `${school.programs[0].tuition}` : '0',
       topRated: school.verified || false,
-      rating: 4.5, // Placeholder until ratings are implemented
-      image: school.imageUrl || school.logo || '',
+      rating: 0, // No ratings implemented yet — 0 means "no rating"
+      image: school.imageUrl || school.logo || DEFAULT_SCHOOL_IMAGE,
       location: {
         lat: school.latitude || 5.5,
         lng: school.longitude || 12.5,
@@ -93,8 +107,8 @@ export const getSchoolById = async (id: string): Promise<School | null> => {
       programs: school.programs?.map((p: any) => p.name) || [],
       feeRange: school.programs?.[0]?.tuition ? `${school.programs[0].tuition}` : '0',
       topRated: school.verified || false,
-      rating: 4.5,
-      image: school.imageUrl || school.logo || '',
+      rating: 0,
+      image: school.imageUrl || school.logo || DEFAULT_SCHOOL_IMAGE,
       location: {
         lat: school.latitude || 5.5,
         lng: school.longitude || 12.5,

@@ -1,5 +1,16 @@
 import { schoolsRepository } from "../schools/schoolsRepository.js";
 import { AppError } from "../../middleware/errorHandler.js";
+import { cacheDelPattern } from "../../config/redis.js";
+
+const SCHOOL_DETAIL_CACHE_PREFIX = "schools:detail:";
+const SCHOOLS_LIST_CACHE_PREFIX = "schools:list:";
+const SCHOOL_NEARBY_CACHE_PREFIX = "schools:nearby:";
+
+async function invalidateSchoolCaches(schoolId) {
+  await cacheDelPattern(`${SCHOOL_DETAIL_CACHE_PREFIX}${schoolId}`);
+  await cacheDelPattern(`${SCHOOLS_LIST_CACHE_PREFIX}*`);
+  await cacheDelPattern(`${SCHOOL_NEARBY_CACHE_PREFIX}*`);
+}
 
 export const programsService = {
   async getPrograms(schoolId) {
@@ -29,6 +40,7 @@ export const programsService = {
     school.programs.push(newProgram);
 
     await schoolsRepository.update(schoolId, { programs: school.programs });
+    await invalidateSchoolCaches(schoolId);
     return newProgram;
   },
 
@@ -45,6 +57,7 @@ export const programsService = {
 
     school.programs[programIdx] = { ...school.programs[programIdx], ...programData, id: programId };
     await schoolsRepository.update(schoolId, { programs: school.programs });
+    await invalidateSchoolCaches(schoolId);
     return school.programs[programIdx];
   },
 
@@ -61,6 +74,7 @@ export const programsService = {
 
     school.programs.splice(programIdx, 1);
     await schoolsRepository.update(schoolId, { programs: school.programs });
+    await invalidateSchoolCaches(schoolId);
     return { success: true };
   },
 };
