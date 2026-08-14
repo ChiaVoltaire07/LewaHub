@@ -33,6 +33,27 @@ export const filterOptions = {
     { value: 'Day', label: 'Day' },
     { value: 'Boarding', label: 'Boarding' },
     { value: 'Both', label: 'Both' }
+  ],
+  /** Fallback options used only while /schools/filters is loading or unreachable */
+  program: [
+    { value: 'GCE Ordinary Level', label: 'GCE Ordinary Level' },
+    { value: 'GCE Advanced Level', label: 'GCE Advanced Level' },
+    { value: 'Higher National Diploma in Computer Science', label: 'HND in Computer Science' },
+    { value: 'Bachelor of Science in Computer Science', label: 'BSc in Computer Science' },
+    { value: 'Bachelor of Laws', label: 'Bachelor of Laws' },
+    { value: 'State Registered Nurse (Diploma)', label: 'State Registered Nurse (Diploma)' }
+  ],
+  speciality: [
+    { value: 'Accounting', label: 'Accounting' },
+    { value: 'Biology', label: 'Biology' },
+    { value: 'Business Administration', label: 'Business Administration' },
+    { value: 'Computer Science', label: 'Computer Science' },
+    { value: 'Economics', label: 'Economics' },
+    { value: 'Electrical Engineering', label: 'Electrical Engineering' },
+    { value: 'Law', label: 'Law' },
+    { value: 'Mathematics', label: 'Mathematics' },
+    { value: 'Medicine', label: 'Medicine' },
+    { value: 'Nursing', label: 'Nursing' }
   ]
 };
 

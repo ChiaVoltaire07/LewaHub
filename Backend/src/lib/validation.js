@@ -38,6 +38,7 @@ export const listSchoolsSchema = z.object({
   ownership: multiValue,
   boarding: multiValue,
   program: z.string().trim().max(200).optional(),
+  speciality: z.string().trim().max(200).optional(),
   verified: z
     .enum(["true", "false"])
     .optional()
@@ -61,7 +62,12 @@ export const nearbySchema = z.object({
 export const searchSchema = z.object({
   q: z.string().trim().min(2).max(200),
   category: z.string().trim().max(50).optional(),
-  region: z.string().trim().max(100).optional(),
+  region: multiValue,
+  language: multiValue,
+  ownership: multiValue,
+  boarding: multiValue,
+  program: z.string().trim().max(200).optional(),
+  speciality: z.string().trim().max(200).optional(),
   page: positiveInt(MAX_PAGE).default(1),
   limit: positiveInt(MAX_LIMIT).default(10),
 });
@@ -72,12 +78,52 @@ export function validateQuery(schema) {
   return (req, res, next) => {
     const result = schema.safeParse(req.query);
     if (!result.success) {
-      const issue = result.error.issues[0];
-      const field = issue?.path?.length ? issue.path.join(".") : "query";
-      const detail = issue?.message ? ` (${issue.message})` : "";
-      return res.status(400).json({ error: `Invalid query parameter "${field}"${detail}` });
+      return validationFailure(res, req, result, "query");
     }
     req.validatedQuery = result.data;
     return next();
   };
+}
+
+// Express middleware: parses req.body against `schema` and, on success,
+// stores the validated/coerced result in req.validatedBody.
+export function validateBody(schema) {
+  return (req, res, next) => {
+    const result = schema.safeParse(req.body ?? {});
+    if (!result.success) {
+      return validationFailure(res, req, result, "body");
+    }
+    req.validatedBody = result.data;
+    return next();
+  };
+}
+
+// Express middleware: parses req.params against `schema` and, on success,
+// stores the validated/coerced result in req.validatedParams.
+export function validateParams(schema) {
+  return (req, res, next) => {
+    const result = schema.safeParse(req.params);
+    if (!result.success) {
+      return validationFailure(res, req, result, "params");
+    }
+    req.validatedParams = result.data;
+    return next();
+  };
+}
+
+// Formats a validation failure. Admin endpoints receive the structured error
+// envelope with a stable code; public endpoints keep the historical shape.
+function validationFailure(res, req, result, source) {
+  const issue = result.error.issues[0];
+  const field = issue?.path?.length ? issue.path.join(".") : source;
+  const detail = issue?.message ? issue.message : "Invalid value";
+  const message = `Invalid ${source} "${field}": ${detail}`;
+
+  if (req.path.startsWith("/api/v1/admin")) {
+    return res.status(400).json({
+      success: false,
+      error: { code: "VALIDATION_ERROR", message },
+    });
+  }
+  return res.status(400).json({ error: message });
 }

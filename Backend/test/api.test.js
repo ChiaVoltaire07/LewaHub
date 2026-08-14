@@ -179,3 +179,78 @@ test("GET /schools/:id returns a serialized school detail", async () => {
   assert.ok(["PrimaryNursery", "Secondary", "University"].includes(body.category));
   assert.equal(typeof body.verified, "boolean");
 });
+
+test("GET /schools/filters returns distinct region/program/speciality options", async () => {
+  const res = await fetch(`${baseUrl}/schools/filters`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.ok(Array.isArray(body.regions));
+  assert.ok(body.regions.length >= 7);
+  assert.ok(body.regions.includes("Centre"));
+  assert.ok(Array.isArray(body.programs));
+  assert.ok(body.programs.length > 0);
+  assert.ok(Array.isArray(body.specialities));
+  assert.ok(body.specialities.length > 0);
+  assert.ok(body.specialities.includes("Computer Science"));
+  const unique = new Set(body.regions);
+  assert.equal(unique.size, body.regions.length);
+});
+
+test("GET /schools?program= filters by program name", async () => {
+  const res = await fetch(`${baseUrl}/schools?program=computer&limit=10`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.ok(body.total > 0, "expected at least one school offering a computer program");
+  for (const school of body.data) {
+    const names = school.programs.map((p) => p.name.toLowerCase());
+    assert.ok(
+      names.some((n) => n.includes("computer")),
+      `school ${school.name} should offer a computer program`
+    );
+  }
+});
+
+test("GET /schools?program= matches departmental (faculty->department) programs too", async () => {
+  const res = await fetch(`${baseUrl}/schools?program=software engineering&limit=10`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.ok(body.total > 0, "expected universities offering Bachelor of Science in Software Engineering");
+});
+
+test("GET /schools?speciality= filters by speciality", async () => {
+  const res = await fetch(`${baseUrl}/schools?speciality=computer science&limit=10`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.ok(body.total > 0);
+  const specialityList = await (await fetch(`${baseUrl}/schools/filters`)).json();
+  assert.ok(specialityList.specialities.includes("Computer Science"));
+});
+
+test("GET /schools filters compose with AND semantics", async () => {
+  const region = (await (await fetch(`${baseUrl}/schools/filters`)).json()).regions[0];
+  const res = await fetch(
+    `${baseUrl}/schools?region=${encodeURIComponent(region)}&speciality=nursing&limit=10`
+  );
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  for (const school of body.data) {
+    assert.equal(school.region, region);
+  }
+});
+
+test("GET /schools with unknown speciality returns empty result set", async () => {
+  const res = await fetch(`${baseUrl}/schools?speciality=definitely-not-a-speciality`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.equal(body.total, 0);
+  assert.equal(body.data.length, 0);
+});
+
+test("GET /search passes program and speciality filters through", async () => {
+  const res = await fetch(`${baseUrl}/search?q=nursing&speciality=nursing&region=Southwest`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  for (const school of body.results) {
+    assert.equal(school.region, "Southwest");
+  }
+});

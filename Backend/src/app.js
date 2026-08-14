@@ -1,13 +1,15 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { config } from "./config/env.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import { globalLimiter, searchLimiter } from "./middleware/rateLimiter.js";
+import { globalLimiter, searchLimiter, adminLoginLimiter } from "./middleware/rateLimiter.js";
 
 // Import route modules
 import schoolsRoutes from "./modules/schools/schoolsRoutes.js";
 import searchRoutes from "./modules/search/searchRoutes.js";
+import adminRoutes from "./modules/admin/adminRoutes.js";
 
 export const app = express();
 
@@ -53,6 +55,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+app.use(cookieParser());
 
 // Rate limiting: broad global protection plus a stricter cap for AI search.
 app.use("/api/v1/", globalLimiter);
@@ -60,6 +63,10 @@ app.use("/api/v1/search", searchLimiter);
 
 app.use("/api/v1/schools", schoolsRoutes);
 app.use("/api/v1/search", searchRoutes);
+
+// Admin API: tight login rate limit, then the admin namespace.
+app.use("/api/v1/admin/auth/login", adminLoginLimiter);
+app.use("/api/v1/admin", adminRoutes);
 
 // Health check
 app.get("/api/v1/health", (req, res) => {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { X, ChevronDown } from 'lucide-react';
-import { Filters } from '../../types';
+import { Filters, FilterOption } from '../../types';
 import { filterOptions } from '../../data/mockSchools';
+import FilterSelect from '../FilterSidebar/FilterSelect';
 import styles from './MobileFilterDrawer.module.css';
 
 interface MobileFilterDrawerProps {
@@ -9,12 +10,19 @@ interface MobileFilterDrawerProps {
   onClose: () => void;
   filters: Filters;
   onToggleArrayFilter: (
-    key: 'region' | 'category' | 'ownership' | 'boarding' | 'programs' | 'language',
+    key: 'region' | 'category' | 'ownership' | 'boarding' | 'programs' | 'language' | 'specialities',
     value: string
   ) => void;
   onToggleVerified: () => void;
   onToggleOffersHighSchool?: () => void;
   resultCount?: number;
+  onProgramChange?: (value: string) => void;
+  onRegionChange?: (value: string) => void;
+  onSpecialityChange?: (value: string) => void;
+  /** Distinct options served by GET /schools/filters (fallback: static lists) */
+  regionOptions?: FilterOption[];
+  programOptions?: FilterOption[];
+  specialityOptions?: FilterOption[];
 }
 
 const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
@@ -24,7 +32,13 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
   onToggleArrayFilter,
   onToggleVerified,
   onToggleOffersHighSchool,
-  resultCount = 0
+  resultCount = 0,
+  onProgramChange,
+  onRegionChange,
+  onSpecialityChange,
+  regionOptions = filterOptions.region,
+  programOptions = filterOptions.program,
+  specialityOptions = filterOptions.speciality
 }) => {
   const [showMoreFilters, setShowMoreFilters] = useState(false);
 
@@ -45,21 +59,14 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
               </button>
             </div>
             <div className={styles.content}>
-              {/* Region */}
-              <div className={styles.filterSection}>
-                <h3 className={styles.filterLabel}>Region</h3>
-                <div className={styles.pillContainer}>
-                  {filterOptions.region.map(option => (
-                    <button
-                      key={option.value}
-                      className={`${styles.pill} ${(filters.region || []).includes(option.value) ? styles.active : ''}`}
-                      onClick={() => onToggleArrayFilter('region', option.value)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {/* Region — single-select dropdown */}
+              <FilterSelect
+                title="Region"
+                value={filters.region[0] || ''}
+                options={regionOptions}
+                placeholder="Any region"
+                onChange={(value) => onRegionChange?.(value)}
+              />
 
               {/* Single 3-category filter replacing the old separate type + level filters */}
               <div className={styles.filterSection}>
@@ -104,6 +111,24 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
                   <span>Verified schools only</span>
                 </label>
               </div>
+
+              {/* Program — single-select dropdown */}
+              <FilterSelect
+                title="Program"
+                value={filters.programs?.[0] || ''}
+                options={programOptions}
+                placeholder="Any program"
+                onChange={(value) => onProgramChange?.(value)}
+              />
+
+              {/* Speciality / field of study — single-select dropdown */}
+              <FilterSelect
+                title="Speciality"
+                value={filters.specialities?.[0] || ''}
+                options={specialityOptions}
+                placeholder="Any speciality"
+                onChange={(value) => onSpecialityChange?.(value)}
+              />
 
               {/* More Filters - Collapsible */}
               <div className={styles.moreFiltersSection}>
@@ -163,24 +188,6 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
                           </button>
                         ))}
                       </div>
-                    </div>
-
-                    {/* Programs (free-text) */}
-                    <div className={styles.filterSection}>
-                      <h3 className={styles.filterLabel}>Programs</h3>
-                      <input
-                        type="text"
-                        placeholder="Search by program, e.g. Computer Science"
-                        value={filters.programs?.[0] || ''}
-                        onChange={(e) => onToggleArrayFilter('programs', e.target.value)}
-                        style={{
-                          width: '100%',
-                          padding: '10px 12px',
-                          borderRadius: '8px',
-                          border: '1px solid var(--line, #E2E8F0)',
-                          fontSize: '14px',
-                        }}
-                      />
                     </div>
                   </div>
                 )}

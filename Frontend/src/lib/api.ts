@@ -94,6 +94,7 @@ class ApiClient {
     ownership?: string;
     boarding?: string;
     program?: string;
+    speciality?: string;
     verified?: string;
     page?: number;
     limit?: number;
@@ -106,12 +107,21 @@ class ApiClient {
     if (filters?.ownership) params.append("ownership", filters.ownership);
     if (filters?.boarding) params.append("boarding", filters.boarding);
     if (filters?.program) params.append("program", filters.program);
+    if (filters?.speciality) params.append("speciality", filters.speciality);
     if (filters?.verified) params.append("verified", filters.verified);
     if (filters?.page) params.append("page", filters.page.toString());
     if (filters?.limit) params.append("limit", filters.limit.toString());
 
     const queryString = params.toString() ? `?${params.toString()}` : "";
     return this.request(`/schools${queryString}`);
+  }
+
+  /**
+   * Public endpoint: Distinct filter option values (regions, programs, specialities)
+   * served from the database. `{ regions: string[], programs: string[], specialities: string[] }`
+   */
+  async getFilterOptions() {
+    return this.request(`/schools/filters`);
   }
 
   /**

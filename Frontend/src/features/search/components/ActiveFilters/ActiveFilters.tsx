@@ -46,6 +46,10 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
     activeChips.push({ key: 'programs', label: filters.programs[0], value: filters.programs[0] });
   }
 
+  if (filters.specialities?.[0]) {
+    activeChips.push({ key: 'specialities', label: filters.specialities[0], value: filters.specialities[0] });
+  }
+
   // Show "High School available" as a chip when active
   if (filters.offersHighSchool) {
     activeChips.push({ key: 'offersHighSchool', label: 'High School available' });

@@ -8,6 +8,47 @@ datasource db {
 }
 
 // ============================================================
+// ADMIN AUTHENTICATION
+// ============================================================
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         AdminRole @default(ADMIN)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions     AdminSession[]
+
+  @@index([email])
+  @@index([isActive])
+}
+
+model AdminSession {
+  id        String   @id @default(cuid())
+  adminId   String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  admin     AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+}
+
+// ============================================================
 // VERIFICATION
 // ============================================================
 
@@ -200,11 +241,48 @@ model Program {
   schoolId        String?
   school          School?       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
+  // Subjects/fields of study a program covers (e.g. "Computer Science").
+  // Many-to-many through ProgramSpeciality so one program can span several
+  // specialities and the same speciality appears across programs/schools.
+  specialities    ProgramSpeciality[]
+
   @@index([departmentId])
   @@index([qualificationId])
   @@index([schoolId])
   // Trigram GIN index backing the program-name ILIKE filter
   @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
+}
+
+// A subject/field of study a program offers. Named model (rather than an
+// implicit many-to-many) so the join table has an explicit @@unique and the
+// relation is easy to query/seed. Values come from existing department names
+// and program name subjects — never fabricated.
+model Speciality {
+  id        String   @id @default(cuid())
+  name      String   @unique // e.g. "Computer Science", "Accounting", "Electrical Engineering"
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  programs  ProgramSpeciality[]
+
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
+}
+
+// Join table between Program and Speciality.
+model ProgramSpeciality {
+  id           String    @id @default(cuid())
+  programId    String
+  specialityId String
+
+  createdAt    DateTime  @default(now())
+
+  program      Program   @relation(fields: [programId], references: [id], onDelete: Cascade)
+  speciality   Speciality @relation(fields: [specialityId], references: [id], onDelete: Cascade)
+
+  @@unique([programId, specialityId])
+  @@index([programId])
+  @@index([specialityId])
 }
 
 // ============================================================

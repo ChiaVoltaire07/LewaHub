@@ -13,6 +13,7 @@ import ActiveFilters from '../components/ActiveFilters/ActiveFilters';
 import NearbyLocationButton from '../components/NearbyLocationButton/NearbyLocationButton';
 import { useFilters } from '../hooks/useFilters';
 import { useNearbySchools } from '../hooks/useNearbySchools';
+import { useFilterOptions } from '../hooks/useFilterOptions';
 import { searchSchools } from '../services/searchApi';
 import { School } from '../types';
 import { sortOptions } from '../data/mockSchools';
@@ -26,11 +27,13 @@ const SearchPage: React.FC = () => {
   const {
     filters,
     isFilterDrawerOpen,
+    updateFilter,
     toggleArrayFilter,
     toggleVerified,
     toggleOffersHighSchool,
     setSearchQuery,
     setProgramFilter,
+    setSpecialityFilter,
     resetFilters,
     openFilterDrawer,
     closeFilterDrawer,
@@ -38,6 +41,10 @@ const SearchPage: React.FC = () => {
   } = useFilters();
 
   const nearby = useNearbySchools();
+
+  // Distinct region/program/speciality options from GET /schools/filters
+  // (with a static fallback so the dropdowns are never empty).
+  const filterOptions = useFilterOptions();
 
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'list' | 'map'>('map');
@@ -109,6 +116,8 @@ const SearchPage: React.FC = () => {
       toggleOffersHighSchool();
     } else if (key === 'programs') {
       setProgramFilter('');
+    } else if (key === 'specialities') {
+      setSpecialityFilter('');
     } else if (value && ['region', 'category', 'language', 'ownership', 'boarding'].includes(key)) {
       toggleArrayFilter(key as any, value);
     }
@@ -177,6 +186,11 @@ const SearchPage: React.FC = () => {
               onViewModeChange={setViewMode}
               resultCount={displaySchools.length}
               onProgramChange={setProgramFilter}
+              onRegionChange={(value) => updateFilter('region', value ? [value] : [])}
+              onSpecialityChange={setSpecialityFilter}
+              regionOptions={filterOptions.regions}
+              programOptions={filterOptions.programs}
+              specialityOptions={filterOptions.specialities}
             />
           </aside>
 
@@ -291,6 +305,12 @@ const SearchPage: React.FC = () => {
           onToggleVerified={toggleVerified}
           onToggleOffersHighSchool={toggleOffersHighSchool}
           resultCount={displaySchools.length}
+          onProgramChange={setProgramFilter}
+          onRegionChange={(value) => updateFilter('region', value ? [value] : [])}
+          onSpecialityChange={setSpecialityFilter}
+          regionOptions={filterOptions.regions}
+          programOptions={filterOptions.programs}
+          specialityOptions={filterOptions.specialities}
         />
 
         {/* Mobile Bottom Toggle */}

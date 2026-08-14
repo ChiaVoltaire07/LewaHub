@@ -59,6 +59,15 @@ export interface Filters {
   boarding?: string[];
   programs?: string[];
   language?: string[];
+  /** Subject/field-of-study filter (e.g. "Computer Science"). Derived from the DB. */
+  specialities?: string[];
+}
+
+/** Distinct filter option values served by GET /schools/filters */
+export interface FilterOptions {
+  regions: string[];
+  programs: string[];
+  specialities: string[];
 }
 
 export interface SearchState {

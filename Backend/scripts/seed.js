@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { specialityNamesForProgram, linkSpecialities } from "../src/lib/specialities.js";
 
 const prisma = new PrismaClient();
 
@@ -934,8 +935,16 @@ async function addPrograms(schoolId, programs, departmentIds = {}, stats) {
     const existing = departmentId
       ? await prisma.program.findFirst({ where: { departmentId, name: program.name } })
       : await prisma.program.findFirst({ where: { schoolId, name: program.name } });
-    if (existing) continue;
-    await prisma.program.create({
+    if (existing) {
+      // Keep links in sync on every seed (idempotent upsert).
+      await linkSpecialities(
+        prisma,
+        existing.id,
+        specialityNamesForProgram({ name: existing.name, department: program.department })
+      );
+      continue;
+    }
+    const created = await prisma.program.create({
       data: {
         name: program.name,
         qualificationId: qualification.id,
@@ -945,6 +954,11 @@ async function addPrograms(schoolId, programs, departmentIds = {}, stats) {
         ...(departmentId ? { departmentId } : { schoolId }),
       },
     });
+    await linkSpecialities(
+      prisma,
+      created.id,
+      specialityNamesForProgram({ name: created.name, department: program.department })
+    );
     if (stats) stats.programsCreated++;
   }
 }

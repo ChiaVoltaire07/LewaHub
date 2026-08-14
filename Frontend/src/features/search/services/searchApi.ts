@@ -43,6 +43,7 @@ export const searchSchools = async (filters: Filters): Promise<School[]> => {
       ownership: filters.ownership?.length ? filters.ownership.join(',') : undefined,
       boarding: filters.boarding?.length ? filters.boarding.join(',') : undefined,
       program: filters.programs?.length ? filters.programs[0] : undefined,
+      speciality: filters.specialities?.length ? filters.specialities[0] : undefined,
       verified: filters.verified ? 'true' : undefined,
       page: 1,
       limit: 50,

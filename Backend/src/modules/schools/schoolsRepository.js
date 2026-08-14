@@ -20,6 +20,35 @@ const LEVEL_MAP = {
 const LANG_MAP = { Anglophone: "ENGLISH", Francophone: "FRENCH", Bilingual: "BILINGUAL" };
 const toUpperEnum = (v) => String(v).toUpperCase();
 
+// A program name match must find the program either attached directly to the
+// school (technical/HND schools) OR reachable through faculties ->
+// departments (universities). Both relation paths are OR'd together.
+function programNameMatches(query) {
+  const nameFilter = { name: { contains: query, mode: "insensitive" } };
+  return [
+    { programs: { some: nameFilter } },
+    {
+      faculties: {
+        some: { departments: { some: { programs: { some: nameFilter } } } },
+      },
+    },
+  ];
+}
+
+// A speciality match is any program (direct or departmental) linked to a
+// Speciality whose name matches.
+function specialityNameMatches(query) {
+  const specialityFilter = { specialities: { some: { speciality: { name: { contains: query, mode: "insensitive" } } } } };
+  return [
+    { programs: { some: specialityFilter } },
+    {
+      faculties: {
+        some: { departments: { some: { programs: { some: specialityFilter } } } },
+      },
+    },
+  ];
+}
+
 const INCLUDE_RELS = {
   programs: { include: { qualification: true } },
   images: { orderBy: { order: "asc" } },
@@ -123,48 +152,62 @@ function serializeSchool(school) {
 
 export const schoolsRepository = {
   async findAll(filters = {}) {
-    const where = {};
+    // Every filter is an independent condition combined with AND, so filters
+    // compose. Filters accepting multiple values (category, region, language,
+    // ownership, boarding) OR within their own condition.
+    const conditions = [];
+
     if (filters.search) {
       const q = filters.search;
-      where.OR = [
-        { name: { contains: q, mode: "insensitive" } },
-        { description: { contains: q, mode: "insensitive" } },
-        { location: { is: { city: { contains: q, mode: "insensitive" } } } },
-        { location: { is: { region: { contains: q, mode: "insensitive" } } } },
-      ];
+      conditions.push({
+        OR: [
+          { name: { contains: q, mode: "insensitive" } },
+          { description: { contains: q, mode: "insensitive" } },
+          { location: { is: { city: { contains: q, mode: "insensitive" } } } },
+          { location: { is: { region: { contains: q, mode: "insensitive" } } } },
+        ],
+      });
     }
     if (filters.category) {
       const cats = Array.isArray(filters.category) ? filters.category : [filters.category];
       const levels = cats.flatMap((c) => LEVEL_MAP[c] || []);
-      if (levels.length) where.levels = { hasSome: levels };
+      if (levels.length) conditions.push({ levels: { hasSome: levels } });
     }
     if (filters.region) {
       const regions = Array.isArray(filters.region) ? filters.region : [filters.region];
-      where.location = {
-        is: { OR: regions.map((r) => ({ region: { equals: r, mode: "insensitive" } })) },
-      };
+      conditions.push({
+        location: {
+          is: { OR: regions.map((r) => ({ region: { equals: r, mode: "insensitive" } })) },
+        },
+      });
     }
     if (filters.verified !== undefined) {
-      where.verificationStatus = filters.verified ? "VERIFIED" : { not: "VERIFIED" };
+      conditions.push({
+        verificationStatus: filters.verified ? "VERIFIED" : { not: "VERIFIED" },
+      });
     }
     if (filters.language) {
       const langs = (Array.isArray(filters.language) ? filters.language : [filters.language]).map(
         (l) => LANG_MAP[l] || toUpperEnum(l)
       );
-      where.languages = { hasSome: langs };
+      conditions.push({ languages: { hasSome: langs } });
     }
     if (filters.ownership) {
       const vals = Array.isArray(filters.ownership) ? filters.ownership : [filters.ownership];
-      where.ownership = { in: vals.map(toUpperEnum) };
+      conditions.push({ ownership: { in: vals.map(toUpperEnum) } });
     }
     if (filters.boarding) {
       const vals = Array.isArray(filters.boarding) ? filters.boarding : [filters.boarding];
-      where.boarding = { in: vals.map(toUpperEnum) };
+      conditions.push({ boarding: { in: vals.map(toUpperEnum) } });
     }
     if (filters.program) {
-      where.programs = { some: { name: { contains: filters.program, mode: "insensitive" } } };
+      conditions.push({ OR: programNameMatches(filters.program) });
+    }
+    if (filters.speciality) {
+      conditions.push({ OR: specialityNameMatches(filters.speciality) });
     }
 
+    const where = conditions.length ? { AND: conditions } : {};
     const page = filters.page || 1;
     const limit = filters.limit || 10;
     const skip = (page - 1) * limit;
@@ -180,6 +223,33 @@ export const schoolsRepository = {
     ]);
 
     return { data: data.map(serializeSchool), total, page, limit };
+  },
+
+  async findFilterOptions() {
+    const [regions, programs, specialities] = await Promise.all([
+      prismaClient.location.findMany({
+        where: {},
+        select: { region: true },
+        distinct: ["region"],
+        orderBy: { region: "asc" },
+      }),
+      prismaClient.program.findMany({
+        where: { OR: [{ schoolId: { not: null } }, { department: { isNot: null } }] },
+        select: { name: true },
+        distinct: ["name"],
+        orderBy: { name: "asc" },
+      }),
+      prismaClient.speciality.findMany({
+        select: { name: true },
+        orderBy: { name: "asc" },
+      }),
+    ]);
+
+    return {
+      regions: regions.map((r) => r.region).filter(Boolean),
+      programs: programs.map((p) => p.name),
+      specialities: specialities.map((s) => s.name),
+    };
   },
 
   async findById(id) {

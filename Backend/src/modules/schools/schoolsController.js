@@ -37,4 +37,12 @@ export const schoolsController = {
       next(err);
     }
   },
+
+  async getFilterOptions(req, res, next) {
+    try {
+      res.json(await schoolsService.getFilterOptions());
+    } catch (err) {
+      next(err);
+    }
+  },
 };

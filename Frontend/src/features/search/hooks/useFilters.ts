@@ -10,7 +10,8 @@ const initialFilters: Filters = {
   ownership: [],
   boarding: [],
   programs: [],
-  language: []
+  language: [],
+  specialities: []
 };
 
 // Support pre-filtering from a URL query param (e.g. footer "Explore" links
@@ -33,7 +34,7 @@ export const useFilters = () => {
   }, []);
 
   const toggleArrayFilter = useCallback((
-    key: 'region' | 'category' | 'ownership' | 'boarding' | 'programs' | 'language',
+    key: 'region' | 'category' | 'ownership' | 'boarding' | 'programs' | 'language' | 'specialities',
     value: string
   ) => {
     setFilters(prev => {
@@ -64,6 +65,10 @@ export const useFilters = () => {
     setFilters(prev => ({ ...prev, programs: value ? [value] : [] }));
   }, []);
 
+  const setSpecialityFilter = useCallback((value: string) => {
+    setFilters(prev => ({ ...prev, specialities: value ? [value] : [] }));
+  }, []);
+
   const resetFilters = useCallback(() => {
     setFilters(initialFilters);
   }, []);
@@ -84,7 +89,8 @@ export const useFilters = () => {
     (filters.ownership?.length || 0) > 0 ||
     (filters.boarding?.length || 0) > 0 ||
     (filters.programs?.length || 0) > 0 ||
-    (filters.language?.length || 0) > 0;
+    (filters.language?.length || 0) > 0 ||
+    (filters.specialities?.length || 0) > 0;
 
   return {
     filters,
@@ -95,6 +101,7 @@ export const useFilters = () => {
     toggleOffersHighSchool,
     setSearchQuery,
     setProgramFilter,
+    setSpecialityFilter,
     resetFilters,
     openFilterDrawer,
     closeFilterDrawer,

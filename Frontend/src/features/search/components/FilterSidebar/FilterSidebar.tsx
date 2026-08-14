@@ -2,12 +2,13 @@ import React from 'react';
 import { X, LayoutList, Map } from 'lucide-react';
 import { Filters, FilterOption } from '../../types';
 import { filterOptions } from '../../data/mockSchools';
+import FilterSelect from './FilterSelect';
 import styles from './FilterSidebar.module.css';
 
 interface FilterSidebarProps {
   filters: Filters;
   onToggleArrayFilter: (
-    key: 'region' | 'category' | 'ownership' | 'boarding' | 'programs' | 'language',
+    key: 'region' | 'category' | 'ownership' | 'boarding' | 'programs' | 'language' | 'specialities',
     value: string
   ) => void;
   onToggleVerified: () => void;
@@ -19,6 +20,12 @@ interface FilterSidebarProps {
   onViewModeChange?: (mode: 'list' | 'map') => void;
   resultCount?: number;
   onProgramChange?: (value: string) => void;
+  onRegionChange?: (value: string) => void;
+  onSpecialityChange?: (value: string) => void;
+  /** Distinct options served by GET /schools/filters (fallback: static lists) */
+  regionOptions?: FilterOption[];
+  programOptions?: FilterOption[];
+  specialityOptions?: FilterOption[];
 }
 
 const FilterSection: React.FC<{
@@ -54,7 +61,12 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   viewMode = 'list',
   onViewModeChange,
   resultCount = 0,
-  onProgramChange
+  onProgramChange,
+  onRegionChange,
+  onSpecialityChange,
+  regionOptions = filterOptions.region,
+  programOptions = filterOptions.program,
+  specialityOptions = filterOptions.speciality
 }) => {
   const activeFilterCount =
     filters.region.length +
@@ -64,7 +76,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     (filters.ownership?.length || 0) +
     (filters.boarding?.length || 0) +
     (filters.programs?.length || 0) +
-    (filters.language?.length || 0);
+    (filters.language?.length || 0) +
+    (filters.specialities?.length || 0);
 
   // The "High School available" checkbox only makes sense when Secondary is selected
   const secondarySelected = filters.category.includes('Secondary');
@@ -137,12 +150,13 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </div>
         )}
 
-        {/* Region second */}
-        <FilterSection
+        {/* Region — single-select dropdown */}
+        <FilterSelect
           title="Region"
-          options={filterOptions.region}
-          selectedValues={filters.region}
-          onToggle={(value) => onToggleArrayFilter('region', value)}
+          value={filters.region[0] || ''}
+          options={regionOptions}
+          placeholder="Any region"
+          onChange={(value) => onRegionChange?.(value)}
         />
 
         {/* Language of instruction */}
@@ -169,17 +183,23 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
           onToggle={(value) => onToggleArrayFilter('boarding', value)}
         />
 
-        {/* Programs (free-text) */}
-        <div className={styles.filterSection}>
-          <h3 className={styles.filterTitle}>Programs</h3>
-          <input
-            type="text"
-            placeholder="Search by program, e.g. Computer Science"
-            value={filters.programs?.[0] || ''}
-            onChange={(e) => onProgramChange?.(e.target.value)}
-            className={styles.textInput}
-          />
-        </div>
+        {/* Program — single-select dropdown */}
+        <FilterSelect
+          title="Program"
+          value={filters.programs?.[0] || ''}
+          options={programOptions}
+          placeholder="Any program"
+          onChange={(value) => onProgramChange?.(value)}
+        />
+
+        {/* Speciality / field of study — single-select dropdown */}
+        <FilterSelect
+          title="Speciality"
+          value={filters.specialities?.[0] || ''}
+          options={specialityOptions}
+          placeholder="Any speciality"
+          onChange={(value) => onSpecialityChange?.(value)}
+        />
 
         <div className={styles.filterSection}>
           <label className={styles.topRatedOption}>

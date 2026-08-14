@@ -38,6 +38,11 @@ export const searchService = {
     // Explicit query filters override AI intent
     if (filters.category) dbFilters.category = filters.category;
     if (filters.region) dbFilters.region = filters.region;
+    if (filters.language) dbFilters.language = filters.language;
+    if (filters.ownership) dbFilters.ownership = filters.ownership;
+    if (filters.boarding) dbFilters.boarding = filters.boarding;
+    if (filters.program) dbFilters.program = filters.program;
+    if (filters.speciality) dbFilters.speciality = filters.speciality;
 
     // Determine the search keywords: AI keywords if available, otherwise the raw query
     const searchKeywords = aiIntent?.keywords?.length
@@ -70,6 +75,11 @@ export const searchService = {
       search: keywords.join(" "),
       category: filters.category,
       region: filters.region,
+      language: filters.language,
+      ownership: filters.ownership,
+      boarding: filters.boarding,
+      program: filters.program,
+      speciality: filters.speciality,
       page: filters.page || 1,
       limit: filters.limit || 10,
     });

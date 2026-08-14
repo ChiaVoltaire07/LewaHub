@@ -75,4 +75,8 @@ export const schoolsService = {
       cache,
     };
   },
+
+  async getFilterOptions() {
+    return schoolsRepository.findFilterOptions();
+  },
 };
