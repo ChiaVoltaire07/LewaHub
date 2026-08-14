@@ -134,18 +134,6 @@ const About = () => {
             </div>
           </div>
         </section>
-
-        <section className="py-lg bg-surface border-t border-outline-variant">
-          <div className="px-margin-mobile md:px-xl max-w-container-max mx-auto text-center">
-            <h3 className="font-headline-md text-headline-md text-on-surface mb-sm">{t("about.partners")}</h3>
-            <div className="flex flex-wrap justify-center gap-xl grayscale opacity-60">
-              <div className="flex items-center gap-xs font-bold text-headline-md">LOGO A</div>
-              <div className="flex items-center gap-xs font-bold text-headline-md">LOGO B</div>
-              <div className="flex items-center gap-xs font-bold text-headline-md">LOGO C</div>
-              <div className="flex items-center gap-xs font-bold text-headline-md">LOGO D</div>
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   );
