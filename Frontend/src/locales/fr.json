@@ -1,0 +1,228 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "search": "Recherche",
+    "about": "À propos",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "title": "Trouvez l'école parfaite pour votre enfant",
+      "subtitle": "Découvrez, comparez et connectez-vous avec des milliers d'écoles vérifiées à travers le Cameroun. Prenez des décisions éclairées pour l'avenir de votre enfant.",
+      "cta": "Commencer la recherche",
+      "learnMore": "En savoir plus"
+    },
+    "features": {
+      "title": "Pourquoi choisir LewaHub ?",
+      "subtitle": "Nous rendons la sélection scolaire simple, transparente et sans stress.",
+      "comprehensive": {
+        "title": "Base de données complète",
+        "desc": "Accédez à des profils détaillés de milliers d'écoles dans les 10 régions du Cameroun."
+      },
+      "verified": {
+        "title": "Informations vérifiées",
+        "desc": "Les données de chaque école sont vérifiées via des documents officiels et des visites sur place."
+      },
+      "compare": {
+        "title": "Comparaison facile",
+        "desc": "Comparez les écoles côte à côte en fonction des frais, des programmes, des installations et plus encore."
+      }
+    },
+    "featured": {
+      "title": "Écoles en vedette",
+      "subtitle": "Écoles les mieux notées sélectionnées pour l'excellence et la qualité vérifiée.",
+      "viewAll": "Voir toutes les écoles",
+      "loading": "Chargement...",
+      "error": "Erreur lors du chargement des écoles",
+      "empty": "Aucune école disponible"
+    },
+    "newsletter": {
+      "title": "Restez informé",
+      "subtitle": "Recevez les dernières listes d'écoles, actualités éducatives et conseils dans votre boîte de réception.",
+      "placeholder": "Entrez votre email",
+      "button": "S'abonner",
+      "success": "Merci de vous être abonné !",
+      "error": "Une erreur s'est produite. Veuillez réessayer."
+    }
+  },
+  "search": {
+    "title": "Rechercher des écoles",
+    "placeholder": "Rechercher par nom d'école, ville ou région...",
+    "filters": "Filtres",
+    "sortBy": "Trier par :",
+    "schoolsFound": "{{count}} école trouvée",
+    "schoolsFound_plural": "{{count}} écoles trouvées",
+    "viewDetails": "Voir les détails",
+    "noResults": "Aucune école ne correspond à vos critères de recherche.",
+    "loading": "Recherche d'écoles en cours...",
+    "error": "Erreur lors du chargement des écoles"
+  },
+  "about": {
+    "badge": "L'éducation d'abord",
+    "title": "Autonomiser les parents et les élèves grâce à",
+    "titleHighlight": "un savoir vérifié.",
+    "description": "Chez LewaHub, nous croyons que chaque enfant mérite un accès à une éducation de qualité. Nous comblons le déficit d'information en fournissant un répertoire complet, transparent et vérifié des écoles à travers le Cameroun.",
+    "mission": {
+      "title": "Notre mission",
+      "desc": "Notre mission principale est de simplifier le processus de sélection scolaire pour les familles au Cameroun. Nous comprenons que choisir la bonne école est l'une des décisions les plus critiques qu'un parent puisse prendre. En centralisant les données sur les frais, les programmes, les installations et l'emplacement, nous supprimons le stress et l'incertitude du processus.",
+      "accessibility": "Accessibilité",
+      "accessibilityDesc": "Rendre les données scolaires gratuites et faciles d'accès pour tous.",
+      "transparency": "Transparence",
+      "transparencyDesc": "Garantir que les détails des frais de scolarité et des installations sont clairs et honnêtes."
+    },
+    "verification": {
+      "title": "Comment nous vérifions les écoles",
+      "desc": "La confiance est le fondement de notre plateforme. Chaque école répertoriée sur LewaHub subit un processus de vérification en plusieurs étapes.",
+      "document": {
+        "title": "Examen des documents",
+        "desc": "Nous collectons et examinons les documents d'enregistrement officiels du Ministère de l'Enseignement Secondaire (MINESEC) ou de l'Éducation de Base (MINEDUB)."
+      },
+      "onsite": {
+        "title": "Confirmation sur place",
+        "desc": "Nos agents de terrain effectuent des visites périodiques pour vérifier l'existence des installations physiques et l'exactitude des photos fournies."
+      },
+      "feedback": {
+        "title": "Avis de la communauté",
+        "desc": "Nous modérons les avis des parents et des élèves pour garantir que les retours qualitatifs reflètent l'expérience réelle au sein de l'école."
+      }
+    },
+    "vision": {
+      "title": "LewaHub",
+      "desc": "D'ici 2030, notre objectif est que chaque école primaire et secondaire légalement enregistrée au Cameroun soit accessible via notre plateforme. Nous visons à devenir la référence standard pour la transparence éducative en Afrique centrale, en favorisant une saine concurrence entre les écoles pour améliorer leurs installations et leurs résultats éducatifs.",
+      "schoolsVerified": "Écoles vérifiées",
+      "monthlyUsers": "Utilisateurs mensuels",
+      "regionsCovered": "Régions couvertes"
+    },
+    "partners": "Approuvé par nos partenaires éducatifs"
+  },
+  "contact": {
+    "title": "Prenez contact",
+    "subtitle": "Vous avez des questions sur le choix de la bonne école pour votre enfant ? Notre équipe d'experts en éducation est là pour vous guider tout au long du processus.",
+    "form": {
+      "name": "Nom complet",
+      "email": "Adresse email",
+      "phone": "Numéro de téléphone",
+      "subject": "Sujet",
+      "message": "Votre message",
+      "submit": "Envoyer le message",
+      "sending": "Envoi en cours...",
+      "success": "Votre message a été envoyé avec succès ! Nous vous répondrons bientôt.",
+      "error": "Échec de l'envoi du message. Veuillez réessayer."
+    },
+    "info": {
+      "title": "Coordonnées",
+      "email": "Email",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "hours": "Heures d'ouverture",
+      "hoursValue": "Lundi - Vendredi : 8h00 - 17h00"
+    }
+  },
+  "schoolDetails": {
+    "overview": "Aperçu",
+    "programs": "Programmes",
+    "fees": "Frais de scolarité",
+    "location": "Emplacement",
+    "facilities": "Installations",
+    "reviews": "Avis",
+    "contact": "Contacter l'école",
+    "visitWebsite": "Visiter le site web",
+    "notFound": "École non trouvée",
+    "loading": "Chargement des détails de l'école...",
+    "error": "Échec du chargement des détails de l'école"
+  },
+  "footer": {
+    "tagline": "Mettre en relation les élèves, les parents et les apprenants avec des institutions éducatives de confiance à travers le Cameroun.",
+    "exploreTitle": "Explorer",
+    "lewahubTitle": "LewaHub",
+    "legalTitle": "Mentions légales",
+    "contactTitle": "Contact",
+    "findSchools": "Trouver des écoles",
+    "primaryNursery": "Primaire & Maternelle",
+    "secondarySchools": "Écoles secondaires",
+    "technicalSchools": "Écoles techniques",
+    "universities": "Universités",
+    "programs": "Programmes",
+    "aboutUs": "À propos de nous",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "copyright": "© {{year}} LewaHub. Tous droits réservés.",
+    "email": "support@LewaHub.cm",
+    "location": "Yaoundé, Cameroun"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "updated": "Dernière mise à jour : août 2026",
+      "intro": "Cette politique de confidentialité explique quelles informations LewaHub traite, d'où proviennent ces informations et comment elles sont utilisées. Veuillez la lire en parallèle de nos Conditions d'utilisation.",
+      "disclaimer": "Les informations affichées sur LewaHub peuvent provenir des écoles, de sources publiques, de sites web officiels ou d'autres sources documentées. Bien que nous travaillions à maintenir des informations exactes et à jour, LewaHub ne garantit pas que chaque fiche soit complète, actuelle ou sans erreur.",
+      "sections": [
+        { "h": "Introduction", "p": "LewaHub est un annuaire éducatif qui aide les élèves, les parents et les apprenants à découvrir et à comparer des écoles à travers le Cameroun. Cette politique décrit les informations que nous traitons et les choix qui s'offrent à vous." },
+        { "h": "Informations que nous collectons", "p": "Nous traitons quatre types d'informations : (1) les informations fournies par les écoles, telles que les noms, coordonnées, frais et descriptions de programmes ; (2) les informations publiquement disponibles, telles que les détails publiés sur les sites web officiels des écoles ou les registres gouvernementaux ; (3) les informations que vous soumettez directement, par exemple via notre formulaire de contact ; et (4) les informations d'utilisation anonymes collectées automatiquement, telles que les pages visitées." },
+        { "h": "Informations sur les écoles", "p": "Les écoles fournissent des informations sur leur établissement, notamment le nom, l'emplacement, les coordonnées, les frais, les programmes et les installations. Nous pouvons également collecter des informations déjà publiquement disponibles sur des sites web officiels, des registres gouvernementaux (tels que le MINESEC et le MINEDUB) et d'autres sources documentées." },
+        { "h": "Utilisation des informations", "p": "Nous utilisons les informations que nous traitons pour créer et maintenir les fiches des écoles, pour alimenter les fonctionnalités de recherche et de comparaison, pour afficher les écoles à proximité, pour répondre aux messages soumis via notre formulaire de contact, et pour améliorer et protéger le service LewaHub." },
+        { "h": "Informations de localisation", "p": "Nous stockons les coordonnées géographiques et l'adresse de chaque école afin que les visiteurs puissent trouver et comparer les établissements par emplacement. Si vous utilisez notre fonctionnalité d'écoles à proximité, votre emplacement approximatif est utilisé pour calculer les distances. Nous ne vendons pas les informations de localisation." },
+        { "h": "Images et médias", "p": "Les images des écoles sont fournies par les écoles ou proviennent de sources publiquement disponibles. Nous affichons ces images sur les fiches des écoles. Si vous estimez qu'une image ne devrait pas apparaître sur LewaHub, veuillez nous contacter et nous examinerons votre demande." },
+        { "h": "Analytique et données d'utilisation anonymes", "p": "Nous pouvons collecter des données d'utilisation anonymes, telles que les pages visitées et le nombre de vues de chaque fiche d'école, afin de comprendre comment LewaHub est utilisé et d'améliorer le service. Ces données sont agrégées et n'identifient pas les utilisateurs individuels." },
+        { "h": "Sources de données", "p": "Les informations affichées sur LewaHub proviennent des écoles elles-mêmes, de sources publiques, de sites web officiels, de registres gouvernementaux et d'autres sources documentées." },
+        { "h": "Exactitude des données", "p": "Les informations affichées sur LewaHub peuvent provenir des écoles, de sources publiques, de sites web officiels ou d'autres sources documentées. Bien que nous travaillions à maintenir des informations exactes et à jour, LewaHub ne garantit pas que chaque fiche soit complète, actuelle ou sans erreur." },
+        { "h": "Services tiers", "p": "LewaHub peut utiliser des services tiers tels que des cartes intégrées et des outils d'analyse. Ces services sont régis par leurs propres politiques de confidentialité, et nous vous encourageons à les consulter." },
+        { "h": "Sécurité des données", "p": "Nous appliquons des mesures techniques et organisationnelles raisonnables pour protéger les informations que nous traitons. Cependant, aucune méthode de transmission sur Internet n'est totalement sécurisée, et nous ne pouvons garantir une sécurité absolue." },
+        { "h": "Conservation des données", "p": "Nous conservons les informations des fiches des écoles aussi longtemps que l'école reste répertoriée sur LewaHub. Les messages soumis via notre formulaire de contact ne sont conservés que le temps nécessaire pour répondre à votre demande." },
+        { "h": "Droits des utilisateurs", "p": "Lorsque la loi applicable prévoit de tels droits, vous pouvez demander l'accès à vos informations personnelles, leur correction ou leur suppression. Pour faire une telle demande, veuillez nous contacter en utilisant les coordonnées ci-dessous." },
+        { "h": "Confidentialité des enfants", "p": "LewaHub est un annuaire d'établissements éducatifs. Les informations scolaires affichées sur la plateforme sont de nature institutionnelle. Nous ne collectons pas sciemment d'informations personnelles auprès des enfants." },
+        { "h": "Modifications de cette politique", "p": "Nous pouvons mettre à jour cette politique de confidentialité de temps à autre. Le cas échéant, nous réviserons la date de « dernière mise à jour » ci-dessus. Votre utilisation continue de LewaHub après la publication des modifications signifie que vous acceptez la politique mise à jour." },
+        { "h": "Contact", "p": "Pour toute question concernant cette politique de confidentialité ou vos informations personnelles, contactez-nous à support@LewaHub.cm, Yaoundé, Cameroun." }
+      ]
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "updated": "Dernière mise à jour : août 2026",
+      "intro": "Ces Conditions d'utilisation régissent votre utilisation du site web et des services de LewaHub. Veuillez les lire attentivement avant d'utiliser la plateforme.",
+      "disclaimer": "LewaHub fournit des informations éducatives pour la découverte et la comparaison. Les utilisateurs doivent vérifier indépendamment les informations importantes concernant les admissions, les frais, les examens, l'inscription et l'établissement auprès de l'institution concernée.",
+      "sections": [
+        { "h": "Acceptation des conditions", "p": "En accédant à LewaHub ou en l'utilisant, vous acceptez ces Conditions d'utilisation. Si vous n'êtes pas d'accord avec une partie de ces conditions, veuillez ne pas utiliser le service." },
+        { "h": "À propos de LewaHub", "p": "LewaHub est un annuaire et un catalogue éducatif. Il n'est ni une école, ni une autorité gouvernementale, ni un organisme d'examen, ni un organisme d'accréditation. Nous fournissons une plateforme pour découvrir et comparer les établissements éducatifs." },
+        { "h": "Objectif de l'annuaire éducatif", "p": "LewaHub fournit des informations éducatives pour la découverte et la comparaison. Les utilisateurs doivent vérifier indépendamment les informations importantes concernant les admissions, les frais, les examens, l'inscription et l'établissement auprès de l'institution concernée." },
+        { "h": "Informations sur les écoles", "p": "Les fiches des écoles peuvent inclure des informations fournies par les écoles elles-mêmes, ainsi que des informations recueillies à partir de sources publiques, de sites web officiels et d'autres sources documentées." },
+        { "h": "Exactitude et vérification", "p": "Les informations scolaires peuvent changer, et toutes les fiches n'ont pas été vérifiées de manière indépendante. Bien que nous travaillions à maintenir des informations exactes et à jour, nous ne garantissons pas que chaque fiche soit complète, actuelle ou sans erreur. Confirmez toujours les détails importants directement auprès de l'établissement." },
+        { "h": "Liens tiers / externes", "p": "LewaHub peut renvoyer vers des sites web externes gérés par des tiers. Nous ne sommes pas responsables du contenu ou des pratiques de ces sites web, et nous vous encourageons à consulter leurs propres conditions et politiques de confidentialité." },
+        { "h": "Responsabilités de l'utilisateur", "p": "Lorsque vous utilisez LewaHub, vous acceptez d'utiliser le service de manière légale et de ne pas interférer avec son fonctionnement. Si vous soumettez des informations via notre formulaire de contact, vous acceptez de fournir un contenu exact et licite." },
+        { "h": "Utilisation interdite", "p": "Vous ne pouvez pas utiliser LewaHub pour : vous livrer à une activité illicite ; tenter d'obtenir un accès non autorisé au service ; soumettre des informations trompeuses ou frauduleuses ; ou utiliser des moyens automatisés qui perturbent ou surchargent la plateforme." },
+        { "h": "Propriété intellectuelle", "p": "Le nom, le logo et la conception de la plateforme LewaHub appartiennent à LewaHub. Les informations scolaires affichées sur la plateforme sont fournies par les écoles ou obtenues à partir de sources publiques, et les droits sur ce contenu restent la propriété de leurs titulaires respectifs." },
+        { "h": "Images et contenu", "p": "Les images et autres contenus des fiches d'écoles sont affichés tels que fournis par les écoles ou obtenus à partir de sources publiques. La propriété de ces contenus reste celle de leurs propriétaires d'origine." },
+        { "h": "Disponibilité du service", "p": "LewaHub est fourni sur une base « en l'état » et « selon disponibilité ». Nous ne garantissons pas que le service sera ininterrompu, sans erreur ou toujours disponible." },
+        { "h": "Limitation de responsabilité", "p": "Dans toute la mesure permise par la loi, LewaHub n'est pas responsable des dommages directs, indirects, accessoires ou consécutifs découlant de votre utilisation du service ou des décisions prises sur la base des informations affichées sur la plateforme. La plateforme est un annuaire, et les décisions concernant l'éducation doivent toujours être prises en référence à l'établissement concerné." },
+        { "h": "Modifications du service", "p": "Nous pouvons ajouter, modifier ou supprimer des fonctionnalités de LewaHub à tout moment sans préavis." },
+        { "h": "Modifications de ces conditions", "p": "Nous pouvons mettre à jour ces Conditions d'utilisation de temps à autre. Les modifications seront publiées sur cette page. Votre utilisation continue de LewaHub après la publication des modifications signifie que vous acceptez les conditions mises à jour." },
+        { "h": "Contact", "p": "Pour toute question concernant ces Conditions d'utilisation, contactez-nous à support@LewaHub.cm, Yaoundé, Cameroun." }
+      ]
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "close": "Fermer",
+    "menu": "Menu",
+    "switchLanguage": "Changer de langue"
+  },
+  "nearby": {
+    "useMyLocation": "Trouver les écoles à proximité",
+    "locating": "Localisation en cours…",
+    "searching": "Recherche des écoles à proximité…",
+    "within": "{{count}} école trouvée dans un rayon de {{radius}} km autour de vous",
+    "within_plural": "{{count}} écoles trouvées dans un rayon de {{radius}} km autour de vous",
+    "radiusLabel": "Rayon de recherche :",
+    "exit": "Quitter",
+    "nearestFirst": "Les plus proches en premier",
+    "denied": "L'accès à votre position a été refusé. Veuillez autoriser la localisation dans les paramètres de votre navigateur et réessayer.",
+    "unavailable": "Votre position n'a pas pu être déterminée. Veuillez réessayer.",
+    "timeout": "La demande de localisation a expiré. Veuillez réessayer.",
+    "unsupported": "Votre navigateur ne prend pas en charge les services de localisation. Essayez un autre navigateur pour trouver les écoles près de chez vous.",
+    "error": "Une erreur est survenue lors de la recherche des écoles à proximité. Veuillez réessayer.",
+    "noSchoolsWithin": "Aucune école trouvée dans un rayon de {{radius}} km. Essayez d'élargir votre rayon de recherche.",
+    "you": "Vous êtes ici"
+  }
+}

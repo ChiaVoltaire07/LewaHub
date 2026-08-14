@@ -1,0 +1,532 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// VERIFICATION
+// ============================================================
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  hash      String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
+// ============================================================
+// LOCATION HIERARCHY
+// ============================================================
+
+model Location {
+  id          String   @id @default(cuid())
+  region      String   // e.g., "Littoral", "North West"
+  division    String?  // e.g., "Douala", "Kumba"
+  subdivision String?  // e.g., "Douala I", "Douala II"
+  city        String   // e.g., "Douala", "Yaoundé"
+  address     String?  // e.g., "123 Main Street"
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  schools     School[]
+
+  @@unique([region, division, subdivision, city, address])
+  @@index([region])
+  @@index([division])
+  @@index([subdivision])
+  @@index([city])
+  // Trigram GIN indexes so the ILIKE '%q%' city/region search clauses can use the index
+  @@index([city(ops: raw("gin_trgm_ops"))], type: Gin, map: "Location_city_trgm_idx")
+  @@index([region(ops: raw("gin_trgm_ops"))], type: Gin, map: "Location_region_trgm_idx")
+}
+
+// ============================================================
+// CORE SCHOOL MODEL
+// ============================================================
+
+model School {
+  id                    String   @id @default(cuid())
+  name                  String
+  description           String
+  locationId            String
+  
+  // Contact & Web
+  website               String?
+  contactEmail          String?
+  contactPhone          String?
+  
+  // Education Structure
+  levels                EducationLevel[]
+  languages             SchoolLanguage[]
+  
+  // School Type
+  ownership             OwnershipType?
+  boarding              BoardingType?
+  
+  // Additional Info
+  ageRange              String?  // "3-6 years"
+  studentTeacherRatio   String?  // "1:8"
+  annualFee             Int?     // in XAF
+  
+  // Verification & Status
+  verificationStatus    VerificationStatus @default(PENDING)
+  verifiedAt            DateTime?
+  verificationNotes     String?
+  
+  // Content
+  aiSummary             String?
+  anonymousViews        Int      @default(0)
+  isDemoData            Boolean  @default(false)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  // Relations
+  location              Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  
+  // School Structure
+  secondarySections     SchoolSection[]
+  faculties             Faculty[]
+  programs              Program[] // For non-university institutions (e.g., technical schools)
+  
+  // Content & Metadata
+  qualifications        SchoolQualification[]
+  images                SchoolImage[]
+  fees                  SchoolFee[]
+  facilities            SchoolFacility[]
+  sources               SchoolSource[]
+  identifiers           InstitutionIdentifier[]
+  
+  // Agent Data Pipeline
+  dataCandidates        SchoolDataCandidate[]
+
+  @@index([locationId])
+  @@index([verificationStatus])
+  @@index([createdAt])
+  // GIN indexes backing the public search filters (enum-array hasSome + ILIKE)
+  @@index([levels], type: Gin)
+  @@index([languages], type: Gin)
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([description(ops: raw("gin_trgm_ops"))], type: Gin)
+}
+
+// ============================================================
+// SECONDARY EDUCATION
+// ============================================================
+
+model SchoolSection {
+  id       String   @id @default(cuid())
+  schoolId String
+  
+  // Section type & track
+  section          SecondarySection  // GENERAL or TECHNICAL
+  track            TechnicalTrack?   // INDUSTRIAL or COMMERCIAL (only if TECHNICAL)
+  
+  // Classes offered in this section
+  classesOffered   String[] @default([]) // ["Form 1", "Form 2", "Form 3", "Form 4", "Form 5", "Lower Sixth", "Upper Sixth"]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, section, track])
+  @@index([schoolId])
+}
+
+// ============================================================
+// HIGHER EDUCATION HIERARCHY
+// ============================================================
+
+model Faculty {
+  id       String   @id @default(cuid())
+  schoolId String
+  name     String   // e.g., "Faculty of Science"
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  school       School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  departments  Department[]
+
+  @@unique([schoolId, name])
+  @@index([schoolId])
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  facultyId String
+  name      String   // e.g., "Department of Computer Science"
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  faculty   Faculty   @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  programs  Program[]
+
+  @@unique([facultyId, name])
+  @@index([facultyId])
+}
+
+model Program {
+  id              String   @id @default(cuid())
+  departmentId    String?  // NULL for non-university programs
+  qualificationId String
+  
+  name            String
+  duration        String?  // e.g., "4 years", "3 months"
+  tuition         Int?     // in XAF
+  description     String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // For university programs: requires department
+  department      Department?   @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  
+  // All programs reference a qualification
+  qualification   Qualification @relation(fields: [qualificationId], references: [id], onDelete: Restrict)
+  
+  // For non-university programs (e.g., technical schools), direct school reference
+  schoolId        String?
+  school          School?       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([departmentId])
+  @@index([qualificationId])
+  @@index([schoolId])
+  // Trigram GIN index backing the program-name ILIKE filter
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
+}
+
+// ============================================================
+// QUALIFICATIONS
+// ============================================================
+
+model Qualification {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g., "GCE Ordinary Level", "Bachelor of Science"
+  type        QualificationType
+  field       QualificationField?
+  description String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  schools     SchoolQualification[]
+  programs    Program[]
+
+  @@index([type])
+  @@index([field])
+}
+
+model SchoolQualification {
+  id              String   @id @default(cuid())
+  schoolId        String
+  qualificationId String
+  createdAt       DateTime @default(now())
+  
+  school         School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  qualification  Qualification @relation(fields: [qualificationId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, qualificationId])
+  @@index([schoolId])
+  @@index([qualificationId])
+}
+
+// ============================================================
+// SCHOOL DETAILS & METADATA
+// ============================================================
+
+model SchoolImage {
+  id          String           @id @default(cuid())
+  schoolId    String
+  
+  url         String
+  storageKey  String?
+  caption     String?
+  altText     String?
+  isPrimary   Boolean          @default(false)
+  order       Int              @default(0)
+  
+  sourceUrl   String?
+  sourceType  SourceType?
+  usageStatus ImageUsageStatus @default(PENDING_REVIEW)
+  
+  createdAt   DateTime         @default(now())
+  
+  school      School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([usageStatus])
+}
+
+model SchoolFee {
+  id           String   @id @default(cuid())
+  schoolId     String
+  
+  academicYear String
+  amount       Int
+  currency     String   @default("XAF")
+  category     String?  // e.g., "tuition", "registration", "boarding"
+  
+  createdAt    DateTime @default(now())
+  
+  school       School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([academicYear])
+}
+
+model Facility {
+  id             String   @id @default(cuid())
+  name           String   @unique  // e.g., "Library", "Laboratory", "Sports Field"
+  description    String?
+  icon           String?
+  
+  createdAt      DateTime @default(now())
+  
+  schools        SchoolFacility[]
+}
+
+model SchoolFacility {
+  schoolId   String
+  facilityId String
+  createdAt  DateTime @default(now())
+  
+  facility   Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  school     School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@id([schoolId, facilityId])
+  @@index([facilityId])
+}
+
+model SchoolSource {
+  id          String       @id @default(cuid())
+  schoolId    String
+  
+  sourceType  SourceType
+  sourceName  String?      // e.g., "MINESEC Official Directory"
+  sourceUrl   String?      // URL where data was found
+  
+  retrievedAt DateTime?    // When was this information retrieved
+  verifiedAt  DateTime?    // When was this last verified
+  confidence  Float?       // 0.0 to 1.0
+  status      SourceStatus @default(PENDING)
+  
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  school      School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId])
+  @@index([sourceType])
+  @@index([status])
+}
+
+model InstitutionIdentifier {
+  id               String         @id @default(cuid())
+  schoolId         String
+  
+  type             IdentifierType // MINESEC_RNE, MINEDUB_RNE, MINESUP_RNE, OTHER
+  value            String         // The actual identifier value
+  issuingAuthority String?        // Which ministry/organization issued it
+  verified         Boolean        @default(false)
+  
+  createdAt        DateTime       @default(now())
+  
+  school           School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@unique([schoolId, type, value])
+  @@index([schoolId])
+  @@index([type])
+}
+
+// ============================================================
+// AI AGENT & SCRAPER PIPELINE
+// ============================================================
+
+model AgentRun {
+  id              String      @id @default(cuid())
+  
+  agentName       String
+  agentVersion    String
+  task            String      // e.g., "scrape_secondary_schools", "validate_existing_data"
+  source          String      // e.g., "minesec_website", "google_sheets"
+  status          AgentStatus
+  
+  recordsFound    Int         @default(0)
+  recordsCreated  Int         @default(0)
+  recordsUpdated  Int         @default(0)
+  recordsRejected Int         @default(0)
+  
+  errorMessage    String?
+  
+  startedAt       DateTime    @default(now())
+  completedAt     DateTime?
+  
+  candidates      SchoolDataCandidate[]
+
+  @@index([agentName])
+  @@index([status])
+  @@index([startedAt])
+}
+
+model SchoolDataCandidate {
+  id              String   @id @default(cuid())
+  agentRunId      String
+  
+  // Candidate source data
+  rawData         Json?             // Raw scraped data as JSON
+  structuredData  Json?             // Normalized/extracted data as JSON
+  sourceUrl       String?
+  sourceName      String?
+  sourceType      SourceType?
+  confidence      Float?            // Agent's confidence score
+  
+  // Matching
+  matchedSchoolId String?
+  
+  // Review workflow
+  status          CandidateStatus        @default(PENDING)     // PENDING, REVIEWING, APPROVED, REJECTED, DUPLICATE
+  reviewStatus    CandidateReviewStatus  @default(UNREVIEWED)  // UNREVIEWED, REVIEWED, APPROVED, REJECTED
+  reviewNotes     String?
+  reviewedAt      DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  agentRun        AgentRun  @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+  matchedSchool   School?   @relation(fields: [matchedSchoolId], references: [id], onDelete: SetNull)
+
+  @@index([agentRunId])
+  @@index([matchedSchoolId])
+  @@index([status])
+  @@index([reviewStatus])
+  @@index([createdAt])
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum EducationLevel {
+  NURSERY
+  PRIMARY
+  SECONDARY
+  HIGHER
+}
+
+enum SchoolLanguage {
+  ENGLISH
+  FRENCH
+  BILINGUAL
+}
+
+enum OwnershipType {
+  PUBLIC
+  PRIVATE
+  MISSION
+}
+
+enum BoardingType {
+  DAY
+  BOARDING
+  BOTH
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  NEEDS_UPDATE
+}
+
+enum SecondarySection {
+  GENERAL
+  TECHNICAL
+}
+
+enum TechnicalTrack {
+  INDUSTRIAL
+  COMMERCIAL
+}
+
+enum QualificationType {
+  SCHOOL_LEAVING   // FSLC, GCE O/L, GCE A/L, Probatoire, Baccalauréat
+  DIPLOMA          // Technical/vocational diplomas
+  HND              // Higher National Diploma
+  BACHELOR         // First degree
+  MASTER           // Postgraduate
+  DOCTORATE        // PhD, DMA, etc.
+  OTHER
+}
+
+enum QualificationField {
+  SCIENCE
+  TECHNOLOGY
+  ARTS
+  BUSINESS
+  ENGINEERING
+  MEDICINE
+  LAW
+  EDUCATION
+  OTHER
+}
+
+enum IdentifierType {
+  MINESEC_RNE       // Secondary education
+  MINEDUB_RNE       // Higher education (French-speaking)
+  MINESUP_RNE       // Higher education (English-speaking)
+  OTHER
+}
+
+enum SourceType {
+  OFFICIAL_GOVERNMENT
+  OFFICIAL_SCHOOL_WEBSITE
+  MANUAL_ENTRY
+  PUBLIC_DIRECTORY
+  AI_EXTRACTED
+}
+
+enum SourceStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ImageUsageStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum AgentStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum CandidateStatus {
+  PENDING
+  REVIEWING
+  APPROVED
+  REJECTED
+  DUPLICATE
+}
+
+enum CandidateReviewStatus {
+  UNREVIEWED
+  REVIEWED
+  APPROVED
+  REJECTED
+}

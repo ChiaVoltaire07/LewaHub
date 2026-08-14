@@ -1,0 +1,146 @@
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border: none;
+  border-radius: var(--radius-md, 14px);
+  background: var(--forest, #1F5D45);
+  color: #fff;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--forest-dark, #164532);
+}
+
+.primaryButton:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.banner {
+  border: 1px solid var(--line, rgba(31, 93, 69, 0.25));
+  background: rgba(31, 93, 69, 0.06);
+  border-radius: var(--radius-md, 14px);
+  padding: 0.85rem 1rem;
+}
+
+.bannerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.bannerTitle {
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink, #14231C);
+}
+
+.exitButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border: none;
+  background: transparent;
+  color: var(--sienna, #C1572B);
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.exitButton:hover {
+  text-decoration: underline;
+}
+
+.radiusRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.radiusLabel {
+  font-size: 0.8rem;
+  color: var(--ink, #14231C);
+  opacity: 0.7;
+  margin-right: 0.25rem;
+}
+
+.radiusPill,
+.radiusPillActive {
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--forest, #1F5D45);
+  background: #fff;
+  color: var(--forest, #1F5D45);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.radiusPill:hover {
+  background: rgba(31, 93, 69, 0.1);
+}
+
+.radiusPillActive {
+  background: var(--forest, #1F5D45);
+  color: #fff;
+}
+
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(193, 87, 43, 0.3);
+  background: rgba(193, 87, 43, 0.08);
+  border-radius: var(--radius-md, 14px);
+}
+
+.errorText {
+  margin: 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.85rem;
+  color: var(--sienna, #C1572B);
+}
+
+.retryButton {
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--sienna, #C1572B);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--sienna, #C1572B);
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.retryButton:hover {
+  background: var(--sienna, #C1572B);
+  color: #fff;
+}

@@ -1,0 +1,228 @@
+{
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "title": "Find the Perfect School for Your Child",
+      "subtitle": "Discover, compare, and connect with thousands of verified schools across Cameroon. Make informed decisions for your child's future.",
+      "cta": "Start Searching",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "title": "Why Choose LewaHub?",
+      "subtitle": "We make school selection simple, transparent, and stress-free.",
+      "comprehensive": {
+        "title": "Comprehensive Database",
+        "desc": "Access detailed profiles of thousands of schools across all 10 regions of Cameroon."
+      },
+      "verified": {
+        "title": "Verified Information",
+        "desc": "Every school's data is verified through official documents and on-site visits."
+      },
+      "compare": {
+        "title": "Easy Comparison",
+        "desc": "Compare schools side by side based on fees, curriculum, facilities, and more."
+      }
+    },
+    "featured": {
+      "title": "Featured Schools",
+      "subtitle": "Top-rated schools hand-picked for excellence and verified quality.",
+      "viewAll": "View all schools",
+      "loading": "Loading...",
+      "error": "Error loading schools",
+      "empty": "No schools available"
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "subtitle": "Get the latest school listings, education news, and tips delivered to your inbox.",
+      "placeholder": "Enter your email",
+      "button": "Subscribe",
+      "success": "Thank you for subscribing!",
+      "error": "Something went wrong. Please try again."
+    }
+  },
+  "search": {
+    "title": "Search Schools",
+    "placeholder": "Search by school name, city, or region...",
+    "filters": "Filters",
+    "sortBy": "Sort by:",
+    "schoolsFound": "{{count}} School",
+    "schoolsFound_plural": "{{count}} Schools Found",
+    "viewDetails": "View Details",
+    "noResults": "No schools match your search criteria.",
+    "loading": "Searching schools...",
+    "error": "Error loading schools"
+  },
+  "about": {
+    "badge": "Education First",
+    "title": "Empowering Parents and Students Through",
+    "titleHighlight": "Verified Knowledge.",
+    "description": "At LewaHub, we believe every child deserves access to a quality education. We bridge the information gap by providing a comprehensive, transparent, and verified directory of schools across Cameroon.",
+    "mission": {
+      "title": "Our Mission",
+      "desc": "Our primary mission is to simplify the school selection process for families in Cameroon. We understand that choosing the right school is one of the most critical decisions a parent can make. By centralizing data on fees, curriculum, facilities, and location, we remove the stress and uncertainty from the process.",
+      "accessibility": "Accessibility",
+      "accessibilityDesc": "Making school data free and easy to access for everyone.",
+      "transparency": "Transparency",
+      "transparencyDesc": "Ensuring tuition and facility details are clear and honest."
+    },
+    "verification": {
+      "title": "How We Verify Schools",
+      "desc": "Trust is the foundation of our platform. Every school listed on LewaHub undergoes a multi-step verification process.",
+      "document": {
+        "title": "Document Review",
+        "desc": "We collect and review official registration documents from the Ministry of Secondary Education (MINESEC) or Basic Education (MINEDUB)."
+      },
+      "onsite": {
+        "title": "On-Site Confirmation",
+        "desc": "Our field agents conduct periodic visits to verify the existence of physical facilities and the accuracy of provided photos."
+      },
+      "feedback": {
+        "title": "Community Feedback",
+        "desc": "We moderate parent and student reviews to ensure that qualitative feedback reflects the real-world experience at the school."
+      }
+    },
+    "vision": {
+      "title": "LewaHub",
+      "desc": "By the year 2030, our goal is to have every legally registered primary and secondary school in Cameroon accessible via our platform. We aim to become the standard benchmark for educational transparency in Central Africa, fostering a healthy competition among schools to improve their facilities and educational outcomes.",
+      "schoolsVerified": "Schools Verified",
+      "monthlyUsers": "Monthly Users",
+      "regionsCovered": "Regions Covered"
+    },
+    "partners": "Trusted by Educational Partners"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Have questions about choosing the right school for your child? Our team of education experts is here to guide you through the process.",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "subject": "Subject",
+      "message": "Your Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Your message has been sent successfully! We'll get back to you soon.",
+      "error": "Failed to send message. Please try again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "hours": "Business Hours",
+      "hoursValue": "Monday - Friday: 8:00 AM - 5:00 PM"
+    }
+  },
+  "schoolDetails": {
+    "overview": "Overview",
+    "programs": "Programs",
+    "fees": "Tuition & Fees",
+    "location": "Location",
+    "facilities": "Facilities",
+    "reviews": "Reviews",
+    "contact": "Contact School",
+    "visitWebsite": "Visit Website",
+    "notFound": "School not found",
+    "loading": "Loading school details...",
+    "error": "Failed to load school details"
+  },
+  "footer": {
+    "tagline": "Connecting students, parents and learners with trusted education institutions across Cameroon.",
+    "exploreTitle": "Explore",
+    "lewahubTitle": "LewaHub",
+    "legalTitle": "Legal",
+    "contactTitle": "Contact",
+    "findSchools": "Find Schools",
+    "primaryNursery": "Primary & Nursery",
+    "secondarySchools": "Secondary Schools",
+    "technicalSchools": "Technical Schools",
+    "universities": "Universities",
+    "programs": "Programs",
+    "aboutUs": "About Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "© {{year}} LewaHub. All rights reserved.",
+    "email": "support@LewaHub.cm",
+    "location": "Yaoundé, Cameroon"
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "updated": "Last updated: August 2026",
+      "intro": "This Privacy Policy explains what information LewaHub handles, where that information comes from, and how it is used. Please read it alongside our Terms of Service.",
+      "disclaimer": "Information displayed on LewaHub may come from schools, public sources, official websites, or other documented sources. Although we work to keep information accurate and current, LewaHub does not guarantee that every listing is complete, current, or error-free.",
+      "sections": [
+        { "h": "Introduction", "p": "LewaHub is an educational directory that helps students, parents and learners discover and compare schools across Cameroon. This Privacy Policy describes the information we handle and the choices available to you." },
+        { "h": "Information We Collect", "p": "We handle four types of information: (1) information supplied by schools, such as names, contact details, fees and program descriptions; (2) publicly available information, such as details published on official school websites or government registries; (3) information you submit directly, for example through our contact form; and (4) anonymous usage information collected automatically, such as which pages are visited." },
+        { "h": "School Information", "p": "Schools provide information about their institution, including name, location, contact details, fees, programs and facilities. We may also collect information that is already publicly available from official websites, government registries (such as MINESEC and MINEDUB) and other documented sources." },
+        { "h": "How We Use Information", "p": "We use the information we handle to build and maintain school listings, to power search and comparison features, to show nearby schools, to respond to messages submitted through our contact form, and to improve and protect the LewaHub service." },
+        { "h": "Location Information", "p": "We store the geographic coordinates and address of each school so that visitors can find and compare institutions by location. If you use our nearby-school feature, your approximate location is used to calculate distances. We do not sell location information." },
+        { "h": "Images and Media", "p": "School images are provided by the schools or taken from publicly available sources. We display these images on school listings. If you believe an image should not appear on LewaHub, please contact us and we will review your request." },
+        { "h": "Analytics and Anonymous Usage Data", "p": "We may collect anonymous usage data, such as the pages visited and the number of views of each school listing, to understand how LewaHub is used and to improve the service. This data is aggregated and does not identify individual users." },
+        { "h": "Data Sources", "p": "Information displayed on LewaHub comes from schools themselves, public sources, official websites, government registries and other documented sources." },
+        { "h": "Data Accuracy", "p": "Information displayed on LewaHub may come from schools, public sources, official websites, or other documented sources. Although we work to keep information accurate and current, LewaHub does not guarantee that every listing is complete, current, or error-free." },
+        { "h": "Third-Party Services", "p": "LewaHub may use third-party services such as embedded maps and analytics tools. These services are governed by their own privacy policies, and we encourage you to review them." },
+        { "h": "Data Security", "p": "We apply reasonable technical and organizational measures to protect the information we handle. However, no method of transmission over the internet is completely secure, and we cannot guarantee absolute security." },
+        { "h": "Data Retention", "p": "We retain school listing information for as long as the school remains listed on LewaHub. Messages submitted through our contact form are retained only for as long as necessary to respond to your request." },
+        { "h": "User Rights", "p": "Where applicable law provides for such rights, you may request access to, correction of, or deletion of your personal information. To make such a request, please contact us using the details below." },
+        { "h": "Children's Privacy", "p": "LewaHub is a directory of educational institutions. School information displayed on the platform is institutional in nature. We do not knowingly collect personal information from children." },
+        { "h": "Changes to This Policy", "p": "We may update this Privacy Policy from time to time. When we do, we will revise the 'Last updated' date above. Your continued use of LewaHub after changes are posted means you accept the updated policy." },
+        { "h": "Contact", "p": "For questions about this Privacy Policy or about your personal information, contact us at support@LewaHub.cm, Yaoundé, Cameroon." }
+      ]
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "updated": "Last updated: August 2026",
+      "intro": "These Terms of Service govern your use of the LewaHub website and services. Please read them carefully before using the platform.",
+      "disclaimer": "LewaHub provides educational information for discovery and comparison. Users should independently verify important admissions, fees, examination, enrollment, and institutional information with the relevant institution.",
+      "sections": [
+        { "h": "Acceptance of Terms", "p": "By accessing or using LewaHub, you agree to these Terms of Service. If you do not agree with any part of these terms, please do not use the service." },
+        { "h": "About LewaHub", "p": "LewaHub is an educational directory and catalog. It is not a school, a government authority, an examination board, or an accreditation body. We provide a platform for discovering and comparing educational institutions." },
+        { "h": "Educational Directory Purpose", "p": "LewaHub provides educational information for discovery and comparison. Users should independently verify important admissions, fees, examination, enrollment, and institutional information with the relevant institution." },
+        { "h": "School Information", "p": "School listings may include information supplied by the schools themselves, as well as information gathered from public sources, official websites, and other documented sources." },
+        { "h": "Accuracy and Verification", "p": "School information can change, and not every listing has been independently verified. Although we work to keep information accurate and current, we do not guarantee that every listing is complete, current, or error-free. Always confirm important details directly with the institution." },
+        { "h": "Third-Party / External Links", "p": "LewaHub may link to external websites operated by third parties. We are not responsible for the content or practices of those websites, and we encourage you to review their own terms and privacy policies." },
+        { "h": "User Responsibilities", "p": "When you use LewaHub, you agree to use the service lawfully and not to interfere with its operation. If you submit information through our contact form, you agree to provide accurate and lawful content." },
+        { "h": "Prohibited Use", "p": "You may not use LewaHub to: engage in unlawful activity; attempt to gain unauthorized access to the service; submit misleading or fraudulent information; or use automated means that disrupt or overload the platform." },
+        { "h": "Intellectual Property", "p": "The LewaHub name, logo and platform design belong to LewaHub. School information displayed on the platform is provided by the schools or obtained from public sources, and rights in that content remain with their respective owners." },
+        { "h": "Images and Content", "p": "Images and other content on school listings are displayed as provided by the schools or obtained from public sources. Ownership of such content remains with its original owners." },
+        { "h": "Service Availability", "p": "LewaHub is provided on an 'as is' and 'as available' basis. We do not guarantee that the service will be uninterrupted, error-free, or always available." },
+        { "h": "Limitation of Liability", "p": "To the fullest extent permitted by law, LewaHub is not liable for any direct, indirect, incidental, or consequential damages arising from your use of the service or from decisions made based on information displayed on the platform. The platform is a directory, and decisions about education should always be made with reference to the relevant institution." },
+        { "h": "Changes to the Service", "p": "We may add, change, or remove features of LewaHub at any time without prior notice." },
+        { "h": "Changes to These Terms", "p": "We may update these Terms of Service from time to time. Changes will be posted on this page. Your continued use of LewaHub after changes are posted means you accept the updated terms." },
+        { "h": "Contact", "p": "For questions about these Terms of Service, contact us at support@LewaHub.cm, Yaoundé, Cameroon." }
+      ]
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "back": "Back",
+    "close": "Close",
+    "menu": "Menu",
+    "switchLanguage": "Switch language"
+  },
+  "nearby": {
+    "useMyLocation": "Find schools near me",
+    "locating": "Locating you…",
+    "searching": "Searching nearby schools…",
+    "within": "{{count}} school found within {{radius}} km of your location",
+    "within_plural": "{{count}} schools found within {{radius}} km of your location",
+    "radiusLabel": "Search radius:",
+    "exit": "Exit",
+    "nearestFirst": "Nearest first",
+    "denied": "Location access was denied. Please allow location in your browser settings and try again.",
+    "unavailable": "Your location could not be determined. Please try again.",
+    "timeout": "Location request timed out. Please try again.",
+    "unsupported": "Your browser does not support location services. Try a different browser to find schools near you.",
+    "error": "Something went wrong while finding nearby schools. Please try again.",
+    "noSchoolsWithin": "No schools found within {{radius}} km. Try expanding your search radius.",
+    "you": "You are here"
+  }
+}

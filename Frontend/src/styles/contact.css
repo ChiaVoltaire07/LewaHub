@@ -1,0 +1,23 @@
+.contact-page {
+  --color-teal-primary: #006d5b;
+  --color-teal-dark: #004f42;
+  --color-teal-light: #e8f5f2;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+@keyframes contact-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-page .contact-toast {
+  animation: contact-slide-up 0.35s ease-out;
+}
