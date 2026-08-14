@@ -1,0 +1,30 @@
+{
+  "name": "lewahub",
+  "version": "1.0.0",
+  "description": "**Find the right verified school**",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "start": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChiaVoltaire07/LewaHub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ChiaVoltaire07/LewaHub/issues"
+  },
+  "homepage": "https://github.com/ChiaVoltaire07/LewaHub#readme",
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.0.5",
+    "vite": "^8.2.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}

@@ -2,6 +2,17 @@
 
 **Find the right verified school**
 
+## Run the anonymous review page
+
+From the project root:
+
+```bash
+npm install
+npm start
+```
+
+Open `http://localhost:5173` in your browser. To create a production build, run `npm run build`.
+
 A school discovery platform for Cameroon — covering Primary/Nursery, Secondary, and University
 schools, with location-based search, verified student ratings, and an admin panel for managing
 the catalog.
