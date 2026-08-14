@@ -2,10 +2,10 @@
   "name": "lewahub",
   "private": true,
   "scripts": {
-    "build": "cd Backend && npx prisma generate",
+    "build": "cd Backend && npm install && npx prisma generate",
     "start": "cd Backend && npm start"
   },
   "engines": {
-    "node": ">=18"
+    "node": "20.x"
   }
 }
