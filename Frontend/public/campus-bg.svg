@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eef7f2"/>
+      <stop offset="100%" stop-color="#f8fbf9"/>
+    </linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cde8d8"/>
+      <stop offset="100%" stop-color="#b5dcc6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1440" height="720" fill="url(#sky)"/>
+  <!-- Sun -->
+  <circle cx="1180" cy="120" r="60" fill="#fde68a" opacity="0.7"/>
+  <!-- Clouds -->
+  <g fill="#ffffff" opacity="0.8">
+    <ellipse cx="300" cy="110" rx="90" ry="30"/>
+    <ellipse cx="360" cy="95" rx="60" ry="24"/>
+    <ellipse cx="900" cy="160" rx="100" ry="32"/>
+    <ellipse cx="970" cy="145" rx="60" ry="22"/>
+  </g>
+  <!-- Back hill -->
+  <path d="M0 520 Q360 380 720 470 T1440 430 L1440 720 L0 720 Z" fill="url(#hill)"/>
+  <!-- Ground -->
+  <rect y="560" width="1440" height="160" fill="#d9efe2"/>
+  <!-- Buildings -->
+  <g fill="#ffffff" stroke="#cbd5e1" stroke-width="2">
+    <rect x="120" y="360" width="150" height="200" rx="6"/>
+    <rect x="300" y="300" width="180" height="260" rx="6"/>
+    <rect x="520" y="380" width="140" height="180" rx="6"/>
+    <rect x="700" y="330" width="170" height="230" rx="6"/>
+    <rect x="920" y="370" width="150" height="190" rx="6"/>
+    <rect x="1110" y="310" width="180" height="250" rx="6"/>
+  </g>
+  <!-- Windows -->
+  <g fill="#bfdbfe">
+    <rect x="140" y="390" width="24" height="30" rx="3"/>
+    <rect x="180" y="390" width="24" height="30" rx="3"/>
+    <rect x="220" y="390" width="24" height="30" rx="3"/>
+    <rect x="140" y="440" width="24" height="30" rx="3"/>
+    <rect x="180" y="440" width="24" height="30" rx="3"/>
+    <rect x="220" y="440" width="24" height="30" rx="3"/>
+    <rect x="320" y="330" width="24" height="30" rx="3"/>
+    <rect x="360" y="330" width="24" height="30" rx="3"/>
+    <rect x="400" y="330" width="24" height="30" rx="3"/>
+    <rect x="320" y="380" width="24" height="30" rx="3"/>
+    <rect x="360" y="380" width="24" height="30" rx="3"/>
+    <rect x="400" y="380" width="24" height="30" rx="3"/>
+    <rect x="320" y="430" width="24" height="30" rx="3"/>
+    <rect x="360" y="430" width="24" height="30" rx="3"/>
+    <rect x="400" y="430" width="24" height="30" rx="3"/>
+    <rect x="540" y="410" width="24" height="30" rx="3"/>
+    <rect x="580" y="410" width="24" height="30" rx="3"/>
+    <rect x="620" y="410" width="24" height="30" rx="3"/>
+    <rect x="720" y="360" width="24" height="30" rx="3"/>
+    <rect x="760" y="360" width="24" height="30" rx="3"/>
+    <rect x="800" y="360" width="24" height="30" rx="3"/>
+    <rect x="720" y="410" width="24" height="30" rx="3"/>
+    <rect x="760" y="410" width="24" height="30" rx="3"/>
+    <rect x="800" y="410" width="24" height="30" rx="3"/>
+    <rect x="940" y="400" width="24" height="30" rx="3"/>
+    <rect x="980" y="400" width="24" height="30" rx="3"/>
+    <rect x="1020" y="400" width="24" height="30" rx="3"/>
+    <rect x="1130" y="340" width="24" height="30" rx="3"/>
+    <rect x="1170" y="340" width="24" height="30" rx="3"/>
+    <rect x="1210" y="340" width="24" height="30" rx="3"/>
+    <rect x="1130" y="390" width="24" height="30" rx="3"/>
+    <rect x="1170" y="390" width="24" height="30" rx="3"/>
+    <rect x="1210" y="390" width="24" height="30" rx="3"/>
+  </g>
+  <!-- Roofs -->
+  <g fill="#0A3B2C">
+    <path d="M110 360 L195 300 L280 360 Z"/>
+    <path d="M290 300 L390 230 L490 300 Z"/>
+    <path d="M510 380 L590 330 L670 380 Z"/>
+    <path d="M690 330 L785 270 L880 330 Z"/>
+    <path d="M910 370 L995 320 L1080 370 Z"/>
+    <path d="M1100 310 L1200 240 L1300 310 Z"/>
+  </g>
+  <!-- Trees -->
+  <g>
+    <rect x="80" y="500" width="14" height="60" fill="#8b5a2b"/>
+    <circle cx="87" cy="480" r="40" fill="#34d399"/>
+    <rect x="1330" y="500" width="14" height="60" fill="#8b5a2b"/>
+    <circle cx="1337" cy="480" r="40" fill="#34d399"/>
+    <rect x="1380" y="520" width="12" height="50" fill="#8b5a2b"/>
+    <circle cx="1386" cy="500" r="34" fill="#10b981"/>
+  </g>
+</svg>
