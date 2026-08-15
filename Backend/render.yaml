@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: streamcm-backend
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: streamcm-postgres
+          property: connectionString
+    healthCheckPath: /health # Add a simple health endpoint
+
+databases:
+  - name: streamcm-postgres
+    plan: free
+    databaseName: streamcm
+    region: oregon # or closest to Cameroon (eu-west-1 for Europe)

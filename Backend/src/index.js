@@ -10,3 +10,6 @@ const server = app.listen(config.port, () => {
 server.timeout = config.serverTimeoutMs; // idle socket timeout
 server.headersTimeout = config.serverHeadersTimeoutMs; // max time to receive headers
 server.requestTimeout = config.serverTimeoutMs; // max time for a request to complete
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
