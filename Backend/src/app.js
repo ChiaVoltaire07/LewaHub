@@ -20,10 +20,12 @@ app.set("trust proxy", config.isProduction ? 1 : false);
 app.get("/api/v1/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
-
 // Enforce HTTPS in production: redirect all plain HTTP to HTTPS.
 if (config.isProduction) {
   app.use((req, res, next) => {
+    // Skip health check
+    if (req.path === "/api/v1/health") return next();
+    
     if (req.secure) return next();
     const host = req.headers.host || "localhost";
     return res.redirect(301, `https://${host}${req.originalUrl}`);
