@@ -14,8 +14,12 @@ import adminRoutes from "./modules/admin/adminRoutes.js";
 export const app = express();
 
 // Trust the first hop so req.ip and rate limiting see the real client IP
-// when running behind a reverse proxy / load balancer (production).
 app.set("trust proxy", config.isProduction ? 1 : false);
+
+// ✅ Health check BEFORE HTTPS redirect
+app.get("/api/v1/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
 // Enforce HTTPS in production: redirect all plain HTTP to HTTPS.
 if (config.isProduction) {
@@ -26,8 +30,7 @@ if (config.isProduction) {
   });
 }
 
-// Security headers. HSTS is active only over HTTPS responses; the header is
-// intentionally not sent in development so localhost HTTP browsing is unaffected.
+// Security headers...
 app.use(
   helmet({
     hsts: config.isProduction
@@ -38,13 +41,12 @@ app.use(
   })
 );
 
-// Locked CORS: only explicitly configured origins are allowed.
-// In production the localhost defaults are NOT included (see config/env.js).
+// CORS...
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // same-origin / server-to-server / curl
+    if (!origin) return callback(null, true);
     if (config.corsAllowedOrigins.includes(origin)) return callback(null, true);
-    return callback(null, false); // block: no CORS headers => browser rejects
+    return callback(null, false);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -57,26 +59,20 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(cookieParser());
 
-// Rate limiting: broad global protection plus a stricter cap for AI search.
+// Rate limiting
 app.use("/api/v1/", globalLimiter);
 app.use("/api/v1/search", searchLimiter);
 
+// Routes
 app.use("/api/v1/schools", schoolsRoutes);
 app.use("/api/v1/search", searchRoutes);
-
-// Admin API: tight login rate limit, then the admin namespace.
 app.use("/api/v1/admin/auth/login", adminLoginLimiter);
 app.use("/api/v1/admin", adminRoutes);
 
-// Health check
-app.get("/api/v1/health", (req, res) => {
-  res.json({ status: "ok", timestamp: new Date().toISOString() });
-});
-
-// 404 handler (must come before error handler)
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
 
-// Error handling middleware (must be last)
+// Error handler
 app.use(errorHandler);
