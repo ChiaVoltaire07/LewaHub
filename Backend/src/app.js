@@ -11,6 +11,27 @@ import schoolsRoutes from "./modules/schools/schoolsRoutes.js";
 import searchRoutes from "./modules/search/searchRoutes.js";
 import adminRoutes from "./modules/admin/adminRoutes.js";
 
+import cors from 'cors';
+
+const allowedOrigins = [
+  'https://lewa-hub.vercel.app',
+  'http://localhost:5173', // for local testing
+  'http://localhost:3000',  // if you test locally on different ports
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 export const app = express();
 
 // Trust the first hop so req.ip and rate limiting see the real client IP
