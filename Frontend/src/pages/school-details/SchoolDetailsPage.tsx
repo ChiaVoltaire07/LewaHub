@@ -1,14 +1,42 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../../styles/school-details.css";
 import HeroBanner from "./components/HeroBanner";
 import StatusBadges from "./components/StatusBadges";
 import MainContent from "./components/MainContent";
 import BottomActionBar from "./components/BottomActionBar";
+import { SchoolContext } from "./context/SchoolContext";
+import api from "../../lib/api";
+import type { SchoolDetail } from "../../types/school";
 
 export default function SchoolDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const [school, setSchool] = useState<SchoolDetail | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const loadSchool = async () => {
+    if (!id) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    const response = await api.getSchool(id);
+    if (!response.ok) {
+      setError(response.error || "Failed to load school details.");
+      setSchool(null);
+    } else {
+      setSchool(response.data as SchoolDetail);
+      setError(null);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadSchool();
+  }, [id]);
 
   const scrollToMap = () => {
     if (mapRef.current) {
@@ -17,13 +45,15 @@ export default function SchoolDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col school-details-page">
-      <main className="flex-1">
-        <HeroBanner schoolId={id} />
-        <StatusBadges schoolId={id} />
-        <MainContent mapRef={mapRef} schoolId={id} />
-      </main>
-      <BottomActionBar scrollToMap={scrollToMap} schoolId={id} />
-    </div>
+    <SchoolContext.Provider value={{ school, error, loading }}>
+      <div className="min-h-screen flex flex-col school-details-page">
+        <main className="flex-1">
+          <HeroBanner />
+          <StatusBadges />
+          <MainContent mapRef={mapRef} />
+        </main>
+        <BottomActionBar scrollToMap={scrollToMap} />
+      </div>
+    </SchoolContext.Provider>
   );
 }

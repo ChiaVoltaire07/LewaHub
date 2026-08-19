@@ -1,34 +1,16 @@
-import { useEffect, useState } from 'react';
 import { Phone, MapPin, ExternalLink } from 'lucide-react';
-import api from '../../../lib/api';
-import { SchoolDetail } from '../../../types/school';
+import { useSchool } from '../context/SchoolContext';
 
 interface BottomActionBarProps {
   scrollToMap: () => void;
-  schoolId?: string;
 }
 
 /**
  * Sticky bottom action bar. Only renders real contact links — no hardcoded
  * placeholder phone numbers or "#" website links.
  */
-function BottomActionBar({ scrollToMap, schoolId }: BottomActionBarProps) {
-  const [school, setSchool] = useState<SchoolDetail | null>(null);
-
-  useEffect(() => {
-    if (!schoolId) return;
-    const loadSchool = async () => {
-      try {
-        const response = await api.getSchool(schoolId);
-        if (!response.error && response.data) {
-          setSchool(response.data as SchoolDetail);
-        }
-      } catch (err) {
-        console.error('Failed to load school for action bar:', err);
-      }
-    };
-    loadSchool();
-  }, [schoolId]);
+function BottomActionBar({ scrollToMap }: BottomActionBarProps) {
+  const { school } = useSchool();
 
   return (
     <div className="sticky bottom-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">

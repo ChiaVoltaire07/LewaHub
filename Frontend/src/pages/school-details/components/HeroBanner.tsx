@@ -1,47 +1,26 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MapPin } from 'lucide-react';
-import api from '../../../lib/api';
 import SmartImage from '../../../components/skeletons/SmartImage';
 import { HeroSkeleton } from '../../../components/skeletons/SchoolDetailsSkeleton';
-import { SchoolDetail } from '../../../types/school';
+import { useSchool } from '../context/SchoolContext';
 
 const DEFAULT_SCHOOL_IMAGE =
   'https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80';
 
-interface HeroBannerProps {
-  schoolId?: string;
-}
-
-function HeroBanner({ schoolId }: HeroBannerProps) {
+function HeroBanner() {
   const { t } = useTranslation();
-  const [school, setSchool] = useState<SchoolDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!schoolId) {
-      setLoading(false);
-      return;
-    }
-
-    const loadSchool = async () => {
-      try {
-        const response = await api.getSchool(schoolId);
-        if (!response.error && response.data) {
-          setSchool(response.data as SchoolDetail);
-        }
-      } catch (err) {
-        console.error('Failed to load school details:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSchool();
-  }, [schoolId]);
+  const { school, error, loading } = useSchool();
 
   if (loading) {
     return <HeroSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <section className="relative h-[50vh] sm:h-[55vh] md:h-[60vh] lg:h-[65vh] min-h-[400px] overflow-hidden bg-red-50 flex items-center justify-center">
+        <p className="text-red-600 text-lg">{error}</p>
+      </section>
+    );
   }
 
   const fallbackLetter = (

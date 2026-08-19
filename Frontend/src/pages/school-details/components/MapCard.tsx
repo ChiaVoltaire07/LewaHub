@@ -1,20 +1,11 @@
 import { useEffect, useState } from 'react';
 import { MapPin, MapPinOff, Phone, ExternalLink, LocateFixed } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
 import type { RefObject } from 'react';
-import 'leaflet/dist/leaflet.css';
-import api from '../../../lib/api';
+import { useSchool } from '../context/SchoolContext';
 import MapSkeleton from '../../../components/skeletons/MapSkeleton';
-import { SchoolDetail } from '../../../types/school';
 
-// Fixed, responsive map height used by the map, the loading skeleton and the
-// empty state alike. Keeping the height constant across states prevents the
-// page from jumping while the school (and its coordinates) are being loaded.
 const MAP_HEIGHT_CLASSES = 'h-64 sm:h-72 lg:h-80';
 
-// Cameroon default (Yaoundé) used only when coordinates are missing — the map
-// itself is hidden in that case; this guards the initial center before load.
 const defaultPosition: [number, number] = [3.8863, 11.5165];
 const MAP_ZOOM = 15;
 
@@ -31,28 +22,11 @@ const SCHOOL_PIN_SVG = `
   <circle cx="17" cy="17" r="3.2" fill="#C1572B"/>
 </svg>`;
 
-const schoolPinIcon = L.divIcon({
-  className: 'school-map-pin',
-  html: SCHOOL_PIN_SVG,
-  iconSize: [34, 44],
-  iconAnchor: [17, 44],
-  popupAnchor: [0, -40],
-});
-
 interface MapCardProps {
   mapRef: RefObject<HTMLDivElement>;
-  schoolId?: string;
 }
 
-/**
- * Keeps the Leaflet map centred and correctly sized. Leaflet measures its
- * container at init time, so while a route transition or lazy layout is still
- * animating the map can render blank/gray tiles. We invalidate the size on a
- * few ticks (initial mount, tiles ready, and after layout settles) plus on
- * window resize — this makes the map stable without depending on animation
- * callbacks from the page shell.
- */
-function MapUpdater({ position }: { position: [number, number] }) {
+function MapUpdater({ position, useMap }: { position: [number, number]; useMap: any }) {
   const map = useMap();
 
   useEffect(() => {
@@ -90,9 +64,16 @@ function MapUpdater({ position }: { position: [number, number] }) {
   return null;
 }
 
-function MapCard({ mapRef, schoolId }: MapCardProps) {
-  const [school, setSchool] = useState<SchoolDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+function MapCard({ mapRef }: MapCardProps) {
+  const { school, loading } = useSchool();
+  const [MapComponents, setMapComponents] = useState<{
+    MapContainer: any;
+    TileLayer: any;
+    Marker: any;
+    Popup: any;
+    useMap: any;
+    L: any;
+  } | null>(null);
 
   const hasCoords =
     !!school &&
@@ -103,29 +84,46 @@ function MapCard({ mapRef, schoolId }: MapCardProps) {
     : defaultPosition;
 
   useEffect(() => {
-    if (!schoolId) {
-      setLoading(false);
-      return;
-    }
+    if (!hasCoords || !school) return;
 
-    const loadSchool = async () => {
+    let cancelled = false;
+    const loadLeaflet = async () => {
       try {
-        const response = await api.getSchool(schoolId);
-        if (!response.error && response.data) {
-          setSchool(response.data as SchoolDetail);
+        const leaflet = await import('leaflet');
+        await import('leaflet/dist/leaflet.css');
+        const reactLeaflet = await import('react-leaflet');
+        if (!cancelled) {
+          setMapComponents({
+            MapContainer: reactLeaflet.MapContainer,
+            TileLayer: reactLeaflet.TileLayer,
+            Marker: reactLeaflet.Marker,
+            Popup: reactLeaflet.Popup,
+            useMap: reactLeaflet.useMap,
+            L: leaflet.default,
+          });
         }
-      } catch (err) {
-        console.error('Failed to load school for map:', err);
-      } finally {
-        setLoading(false);
+      } catch {
+        // Leaflet failed to load — show empty state
       }
     };
 
-    loadSchool();
-  }, [schoolId]);
+    loadLeaflet();
+    return () => { cancelled = true; };
+  }, [hasCoords, school]);
 
-  const showMap = !loading && hasCoords;
+  const showMap = !loading && hasCoords && !!MapComponents;
   const showEmpty = !loading && !hasCoords;
+  const showLoading = loading;
+
+  const schoolPinIcon = MapComponents
+    ? MapComponents.L.divIcon({
+        className: 'school-map-pin',
+        html: SCHOOL_PIN_SVG,
+        iconSize: [34, 44],
+        iconAnchor: [17, 44],
+        popupAnchor: [0, -40],
+      })
+    : null;
 
   return (
     <div
@@ -143,20 +141,20 @@ function MapCard({ mapRef, schoolId }: MapCardProps) {
 
       <div className="relative">
         {showMap && (
-          <MapContainer
+          <MapComponents.MapContainer
             center={position}
             zoom={MAP_ZOOM}
             scrollWheelZoom={false}
             maxZoom={18}
             className={`${MAP_HEIGHT_CLASSES} w-full`}
           >
-            <TileLayer
+            <MapComponents.TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <MapUpdater position={position} />
-            <Marker position={position} icon={schoolPinIcon}>
-              <Popup>
+            <MapUpdater position={position} useMap={MapComponents.useMap} />
+            <MapComponents.Marker position={position} icon={schoolPinIcon}>
+              <MapComponents.Popup>
                 <div className="map-popup">
                   <strong className="block text-sm font-bold text-gray-900">
                     {school?.name}
@@ -165,12 +163,12 @@ function MapCard({ mapRef, schoolId }: MapCardProps) {
                     {school?.address}
                   </span>
                 </div>
-              </Popup>
-            </Marker>
-          </MapContainer>
+              </MapComponents.Popup>
+            </MapComponents.Marker>
+          </MapComponents.MapContainer>
         )}
 
-        {loading && (
+        {showLoading && (
           <div className={MAP_HEIGHT_CLASSES}>
             <MapSkeleton className="h-full rounded-none border-0" />
           </div>

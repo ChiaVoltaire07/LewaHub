@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Menu } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -43,7 +44,7 @@ const Navbar = () => {
         <div className="flex items-center gap-sm">
          
           <button className="md:hidden text-primary">
-            <span className="material-symbols-outlined">menu</span>
+            <Menu className="w-6 h-6" />
           </button>
         </div>
       </div>

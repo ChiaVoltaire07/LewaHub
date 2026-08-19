@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { CheckCircle2, FileText, MapPin, Star } from "lucide-react";
 
 const About = () => {
   const { t } = useTranslation();
@@ -50,14 +51,14 @@ const About = () => {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-md mt-md">
                   <div className="flex items-start gap-sm">
-                    <span className="material-symbols-outlined text-primary" style={{fontVariationSettings: "'FILL' 1"}}>task_alt</span>
+                    <CheckCircle2 className="w-6 h-6 text-primary" fill="currentColor" />
                     <div>
                       <h4 className="font-label-md text-label-md text-on-surface">{t("about.mission.accessibility")}</h4>
                       <p className="font-body-md text-body-md text-on-surface-variant">{t("about.mission.accessibilityDesc")}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-sm">
-                    <span className="material-symbols-outlined text-primary" style={{fontVariationSettings: "'FILL' 1"}}>task_alt</span>
+                    <CheckCircle2 className="w-6 h-6 text-primary" fill="currentColor" />
                     <div>
                       <h4 className="font-label-md text-label-md text-on-surface">{t("about.mission.transparency")}</h4>
                       <p className="font-body-md text-body-md text-on-surface-variant">{t("about.mission.transparencyDesc")}</p>
@@ -79,7 +80,7 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
             <div className="p-md rounded-2xl bg-surface border border-outline-variant shadow-sm hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center mb-sm">
-                <span className="material-symbols-outlined">description</span>
+                <span className="text-primary"><FileText className="w-6 h-6" /></span>
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">{t("about.verification.document.title")}</h3>
               <p className="font-body-md text-body-md text-on-surface-variant">
@@ -89,7 +90,7 @@ const About = () => {
            
             <div className="p-md rounded-2xl bg-surface border border-outline-variant shadow-sm hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center mb-sm">
-                <span className="material-symbols-outlined">location_on</span>
+                <span className="text-primary"><MapPin className="w-6 h-6" /></span>
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">{t("about.verification.onsite.title")}</h3>
               <p className="font-body-md text-body-md text-on-surface-variant">
@@ -99,7 +100,7 @@ const About = () => {
            
             <div className="p-md rounded-2xl bg-surface border border-outline-variant shadow-sm hover:shadow-md transition-all">
               <div className="w-12 h-12 bg-primary-container text-on-primary-container rounded-xl flex items-center justify-center mb-sm">
-                <span className="material-symbols-outlined">reviews</span>
+                <span className="text-primary"><Star className="w-6 h-6" /></span>
               </div>
               <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">{t("about.verification.feedback.title")}</h3>
               <p className="font-body-md text-body-md text-on-surface-variant">

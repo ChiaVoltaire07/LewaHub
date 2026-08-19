@@ -1,12 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Globe, Mail, Phone } from 'lucide-react';
-import api from '../../../lib/api';
 import { InfoCardSkeleton } from '../../../components/skeletons/SchoolDetailsSkeleton';
-import { SchoolDetail } from '../../../types/school';
-
-interface SchoolInfoCardProps {
-  schoolId?: string;
-}
+import { useSchool } from '../context/SchoolContext';
 
 const INFO_COLORS = {
   website: { color: '#1F5D45', bg: 'rgba(31, 93, 69, 0.12)' },
@@ -14,31 +8,8 @@ const INFO_COLORS = {
   phone: { color: '#E8A93B', bg: 'rgba(232, 169, 59, 0.15)' },
 };
 
-function SchoolInfoCard({ schoolId }: SchoolInfoCardProps) {
-  const [school, setSchool] = useState<SchoolDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!schoolId) {
-      setLoading(false);
-      return;
-    }
-
-    const loadSchool = async () => {
-      try {
-        const response = await api.getSchool(schoolId);
-        if (!response.error && response.data) {
-          setSchool(response.data as SchoolDetail);
-        }
-      } catch (err) {
-        console.error('Failed to load school info:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSchool();
-  }, [schoolId]);
+function SchoolInfoCard() {
+  const { school, error, loading } = useSchool();
 
   const infoItems = school ? [
     ...(school.website ? [{
@@ -69,6 +40,14 @@ function SchoolInfoCard({ schoolId }: SchoolInfoCardProps) {
 
   if (loading) {
     return <InfoCardSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 sm:p-6">
+        <p className="text-sm text-red-600">{error}</p>
+      </div>
+    );
   }
 
   return (

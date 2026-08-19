@@ -1,43 +1,33 @@
-import { useEffect, useState } from 'react';
 import FeeCard from './FeeCard';
 import AcademicProgramCard from './AcademicProgramCard';
 import MapCard from './MapCard';
 import SchoolInfoCard from './SchoolInfoCard';
-import api from '../../../lib/api';
 import SmartImage from '../../../components/skeletons/SmartImage';
-import { SchoolDetail } from '../../../types/school';
+import { useSchool } from '../context/SchoolContext';
 import type { RefObject } from 'react';
 
 interface MainContentProps {
   mapRef: RefObject<HTMLDivElement>;
-  schoolId?: string;
 }
 
-function MainContent({ mapRef, schoolId }: MainContentProps) {
-  const [school, setSchool] = useState<SchoolDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+function MainContent({ mapRef }: MainContentProps) {
+  const { school, error, loading } = useSchool();
 
-  useEffect(() => {
-    if (!schoolId) {
-      setLoading(false);
-      return;
-    }
-
-    const loadSchool = async () => {
-      try {
-        const response = await api.getSchool(schoolId);
-        if (!response.error && response.data) {
-          setSchool(response.data as SchoolDetail);
-        }
-      } catch (err) {
-        console.error('Failed to load school details:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSchool();
-  }, [schoolId]);
+  if (error && !loading) {
+    return (
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+          <p className="text-red-600 font-medium">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-3 text-sm text-red-700 underline hover:text-red-900"
+          >
+            Try again
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
@@ -49,7 +39,7 @@ function MainContent({ mapRef, schoolId }: MainContentProps) {
             <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 sm:p-6">
               <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Campus & Facilities</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {school.images.map((img) => (
+                {school.images.map((img: { id: string; url: string; caption?: string }) => (
                   <figure key={img.id} className="overflow-hidden rounded-lg border border-gray-100">
                     <div className="h-40 sm:h-48">
                       <SmartImage
@@ -76,8 +66,8 @@ function MainContent({ mapRef, schoolId }: MainContentProps) {
         </div>
 
         <div className="space-y-6 sm:space-y-8">
-          <MapCard mapRef={mapRef} schoolId={schoolId} />
-          <SchoolInfoCard schoolId={schoolId} />
+          <MapCard mapRef={mapRef} />
+          <SchoolInfoCard />
         </div>
       </div>
     </section>

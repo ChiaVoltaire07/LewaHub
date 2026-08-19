@@ -1,31 +1,30 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import HomePage from "./features/home/pages/HomePage";
-import { SearchPage } from "./features/search";
-import About from "./pages/about/About";
-import ContactPage from "./pages/contact/ContactPage";
-import SchoolDetailsPage from "./pages/school-details/SchoolDetailsPage";
-import PrivacyPolicyPage from "./pages/privacy/PrivacyPolicyPage";
-import TermsPage from "./pages/terms/TermsPage";
 
-// Admin imports
-import {
-  AdminAuthProvider,
-  AdminRoute,
-  AdminLayout,
-  LoginPage,
-  DashboardPage,
-  SchoolsPage,
-  SchoolDetailsPage as AdminSchoolDetailsPage,
-  EditSchoolPage,
-  CreateSchoolPage,
-  ImagesPage,
-  SettingsPage,
-} from "./Admin";
+const HomePage = lazy(() => import("./features/home/pages/HomePage"));
+const SearchPage = lazy(() =>
+  import("./features/search/pages/SearchPage").then((m) => ({ default: m.default }))
+);
+const About = lazy(() => import("./pages/about/About"));
+const ContactPage = lazy(() => import("./pages/contact/ContactPage"));
+const SchoolDetailsPage = lazy(() => import("./pages/school-details/SchoolDetailsPage"));
+const PrivacyPolicyPage = lazy(() => import("./pages/privacy/PrivacyPolicyPage"));
+const TermsPage = lazy(() => import("./pages/terms/TermsPage"));
+
+const AdminRoutes = lazy(() => import("./Admin/AdminRoutes"));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-primary"></div>
+    </div>
+  );
+}
 
 export default function App() {
   return (
-    <AdminAuthProvider>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* Public Routes */}
         <Route element={<Layout />}>
@@ -38,22 +37,9 @@ export default function App() {
           <Route path="/terms" element={<TermsPage />} />
         </Route>
 
-        {/* Admin Login (No Auth Required) */}
-        <Route path="/admin/login" element={<LoginPage />} />
-
-        {/* Protected Admin Routes */}
-        <Route element={<AdminRoute />}>
-          <Route element={<AdminLayout />}>
-            <Route path="/admin" element={<DashboardPage />} />
-            <Route path="/admin/schools" element={<SchoolsPage />} />
-            <Route path="/admin/schools/new" element={<CreateSchoolPage />} />
-            <Route path="/admin/schools/:id" element={<AdminSchoolDetailsPage />} />
-            <Route path="/admin/schools/:id/edit" element={<EditSchoolPage />} />
-            <Route path="/admin/images" element={<ImagesPage />} />
-            <Route path="/admin/settings" element={<SettingsPage />} />
-          </Route>
-        </Route>
+        {/* All Admin Routes (lazy-loaded as a group) */}
+        <Route path="/admin/*" element={<AdminRoutes />} />
       </Routes>
-    </AdminAuthProvider>
+    </Suspense>
   );
 }

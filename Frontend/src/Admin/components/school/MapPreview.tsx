@@ -1,8 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MapPin, MapPinOff } from "lucide-react";
-import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import MapSkeleton from "../../../components/skeletons/MapSkeleton";
 
 const defaultPosition: [number, number] = [3.8863, 11.5165];
 const MAP_ZOOM = 13;
@@ -20,27 +18,6 @@ const PIN_SVG = `
   <circle cx="17" cy="17" r="3.2" fill="#C1572B"/>
 </svg>`;
 
-const pinIcon = L.divIcon({
-  className: "school-map-pin",
-  html: PIN_SVG,
-  iconSize: [34, 44],
-  iconAnchor: [17, 44],
-  popupAnchor: [0, -40],
-});
-
-/** Keeps the map correctly sized and centred when it mounts or resizes. */
-function MapUpdater({ position }: { position: [number, number] }) {
-  const map = useMap();
-  useEffect(() => {
-    map.invalidateSize();
-    map.setView(position, MAP_ZOOM, { animate: false });
-    const onResize = () => map.invalidateSize();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [map, position]);
-  return null;
-}
-
 interface MapPreviewProps {
   latitude: number | null;
   longitude: number | null;
@@ -52,8 +29,36 @@ interface MapPreviewProps {
 export function MapPreview({ latitude, longitude, address, city, region }: MapPreviewProps) {
   const hasCoords = typeof latitude === "number" && typeof longitude === "number";
   const position: [number, number] = hasCoords ? [latitude as number, longitude as number] : defaultPosition;
+  const [MapComponents, setMapComponents] = useState<any>(null);
 
   const locationText = [address, city, region].filter(Boolean).join(", ");
+
+  useEffect(() => {
+    if (!hasCoords) return;
+
+    let cancelled = false;
+    const loadLeaflet = async () => {
+      try {
+        const leaflet = await import("leaflet");
+        await import("leaflet/dist/leaflet.css");
+        const reactLeaflet = await import("react-leaflet");
+        if (!cancelled) {
+          setMapComponents({
+            MapContainer: reactLeaflet.MapContainer,
+            TileLayer: reactLeaflet.TileLayer,
+            Marker: reactLeaflet.Marker,
+            useMap: reactLeaflet.useMap,
+            L: leaflet.default,
+          });
+        }
+      } catch {
+        // Leaflet failed to load
+      }
+    };
+
+    loadLeaflet();
+    return () => { cancelled = true; };
+  }, [hasCoords]);
 
   if (!hasCoords) {
     return (
@@ -69,24 +74,52 @@ export function MapPreview({ latitude, longitude, address, city, region }: MapPr
     );
   }
 
+  if (!MapComponents) {
+    return (
+      <div className="h-64">
+        <MapSkeleton className="h-full rounded-lg border-0" />
+      </div>
+    );
+  }
+
+  const pinIcon = MapComponents.L.divIcon({
+    className: "school-map-pin",
+    html: PIN_SVG,
+    iconSize: [34, 44],
+    iconAnchor: [17, 44],
+    popupAnchor: [0, -40],
+  });
+
+  function MapUpdater({ position: pos }: { position: [number, number] }) {
+    const map = MapComponents.useMap();
+    useEffect(() => {
+      map.invalidateSize();
+      map.setView(pos, MAP_ZOOM, { animate: false });
+      const onResize = () => map.invalidateSize();
+      window.addEventListener("resize", onResize);
+      return () => window.removeEventListener("resize", onResize);
+    }, [map, pos]);
+    return null;
+  }
+
   return (
     <div className="overflow-hidden rounded-lg border border-border-light">
-      <MapContainer
+      <MapComponents.MapContainer
         center={position}
         zoom={MAP_ZOOM}
         scrollWheelZoom={false}
         maxZoom={18}
         className="h-64 w-full"
       >
-        <TileLayer
+        <MapComponents.TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapUpdater position={position} />
-        <Marker position={position} icon={pinIcon}>
+        <MapComponents.Marker position={position} icon={pinIcon}>
           <span className="sr-only">{locationText || "School location"}</span>
-        </Marker>
-      </MapContainer>
+        </MapComponents.Marker>
+      </MapComponents.MapContainer>
       {locationText && (
         <div className="flex items-start gap-2 px-4 py-3 bg-white border-t border-border-light">
           <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-teal-primary" />

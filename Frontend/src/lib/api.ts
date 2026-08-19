@@ -57,30 +57,39 @@ class ApiClient {
       fetchOptions.body = JSON.stringify(body);
     }
 
-    const response = await fetch(fullUrl, fetchOptions);
+    try {
+      const response = await fetch(fullUrl, fetchOptions);
 
-    if (!response.ok) {
-      let errorMessage = `HTTP ${response.status}`;
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.error || errorMessage;
-      } catch (e) {
-        // If response isn't JSON, use default message
+      if (!response.ok) {
+        let errorMessage = `HTTP ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch {
+          // If response isn't JSON, use default message
+        }
+
+        return {
+          error: errorMessage,
+          status: response.status,
+        };
       }
 
+      const data = await response.json();
+      // Spread top-level properties for backward compatibility
+      // (callers may access response.data directly, or response.total, etc.)
       return {
-        error: errorMessage,
-        status: response.status,
+        data: data as T,
+        ...(typeof data === "object" && data !== null ? data : {}),
+      };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Network error";
+      console.error(`API Error [${method} ${path}]:`, message);
+      return {
+        error: "Network error. Please check your connection.",
+        status: 0,
       };
     }
-
-    const data = await response.json();
-    // Spread top-level properties for backward compatibility
-    // (callers may access response.data directly, or response.total, etc.)
-    return {
-      data: data as T,
-      ...(typeof data === "object" && data !== null ? data : {}),
-    };
   }
 
   /**
