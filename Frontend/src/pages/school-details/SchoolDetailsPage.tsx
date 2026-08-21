@@ -24,13 +24,13 @@ export default function SchoolDetailsPage() {
     setLoading(true);
     setError(null);
     const response = await api.getSchool(id);
-    if (!response.ok) {
-      setError(response.error || "Failed to load school details.");
-      setSchool(null);
-    } else {
-      setSchool(response.data as SchoolDetail);
-      setError(null);
-    }
+    if (response.error) {  // ← Check for error instead
+  setError(response.error);
+  setSchool(null);
+} else {
+  setSchool(response.data as SchoolDetail);
+  setError(null);
+}
     setLoading(false);
   };
 
